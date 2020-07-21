@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, TextInput } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import ArcProgress from '../../components/animatedArcProgress'
+import {Easing} from 'react-native-reanimated';
+import { timing } from "react-native-redash";
 
 const SearchBar = ()=>{
     const [value , onValueChange] = useState('Search for housename..')
@@ -17,12 +19,30 @@ const SearchBar = ()=>{
     )
 }
 
+
 export const Home = ({  })=>{
+    const config = {
+        duration: 1000,
+        from: 0,
+        to: 0.4,
+        easing: Easing.bezier(0.5, 1, 0.89, 1),
+    }
     return(
         <View style={styles.container}>
             <View style={{ flexDirection: "column" }}>
                 <Text style={styles.header}>Campaign Progress</Text>
                 <Text style={styles.subHeader}>Idukki</Text>
+            </View>
+            <View style={{ alignSelf: "center", flexDirection: 'column', alignItems: "center", justifyContent: 'center' }}>
+                <ArcProgress progress={timing(config)} />
+                <View style={{position: "absolute", alignItems: "center"}}>
+                    <Text style={{
+                        fontWeight: "bold",
+                        fontSize: 40,
+                    }}>{323}</Text>
+                    <Text style={{fontSize: 20, marginTop: 10}}>{1002}</Text>
+                    <Text style={{color: '#888'}}>Houses</Text>
+                </View>
             </View>
             <SearchBar/>
         </View>
@@ -49,7 +69,7 @@ const styles = StyleSheet.create({
     searchBarBg: {
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        padding: 20,
+        padding: 15,
     },
     searchBg: {
         backgroundColor: '#fffa',

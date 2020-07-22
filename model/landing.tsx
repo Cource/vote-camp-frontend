@@ -3,7 +3,7 @@ export interface Option{
     list: Array<String>,
 }
   
-export let options:Array<Option> =[
+export const options:Array<Option> =[
     {
       title: "District",
       list: [
@@ -42,5 +42,4 @@ export let options:Array<Option> =[
           "G05019006 - IRAVEESWARAM"
       ],
     }
-  ]
-  
+]

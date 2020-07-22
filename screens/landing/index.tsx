@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Picker, TouchableOpacity } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
-import { Option, options } from "./data";
+import { Option, options } from "../../model/landing";
 
 const OptionPicker = (props:Option)=>{
     const [currentItem, setCurrentItem] = useState(props.list[0])
@@ -27,7 +27,7 @@ const OptionPicker = (props:Option)=>{
 
 export const Landing = ({ navigation })=>{
     return(<View style={styles.container}>
-        <View style={{ flexDirection: 'column' }}>
+        <View>
             <Text style={styles.header}>Campaign Details</Text>
             <Text style={styles.party}>Kerala Congress</Text>
         </View>

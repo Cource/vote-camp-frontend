@@ -29,17 +29,21 @@ export const options:Array<Option> =[
           "Thalayazham",
           "Chempu",
           "Maravanthuruthu",
-          "Vechoor"
+          "Vechoor",
+          "Poonjar",
+          "Pala",
+          "Manjoor",
+          "Erattupetta"
       ],
     },
     {
       title: "Ward",
       list: [
-          "G05019002 - VALLYAD",
-          "G05019003 - KALLUNKATHRA",
-          "G05019004 - PULIKKUTTISSERY",
-          "G05019005 - JAYANTHI",
-          "G05019006 - IRAVEESWARAM"
+          "Aruvithra",
+          "Panchipara",
+          "Aanippadi",
+          "Block Office",
+          "Kallolil"
       ],
     }
 ]

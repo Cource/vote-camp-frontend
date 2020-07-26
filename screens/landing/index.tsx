@@ -2,34 +2,40 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Picker, TouchableOpacity } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { Option, options } from "../../model/landing";
+import { StackScreenProps } from '@react-navigation/stack';
+import { StackParamList } from "../../App";
+
+type Props = StackScreenProps<StackParamList, 'landing'>
 
 const OptionPicker = (props:Option)=>{
     const [currentItem, setCurrentItem] = useState(props.list[0])
 
     return (
         <View>
-        <Text style={styles.optionTitle}>{props.title}</Text>
-        <Picker 
-            selectedValue={currentItem as string}
-            onValueChange={(itemValue)=> setCurrentItem(itemValue as string)}
-            style={{ height: 50, width: 300, backgroundColor: '#ddd' }}>
-            {
-                props.list.map((item)=>{
-                    return(
-                        <Picker.Item key={item as string} label={item as string} value={item as string}></Picker.Item>
-                    )
-                })
-            }
-        </Picker>
+            <Text style={styles.optionTitle}>{props.title}</Text>
+            <View style={{ borderRadius: 10, borderColor: "#555", borderStyle: "solid", borderWidth: 2 }}>
+                <Picker 
+                    selectedValue={currentItem as string}
+                    onValueChange={(itemValue)=> setCurrentItem(itemValue as string)}
+                    style={{ height: 50, width: 300 }}>
+                    {
+                        props.list.map((item)=>{
+                            return(
+                                <Picker.Item key={item as string} label={item as string} value={item as string}></Picker.Item>
+                            )
+                        })
+                    }
+                </Picker>
+            </View>
         </View>  
     )
 }
 
-export const Landing = ({ navigation })=>{
+export default ({ navigation }:Props)=>{
     return(<View style={styles.container}>
         <View>
             <Text style={styles.header}>Campaign Details</Text>
-            <Text style={styles.party}>Kerala Congress</Text>
+            <Text style={styles.party}>Kerala Janapaksham</Text>
         </View>
         <View>
             {options.map((option)=>{

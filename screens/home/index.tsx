@@ -1,31 +1,26 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import ArcProgress from '../../components/animatedArcProgress'
+import React from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 import { Easing } from 'react-native-reanimated';
 import { timing } from "react-native-redash";
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import ArcProgress from '../../components/animatedArcProgress'
+import SearchBar from "../../components/searchbar";
 import { House, houses } from "../../model/houses";
-import { useNavigation } from '@react-navigation/native';
 
-const SearchBar = ()=>{
-    const [value , onValueChange] = useState('Search for housename..')
-    return(
-        <LinearGradient colors={['#5ABDFF', '#88E7FF']} style={styles.searchBarBg} >
-            <View style={styles.searchBg}>
-                <TextInput
-                    value={value}
-                    onChangeText={(text)=> onValueChange(text)}
-                />
-            </View>
-        </LinearGradient>
-    )
-}
 
 const HouseListItem = (props:House)=>{
     const navigation = useNavigation()
     return(
-        <TouchableOpacity style={ styles.houseListItem } onPress={(()=> navigation.navigate('detail'))} >
+        <TouchableOpacity style={ styles.houseListItem }
+            onPress={(()=> 
+                navigation.navigate('detail',{
+                    name: props.name,
+                    number: props.number,
+                    members: props.members
+                })
+            )}
+        >
             <Text style={styles.listText}>{ props.name }</Text>
             <Text style={styles.listText}>{ props.number }</Text>
         </TouchableOpacity>
@@ -50,7 +45,7 @@ const HouseList = ()=>{
 }
 
 
-export const Home = ()=>{
+export default ()=>{
     const config = {
         duration: 1000,
         from: 0,
@@ -61,7 +56,7 @@ export const Home = ()=>{
         <View style={styles.container}>
             <View>
                 <Text style={styles.header}>Campaign Progress</Text>
-                <Text style={styles.subHeader}>Idukki</Text>
+                <Text style={styles.subHeader}>Poonjar</Text>
             </View>
             <View style={{ alignSelf: "center", alignItems: "center", justifyContent: 'center', marginTop: 10 }}>
                 <ArcProgress progress={timing(config)} />
@@ -102,17 +97,6 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         paddingLeft: 32
     },
-    searchBarBg: {
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        padding: 15,
-    },
-    searchBg: {
-        backgroundColor: '#fffa',
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 10
-    },
     houseListItem: {
         flexDirection: 'row',
         paddingHorizontal: 10,
@@ -121,7 +105,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         justifyContent: "space-between",
         flexGrow: 0,
-        elevation: 3,
+        elevation: 1,
         backgroundColor: "#FFF",
         borderRadius: 6,
     },

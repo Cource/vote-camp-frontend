@@ -20,7 +20,7 @@ export default function App() {
     return (
         <NavigationContainer>
             <StatusBar style="auto" />
-            <Stack.Navigator initialRouteName="signIn" screenOptions={{ headerShown: false }} >
+            <Stack.Navigator initialRouteName="SignIn" screenOptions={{ headerShown: false }} >
                 <Stack.Screen name="signIn" component={SignIn}/>
                 <Stack.Screen name="landing" component={Landing} />
                 <Stack.Screen name="home" component={Home}/>

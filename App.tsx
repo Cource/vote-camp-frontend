@@ -6,6 +6,7 @@ import { Member } from "./model/houses";
 import Landing from './screens/landing';
 import Home from './screens/home';
 import Detail from "./screens/detail"
+import SignIn from "./screens/signIn";
 
 export type StackParamList = {
     landing: undefined;
@@ -19,7 +20,8 @@ export default function App() {
     return (
         <NavigationContainer>
             <StatusBar style="auto" />
-            <Stack.Navigator initialRouteName="landing" screenOptions={{ headerShown: false }} >
+            <Stack.Navigator initialRouteName="signIn" screenOptions={{ headerShown: false }} >
+                <Stack.Screen name="signIn" component={SignIn}/>
                 <Stack.Screen name="landing" component={Landing} />
                 <Stack.Screen name="home" component={Home}/>
                 <Stack.Screen name="detail" component={Detail}/>

@@ -1,13 +1,13 @@
-// import fs from 'fs'
+const fs = require('fs')
 
-// export interface Voter{
-//   name: String,
-//   guardian: String,
-//   houseNo: Number,
-//   houseName: String,
-//   genderAge: String,
-//   id: String
-// }
+export interface Voter{
+  name: String,
+  guardian: String,
+  houseNo: Number,
+  houseName: String,
+  genderAge: String,
+  id: String
+}
 
 export function csvJSON(csv){
 
@@ -31,3 +31,5 @@ export function csvJSON(csv){
 
   return JSON.stringify(result);
 }
+const output = csvJSON(fs.readFile('./G05036-Poonjar001-PERUNNILAM001-PERUNNILAM ANGANVADI  GROUND FLOOR.csv'))
+console.log(output)

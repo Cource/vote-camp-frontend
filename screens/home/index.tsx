@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
@@ -6,7 +6,8 @@ import { Easing } from 'react-native-reanimated';
 import { timing } from "react-native-redash";
 import ArcProgress from '../../components/animatedArcProgress'
 import SearchBar from "../../components/searchbar";
-import { House, houses } from "../../model/houses";
+import { House, server } from "../../model/houses";
+import Axios from "axios";
 
 
 const HouseListItem = (props:House)=>{
@@ -15,30 +16,38 @@ const HouseListItem = (props:House)=>{
         <TouchableOpacity style={ styles.houseListItem }
             onPress={(()=> 
                 navigation.navigate('detail',{
-                    name: props.name,
-                    number: props.number,
-                    members: props.members
+                    houseName: props.houseName,
+                    houseNumber: props.houseNumber,
                 })
             )}
         >
-            <Text style={styles.listText}>{ props.name }</Text>
-            <Text style={styles.listText}>{ props.number }</Text>
+            <Text style={styles.listText}>{ props.houseName }</Text>
+            <Text style={styles.listText}>{ props.houseNumber }</Text>
         </TouchableOpacity>
     )
 }
 
 const HouseList = ()=>{
+    const [ data, setData ] = useState([])
+    Axios.get(server + '/users', {
+        params: {
+            district: 'kottayam',
+            city: 'poonjar',
+            ward: 'perunnilam',
+        }
+    }).then((res)=>{
+        setData(res.data)
+    })
     return(<>
             {
-                houses.map((house)=> {
-                    return(
-                        <HouseListItem
-                            number={ house.number }
-                            name={ house.name }
-                            members={ house.members }
-                            key={ house.number as number }
-                        />
-                    )
+                data.map((house:House)=> {
+                return(
+                    <HouseListItem
+                        houseNumber={ house.houseNumber }
+                        houseName={ house.houseName }
+                        key={ house.houseNumber as number }
+                    />
+                )
                 })
             }
     </>)

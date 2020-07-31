@@ -1,30 +1,64 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Ionicons, Feather, Fontisto } from '@expo/vector-icons';
 import { StackParamList } from "../../App";
 import SearchBar from "../../components/searchbar";
-import { Member } from "../../model/houses";
+import { Member, server } from "../../model/houses";
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+import Axios from "axios";
 
 type Props = StackScreenProps<StackParamList, 'detail'>
 
+interface party {
+    key: String,
+    color: String,
+    image: String,
+}
+
+const parties: Array<party> = [
+    {
+        key: 'LDF',
+        color: '#f00',
+        image: '',
+    },
+    {
+        key: 'UDF',
+        color: '#00f',
+        image: '',
+    },
+    {
+        key: 'BJP',
+        color: '#fa0',
+        image: '',
+    }
+]
+
 const Detail = (props:Member)=>{
     const [ hidden, setHide ] = useState(false)
+    const [ disabled, setAbility ] = useState(false)
+
     if (hidden) return null
     else return(
-        <View>
+        <View style={{ marginBottom: 10 }}>
             <View style={ styles.detailsItem }>
                 <View>
-                    <Text style={ styles.detailsText }> { props.name } </Text>
+                    <View>
+                        <Text style={ detailStyles.title } >Name</Text>
+                        <Text>{ props.name }</Text>
+                    </View>
                     <View>
                         <Text style={ detailStyles.title } >Guardian</Text>
                         <Text>{ props.guardian }</Text>
                     </View>
                 </View>
-                <View style={{ justifyContent: 'space-between' }}>
-                    <Text style={ styles.detailsText }> { props.id } </Text>
+                <View>
+                    <View>
+                        <Text style={ detailStyles.title } >Voters Id</Text>
+                        <Text>{ props.id } </Text>
+                    </View>
                     <View>
                         <Text style={ detailStyles.title } >Sex/Age</Text>
                         <Text>{ props.s_d }</Text>
@@ -32,9 +66,22 @@ const Detail = (props:Member)=>{
                 </View>
             </View>
             <View style={ detailStyles.buttonContainer }>
-                <TouchableOpacity onPress={ ()=> setHide(true) } style={[ detailStyles.button ]}>
-                <Fontisto name="paralysis-disability" size={25} color="white" />
-                </TouchableOpacity>
+                <View style={{ flexDirection: 'row' }}>
+                    {
+                        parties.map((party:party)=>{
+                            return(
+                                <TouchableOpacity onPress={ ()=> setHide(true) } key={ party.key } style={[ detailStyles.button, { backgroundColor: party.color } ]}>
+                                    <View style={{ height: 25, width: 25 }}/>
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+                </View>
+                <View>
+                    <TouchableOpacity style={[ detailStyles.button ]} >
+                        <Fontisto name="paralysis-disability" size={25} color="white" />
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
@@ -61,9 +108,10 @@ const detailStyles = StyleSheet.create({
     }
 })
 
-const ConfirmBtn = ()=>{
+const ConfirmBtn = (props:Props)=>{
+    const navigation = useNavigation()
     return(
-        <TouchableOpacity style={{ flexDirection: "row", paddingBottom: 20, paddingRight: 20, alignSelf: "flex-end" }}>
+        <TouchableOpacity onPress={ ()=> navigation.goBack() } style={{ flexDirection: "row", paddingBottom: 20, paddingRight: 20, alignSelf: "flex-end" }}>
             <LinearGradient colors={['#5ABDFF', '#88E7FF']} style={ styles.confirmBtn }>
                 <Feather name="check-circle" size={35} color="white" />
                 <Text style={{ fontSize: 25, color: "white", marginHorizontal: 10, fontWeight:"bold" }}>Confirm</Text>
@@ -73,8 +121,21 @@ const ConfirmBtn = ()=>{
 }
 
 export default ({ route, navigation }:Props)=>{
-    const { name } = route.params
-    const { members } = route.params
+    const { houseName } = route.params
+    const { houseNumber } = route.params
+
+    const [ members, setMembers ] = useState([])
+
+    Axios.get(server + '/familyDetails', {
+        params: {
+            houseNumber: houseNumber,
+            ward: houseName,
+        }
+    }).then((res)=>{
+        setMembers(res.data)
+        console.log(res.data)
+    })
+
     return(
         <View style={styles.screen}>
             <View>
@@ -84,24 +145,19 @@ export default ({ route, navigation }:Props)=>{
                         onPress={()=>{navigation.navigate("home")}}
                     >
                             <Ionicons name="ios-arrow-back" size={30} color="black" />
-                            <Text style={styles.name}>{ name }</Text>
+                            <Text style={styles.name}>{ houseName }</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Feather name="edit" size={30} color="black" />
-                    </TouchableOpacity>
+                    <Text style={styles.name} >{ houseNumber }</Text>
                 </View>
                 <ScrollView style={styles.details}>
-                    <View style={styles.detailsHeader}>
-                        <Text style={styles.detailsHeaderText}>Name</Text>
-                        <Text style={styles.detailsHeaderText}>Voter Id</Text>
-                    </View>
                     {
-                        members.map((member)=> {
+                        members.map((member:Member)=> {
                             return (
-                                <Detail name={ member.name } id={ member.id } guardian={ member.guardian } s_d={ member.s_d } key={ member.id as string } />
+                                <Detail name={ member.name } voterId={ member.voterId } guardian={ member.guardian } gender={ member.gender } key={ member.voterId as string } />
                             )
                         })
                     }
+                    <View style={{ height: 200 }} />
                 </ScrollView>
             </View>
             <View style={{ position: 'absolute', bottom: 0, minWidth: '100%' }}>
@@ -132,11 +188,11 @@ const styles = StyleSheet.create({
     details:{
         marginHorizontal: 30,
         marginTop: 30,
-        marginBottom: 200,
+        marginBottom: 100,
     },
     detailsItem: {
-        justifyContent: "space-between",
         flexDirection: "row",
+        justifyContent: "space-between",
         marginTop: 5,
         backgroundColor: "white",
         borderTopLeftRadius: 10,
@@ -149,15 +205,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         flexDirection: "row",
         marginTop: 5,
-    },
-    detailsHeaderText: {
-        fontWeight: "700",
-        color: "#555",
-        fontSize: 25,
-        marginBottom: 10,
-    },
-    detailsText: {
-        fontSize: 15,
     },
     confirmBtn: {
         flexDirection: "row",

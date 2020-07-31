@@ -7,19 +7,19 @@ export interface Voter{
   id: String
 }
 
-export function csvJSON(csv){
+export function csvJSON(csv:String){
 
   var lines:Array<String> =csv.split("\n");
 
   var result:Array<Voter>  = [];
-  var headers=['Name', "guardian's name", 'House No', 'House Name', 'Gender/Age', 'ID Card No'];
+  var headers=['Name', "guardian", 'HouseNo', 'HouseName', 'Gender_Age', 'IDCardNo'];
 
-  for(var i=1;i<lines.length;i++){
+  for(var i in lines){
 
       var obj = {};
       var currentline=lines[i].split(",");
 
-      for(var j=0;j<headers.length;j++){
+      for(var j in headers){
           obj[headers[j]] = currentline[j];
       }
 
@@ -29,3 +29,5 @@ export function csvJSON(csv){
 
   return JSON.stringify(result);
 }
+
+csvJSON('asdw,awdas,52,awdas,M/19,hgaqwd7989\nasdw,awdas,52,awdas,M/19,hgaqwd7989')

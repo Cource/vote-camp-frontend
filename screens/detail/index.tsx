@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Ionicons, Feather } from '@expo/vector-icons';
+import { Ionicons, Feather, Fontisto } from '@expo/vector-icons';
 import { StackParamList } from "../../App";
 import SearchBar from "../../components/searchbar";
 import { Member } from "../../model/houses";
@@ -14,28 +14,27 @@ const Detail = (props:Member)=>{
     const [ hidden, setHide ] = useState(false)
     if (hidden) return null
     else return(
-        <View style={ styles.detailsItem }>
-            <View>
-                <Text style={ styles.detailsText }> { props.name } </Text>
+        <View>
+            <View style={ styles.detailsItem }>
                 <View>
-                    <Text style={ detailStyles.title } >Guardian</Text>
-                    <Text>{ props.guardian }</Text>
+                    <Text style={ styles.detailsText }> { props.name } </Text>
+                    <View>
+                        <Text style={ detailStyles.title } >Guardian</Text>
+                        <Text>{ props.guardian }</Text>
+                    </View>
                 </View>
-                <View>
-                    <Text style={ detailStyles.title } >Sex/Age</Text>
-                    <Text>{ props.s_d }</Text>
+                <View style={{ justifyContent: 'space-between' }}>
+                    <Text style={ styles.detailsText }> { props.id } </Text>
+                    <View>
+                        <Text style={ detailStyles.title } >Sex/Age</Text>
+                        <Text>{ props.s_d }</Text>
+                    </View>
                 </View>
             </View>
-            <View style={{ justifyContent: 'space-between' }}>
-                <Text style={ styles.detailsText }> { props.id } </Text>
-                <View style={ detailStyles.buttonContainer }>
-                    <TouchableOpacity onPress={ ()=> setHide(true) } style={[ detailStyles.button, { backgroundColor: '#5fa' } ]}>
-                        <Feather name="check" size={30} color="white" />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={ ()=> setHide(true) } style={ detailStyles.button }>
-                        <Feather name="x" size={30} color="white" />
-                    </TouchableOpacity>
-                </View>
+            <View style={ detailStyles.buttonContainer }>
+                <TouchableOpacity onPress={ ()=> setHide(true) } style={[ detailStyles.button ]}>
+                <Fontisto name="paralysis-disability" size={25} color="white" />
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -48,14 +47,17 @@ const detailStyles = StyleSheet.create({
     },
     buttonContainer: {
         flexDirection: 'row',
-        justifyContent: "flex-end"
+        justifyContent: "space-between",
+        backgroundColor: '#ddd',
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
     },
     button: {
-        backgroundColor: "#f56",
-        padding: 5,
+        backgroundColor: "#555",
+        padding: 10,
         borderRadius: 100,
-        marginRight: 5,
-        marginBottom: 5,
+        marginHorizontal: 5,
+        marginVertical: 5,
     }
 })
 
@@ -102,7 +104,7 @@ export default ({ route, navigation }:Props)=>{
                     }
                 </ScrollView>
             </View>
-            <View>
+            <View style={{ position: 'absolute', bottom: 0, minWidth: '100%' }}>
                 <ConfirmBtn/>
                 <SearchBar/>
             </View>
@@ -130,13 +132,15 @@ const styles = StyleSheet.create({
     details:{
         marginHorizontal: 30,
         marginTop: 30,
+        marginBottom: 200,
     },
     detailsItem: {
         justifyContent: "space-between",
         flexDirection: "row",
         marginTop: 5,
         backgroundColor: "white",
-        borderRadius: 10,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
         elevation: 1,
         paddingHorizontal: 10,
         paddingVertical: 5,

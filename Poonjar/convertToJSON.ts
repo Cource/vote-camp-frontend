@@ -29,5 +29,3 @@ export function csvJSON(csv:String){
 
   return JSON.stringify(result);
 }
-
-csvJSON('asdw,awdas,52,awdas,M/19,hgaqwd7989\nasdw,awdas,52,awdas,M/19,hgaqwd7989')

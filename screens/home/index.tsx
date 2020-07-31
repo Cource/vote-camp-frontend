@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
@@ -29,15 +29,17 @@ const HouseListItem = (props:House)=>{
 
 const HouseList = ()=>{
     const [ data, setData ] = useState([])
-    Axios.get(server + '/users', {
-        params: {
-            district: 'kottayam',
-            city: 'poonjar',
-            ward: 'perunnilam',
-        }
-    }).then((res)=>{
-        setData(res.data)
-    })
+    useEffect(()=>{
+        Axios.get(server + '/users', {
+            params: {
+                district: 'kottayam',
+                city: 'poonjar',
+                ward: 'perunnilam',
+            }
+        }).then((res)=>{
+            setData(res.data)
+        })
+    }, [])
     return(<>
             {
                 data.map((house:House)=> {

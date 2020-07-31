@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -57,11 +57,11 @@ const Detail = (props:Member)=>{
                 <View>
                     <View>
                         <Text style={ detailStyles.title } >Voters Id</Text>
-                        <Text>{ props.id } </Text>
+                        <Text>{ props.voterId } </Text>
                     </View>
                     <View>
                         <Text style={ detailStyles.title } >Sex/Age</Text>
-                        <Text>{ props.s_d }</Text>
+                        <Text>{ props.gender }</Text>
                     </View>
                 </View>
             </View>
@@ -70,7 +70,7 @@ const Detail = (props:Member)=>{
                     {
                         parties.map((party:party)=>{
                             return(
-                                <TouchableOpacity onPress={ ()=> setHide(true) } key={ party.key } style={[ detailStyles.button, { backgroundColor: party.color } ]}>
+                                <TouchableOpacity onPress={ ()=> setHide(true) } style={[ detailStyles.button, { backgroundColor: party.color } ]}>
                                     <View style={{ height: 25, width: 25 }}/>
                                 </TouchableOpacity>
                             )
@@ -125,16 +125,17 @@ export default ({ route, navigation }:Props)=>{
     const { houseNumber } = route.params
 
     const [ members, setMembers ] = useState([])
-
-    Axios.get(server + '/familyDetails', {
-        params: {
-            houseNumber: houseNumber,
-            ward: houseName,
-        }
-    }).then((res)=>{
-        setMembers(res.data)
-        console.log(res.data)
-    })
+    useEffect(()=>{
+        Axios.get(server + '/familyDetails', {
+            params: {
+                ward: 'perunnilam',
+                houseNumber: houseNumber,
+            }
+        }).then((res)=>{
+            setMembers(res.data)
+            console.log(res.data)
+        })
+    }, [])
 
     return(
         <View style={styles.screen}>

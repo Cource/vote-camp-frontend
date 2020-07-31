@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 export interface Voter{
   name: String,
   guardian: String,
@@ -29,3 +31,5 @@ export function csvJSON(csv:String){
 
   return JSON.stringify(result);
 }
+
+csvJSON(fs.readFile("./G04..........."))

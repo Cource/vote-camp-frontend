@@ -1,19 +1,19 @@
-import fs from 'fs'
+// import fs from 'fs'
 
-export interface Voter{
-  name: String,
-  guardian: String,
-  houseNo: Number,
-  houseName: String,
-  genderAge: String,
-  id: String
-}
+// export interface Voter{
+//   name: String,
+//   guardian: String,
+//   houseNo: Number,
+//   houseName: String,
+//   genderAge: String,
+//   id: String
+// }
 
-export function csvJSON(csv:String){
+export function csvJSON(csv){
 
-  var lines:Array<String> =csv.split("\n");
+  var lines =csv.split("\n");
 
-  var result:Array<Voter>  = [];
+  var result = [];
   var headers=['Name', "guardian", 'HouseNo', 'HouseName', 'Gender_Age', 'IDCardNo'];
 
   for(var i in lines){
@@ -31,5 +31,3 @@ export function csvJSON(csv:String){
 
   return JSON.stringify(result);
 }
-
-csvJSON(fs.readFile("./G04..........."))

@@ -21,29 +21,61 @@ interface party {
 const parties: Array<party> = [
     {
         key: 'LDF',
-        color: '#f00',
+        color: '#f55',
         image: '',
     },
     {
         key: 'UDF',
-        color: '#00f',
+        color: '#58f',
         image: '',
     },
     {
         key: 'BJP',
-        color: '#fa0',
+        color: '#fa5',
         image: '',
+    },
+    {
+        key: 'NOTA',
+        color: '#887',
+        image: ''
     }
 ]
 
-const Detail = (props:Member)=>{
-    const [ hidden, setHide ] = useState(false)
+
+const ButtonContainer = (props)=>{
     const [ disabled, setAbility ] = useState(false)
 
-    if (hidden) return null
-    else return(
+    if (!props.hidden){
+        return(
+            <View style={ detailStyles.buttonContainer }>
+                <View style={{ flexDirection: 'row' }}>
+                    {
+                        parties.map((party:party)=>{
+                            return(
+                                <TouchableOpacity onPress={ ()=> props.setHide({ backgroundColor:'#ddd', borderRadius: 10 }) } key={ party.key as string } style={[ detailStyles.button, { backgroundColor: party.color } ]}>
+                                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>{party.key}</Text>
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+                </View>
+                <View>
+                    <TouchableOpacity style={[ detailStyles.button ]} >
+                        <Fontisto name="paralysis-disability" size={20} color="white" />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+    else return null
+}
+
+const Detail = (props:Member)=>{
+    const [ hidden, setHide ] = useState({})
+
+    return(
         <View style={{ marginBottom: 10 }}>
-            <View style={ styles.detailsItem }>
+            <TouchableOpacity style={[ styles.detailsItem, hidden ]} onPress={ ()=> setHide({}) } >
                 <View>
                     <View>
                         <Text style={ detailStyles.title } >Name</Text>
@@ -64,25 +96,8 @@ const Detail = (props:Member)=>{
                         <Text>{ props.gender }</Text>
                     </View>
                 </View>
-            </View>
-            <View style={ detailStyles.buttonContainer }>
-                <View style={{ flexDirection: 'row' }}>
-                    {
-                        parties.map((party:party)=>{
-                            return(
-                                <TouchableOpacity onPress={ ()=> setHide(true) } style={[ detailStyles.button, { backgroundColor: party.color } ]}>
-                                    <View style={{ height: 25, width: 25 }}/>
-                                </TouchableOpacity>
-                            )
-                        })
-                    }
-                </View>
-                <View>
-                    <TouchableOpacity style={[ detailStyles.button ]} >
-                        <Fontisto name="paralysis-disability" size={25} color="white" />
-                    </TouchableOpacity>
-                </View>
-            </View>
+            </TouchableOpacity>
+            <ButtonContainer setHide={ setHide } hidden={ Object.keys(hidden).length } />
         </View>
     );
 }
@@ -133,7 +148,6 @@ export default ({ route, navigation }:Props)=>{
             }
         }).then((res)=>{
             setMembers(res.data)
-            console.log(res.data)
         })
     }, [])
 

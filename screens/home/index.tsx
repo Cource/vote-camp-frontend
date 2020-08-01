@@ -46,7 +46,7 @@ const HouseList = ()=>{
                 return(
                     <HouseListItem
                         houseNumber={ house.houseNumber }
-                        houseName={ house.houseName }
+                        houseName={ house.houseName.charAt(0).toUpperCase() +house.houseName.slice(1).toLowerCase() }
                         key={ house.houseNumber as number }
                     />
                 )

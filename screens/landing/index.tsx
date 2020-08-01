@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Picker, TouchableOpacity } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
-import { Option, options } from "../../model/landing";
+import { Option, districts } from "../../model/landing";
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from "../../App";
+import Axios from 'axios';
+import { server } from '../../model/houses';
 
 type Props = StackScreenProps<StackParamList, 'landing'>
 
@@ -16,8 +18,16 @@ const OptionPicker = (props:Option)=>{
             <View style={{ borderRadius: 10, borderColor: "#555", borderStyle: "solid", borderWidth: 2 }}>
                 <Picker 
                     selectedValue={currentItem as string}
-                    onValueChange={(itemValue)=> setCurrentItem(itemValue as string)}
-                    style={{ height: 50, width: 300 }}>
+                    onValueChange={(itemValue)=> {
+                        setCurrentItem(itemValue as string)
+                        Axios.get(server + props.route, {
+                            params: {
+                                district: currentItem.toLowerCase(),
+                            }
+                        }).then((res)=> {props.setNext(res.data); console.log(res.data, server + props.route)} )
+                    }}
+                    style={{ height: 50, width: 300 }}
+                    >
                     {
                         props.list.map((item)=>{
                             return(
@@ -32,17 +42,24 @@ const OptionPicker = (props:Option)=>{
 }
 
 export default ({ navigation }:Props)=>{
+    const [ cities, setCities ] = useState([])
+    const [ wards, setWards ] = useState([])
+    function changeCities(list:String[]) {
+        setCities(list)
+    }
+    function changeWards(list:String[]) {
+        setWards(list)
+    }
+
     return(<View style={styles.container}>
         <View>
             <Text style={styles.header}>Campaign Details</Text>
             <Text style={styles.party}>Kerala Janapaksham</Text>
         </View>
         <View>
-            {options.map((option)=>{
-                return(
-                    <OptionPicker key={option.title as string} title={option.title} list={option.list}/>
-                )
-            })}
+            <OptionPicker title='District' list={districts} route='/cities' setNext={ changeCities } />
+            <OptionPicker title='City/Town' list={cities} route='/wards' setNext={ changeWards } />
+            {/* <OptionPicker title='Ward' list={wards}/> */}
         </View>
         <LinearGradient
             colors={['#5ABDFF', '#88E7FF']}

@@ -1,8 +1,10 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export interface Option{
   title: String,
   list: Array<String>,
-  route?: String,
-  setNext: Function,
+  state: String
+  changeState: Dispatch<SetStateAction<string>>,
 }
   
 export const districts =[

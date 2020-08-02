@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Text } from "react-native";
+import { View, TextInput, StyleSheet, Text, ActivityIndicator } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Axios from 'axios';
 import { server, House } from '../model/houses';
 import { useNavigation } from '@react-navigation/native';
+import useAsync from '../hooks/useAsync';
 
 export default ()=>{
     const [ value , onValueChange ] = useState('Search for houses or people')
     const [ results, createResults ] = useState([])
 
     const navigation = useNavigation()
+    const Search = useAsync(search, false)
 
     async function search(){
         Axios.get(server + '/voters', {
             params:{
                 search: value
             }
-        }).then((res)=> {createResults(res.data); console.log(results)})
+        }).then((res)=> {createResults(res.data)})
     }
 
     return(
@@ -48,11 +50,17 @@ export default ()=>{
                     value={value}
                     onChangeText={(text)=> onValueChange(text)}
                     returnKeyType='google'
-                    onSubmitEditing={ ()=>search() }
+                    onSubmitEditing={ ()=>Search.execute() }
                     style={{ minWidth: '80%' }}
                 />
-                <TouchableOpacity onPress={ ()=>search() }>
-                    <Feather name="search" size={24} color="black" />
+                <TouchableOpacity onPress={ ()=>Search.execute() }>
+                    {
+                        Search.pending
+                        ?
+                        <ActivityIndicator size='small' />
+                        :
+                        <Feather name="search" size={24} color="black" />
+                    }
                 </TouchableOpacity>
             </View>
         </LinearGradient>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Picker, TouchableOpacity } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { Option, districts } from "../../model/landing";
@@ -10,21 +10,17 @@ import { server } from '../../model/houses';
 type Props = StackScreenProps<StackParamList, 'landing'>
 
 const OptionPicker = (props:Option)=>{
-    const [currentItem, setCurrentItem] = useState(props.list[0])
-
     return (
         <View>
             <Text style={styles.optionTitle}>{props.title}</Text>
             <View style={{ borderRadius: 10, borderColor: "#555", borderStyle: "solid", borderWidth: 2 }}>
                 <Picker 
-                    selectedValue={currentItem as string}
+                    selectedValue={props.state as string}
                     onValueChange={(itemValue)=> {
-                        setCurrentItem(itemValue as string)
-                        Axios.get(server + props.route, {
-                            params: {
-                                district: currentItem.toLowerCase(),
-                            }
-                        }).then((res)=> {props.setNext(res.data); console.log(res.data, server + props.route)} )
+                        props.changeState
+                        ?
+                        props.changeState(itemValue)
+                        : null
                     }}
                     style={{ height: 50, width: 300 }}
                     >
@@ -42,37 +38,53 @@ const OptionPicker = (props:Option)=>{
 }
 
 export default ({ navigation }:Props)=>{
+    const [ district, setDistrict ] = useState('')
+    const [ city, setCity ] = useState('')
+    const [ ward, setWard ] = useState('')
     const [ cities, setCities ] = useState([])
     const [ wards, setWards ] = useState([])
-    function changeCities(list:String[]) {
-        setCities(list)
-    }
-    function changeWards(list:String[]) {
-        setWards(list)
-    }
 
-    return(<View style={styles.container}>
-        <View>
-            <Text style={styles.header}>Campaign Details</Text>
-            <Text style={styles.party}>Kerala Janapaksham</Text>
+    useEffect(()=>{
+        Axios.get(server + '/cities', {
+            params: {
+                district: district,
+            }
+        }).then((res)=> setCities(res.data) )
+    }, [district])
+    
+    useEffect(()=>{
+        Axios.get(server + '/wards', {
+            params: {
+                district: district,
+                city: city,
+            }
+        }).then((res)=> setWards(res.data) )
+    }, [city])
+
+    return(
+        <View style={styles.container}>
+            <View>
+                <Text style={styles.header}>Campaign Details</Text>
+                <Text style={styles.party}>Kerala Janapaksham</Text>
+            </View>
+            <View>
+                <OptionPicker title='District' list={districts} state={ district } changeState={ setDistrict } />
+                <OptionPicker title='City/Town' list={cities} state={ city } changeState={ setCity } />
+                <OptionPicker title='Ward' list={wards} state={ ward } changeState={ setWard } />
+            </View>
+            <LinearGradient
+                colors={['#5ABDFF', '#88E7FF']}
+                style={styles.cta}>
+                <TouchableOpacity onPress={()=> navigation.navigate('home')}>
+                    <Text style={{
+                        color: '#fff',
+                        fontSize: 20,
+                        fontWeight: "700",
+                    }}>Start Campaign</Text>
+                </TouchableOpacity>
+            </LinearGradient>
         </View>
-        <View>
-            <OptionPicker title='District' list={districts} route='/cities' setNext={ changeCities } />
-            <OptionPicker title='City/Town' list={cities} route='/wards' setNext={ changeWards } />
-            {/* <OptionPicker title='Ward' list={wards}/> */}
-        </View>
-        <LinearGradient
-            colors={['#5ABDFF', '#88E7FF']}
-            style={styles.cta}>
-            <TouchableOpacity onPress={()=> navigation.navigate('home')}>
-            <Text style={{
-                color: '#fff',
-                fontSize: 20,
-                fontWeight: "700",
-            }}>Start Campaign</Text>
-            </TouchableOpacity>
-        </LinearGradient>
-    </View>)
+    )
 }
 
 const styles = StyleSheet.create({

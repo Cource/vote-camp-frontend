@@ -8,6 +8,7 @@ import ArcProgress from '../../components/animatedArcProgress'
 import SearchBar from "../../components/searchbar";
 import { House, server } from "../../model/houses";
 import Axios from "axios";
+import useAsync from '../../hooks/useAsync';
 
 
 const HouseListItem = (props:House)=>{
@@ -30,16 +31,17 @@ const HouseListItem = (props:House)=>{
 const HouseList = ()=>{
     const [ data, setData ] = useState([])
     useEffect(()=>{
-        Axios.get(server + '/users', {
-            params: {
-                district: 'kottayam',
-                city: 'poonjar',
-                ward: 'perunnilam',
-            }
-        }).then((res)=>{
-            setData(res.data)
-        })
-    }, [])
+            Axios.get(server + '/users', {
+                params: {
+                    district: 'kottayam',
+                    city: 'poonjar',
+                    ward: 'perunnilam',
+                }
+            })
+            .then((res)=>{
+                setData(res.data)
+            })
+    })
     return(<>
             {
                 data.map((house:House)=> {

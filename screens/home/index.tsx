@@ -69,7 +69,7 @@ export default ()=>{
                 <Text style={styles.header}>Campaign Progress</Text>
                 <Text style={styles.subHeader}>Poonjar</Text>
             </View>
-            <View style={{ alignSelf: "center", alignItems: "center", justifyContent: 'center', marginTop: 10 }}>
+            <View style={{ alignSelf: "center", alignItems: "center", justifyContent: 'center', marginTop: 20 }}>
                 <ArcProgress progress={timing(config)} />
                 <View style={{position: "absolute", alignItems: "center"}}>
                     <Text style={{
@@ -84,7 +84,7 @@ export default ()=>{
                 <Text style={[styles.listHeaderText, styles.listText]}>Housename</Text>
                 <Text style={[styles.listHeaderText, styles.listText]}>House number</Text>
             </View>
-            <ScrollView>
+            <ScrollView style={{ marginBottom: 70, }} >
                 <HouseList/>
             </ScrollView>
             <SearchBar/>
@@ -98,13 +98,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        fontSize: 35,
+        fontSize: 30,
         fontWeight: "700",
         paddingLeft: 30,
         paddingTop: 40,
     },
     subHeader: {
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: "600",
         paddingLeft: 32
     },
@@ -129,6 +129,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
     },
     listText:{
-        fontSize: 20,
+        fontSize: 18,
     }
 })

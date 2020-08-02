@@ -126,7 +126,7 @@ const detailStyles = StyleSheet.create({
 const ConfirmBtn = (props:Props)=>{
     const navigation = useNavigation()
     return(
-        <TouchableOpacity onPress={ ()=> navigation.goBack() } style={{ flexDirection: "row", paddingBottom: 20, paddingRight: 20, alignSelf: "flex-end" }}>
+        <TouchableOpacity onPress={ ()=> navigation.goBack() } style={{ marginBottom: 20, marginRight: 20, alignSelf: "flex-end" }}>
             <LinearGradient colors={['#5ABDFF', '#88E7FF']} style={ styles.confirmBtn }>
                 <Feather name="check-circle" size={35} color="white" />
                 <Text style={{ fontSize: 25, color: "white", marginHorizontal: 10, fontWeight:"bold" }}>Confirm</Text>
@@ -175,9 +175,9 @@ export default ({ route, navigation }:Props)=>{
                     <View style={{ height: 200 }} />
                 </ScrollView>
             </View>
+            {/* <SearchBar/> */}
             <View style={{ position: 'absolute', bottom: 0, minWidth: '100%' }}>
                 <ConfirmBtn/>
-                <SearchBar/>
             </View>
         </View>
     )
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     name: {
-        fontSize: 30,
+        fontSize: 25,
         fontWeight: "700",
         marginLeft: 10
     },
@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 5,
+        paddingBottom: 15,
         backgroundColor: "white",
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,

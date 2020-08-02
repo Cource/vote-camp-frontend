@@ -1,25 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import Axios from 'axios';
+import { server, House } from '../model/houses';
+import { useNavigation } from '@react-navigation/native';
 
 export default ()=>{
-    const [value , onValueChange] = useState('Search for housename..')
+    const [ value , onValueChange ] = useState('Search for houses or people')
+    const [ results, createResults ] = useState([])
+
+    const navigation = useNavigation()
+
+    async function search(){
+        Axios.get(server + '/voters', {
+            params:{
+                search: value
+            }
+        }).then((res)=> {createResults(res.data); console.log(results)})
+    }
+
     return(
         <LinearGradient colors={['#5ABDFF', '#88E7FF']} style={styles.searchBarBg} >
             <ScrollView style={{ maxHeight: 400 }} >
-                <View style={[styles.searchBg, { marginBottom: 10, backgroundColor: '#0006' }]}>
-                    <Text style={{ color: 'white' }}>Plathottam</Text>
-                    <Text style={{ color: 'white' }}>120</Text>
-                </View>
+                {
+                    results.map((result:House)=>{
+                        return(
+                            <TouchableOpacity
+                                style={[styles.searchBg, { marginBottom: 10, backgroundColor: '#0006' }]}
+                                onPress={ ()=> {
+                                    navigation.navigate('detail',{
+                                        houseName: result.houseName,
+                                        houseNumber: result.houseNumber,
+                                    })
+                                } }
+                            >
+                                <Text style={{ color: 'white' }}>{ result.houseName }</Text>
+                                <Text style={{ color: 'white' }}>{ result.houseNumber }</Text>
+                            </TouchableOpacity>
+                        )
+                    })
+                }
             </ScrollView>
             <View style={styles.searchBg}>
                 <TextInput
                     value={value}
                     onChangeText={(text)=> onValueChange(text)}
+                    returnKeyType='google'
+                    onSubmitEditing={ ()=>search() }
+                    style={{ minWidth: '80%' }}
                 />
-                <Feather name="search" size={24} color="black" />
+                <TouchableOpacity onPress={ ()=>search() }>
+                    <Feather name="search" size={24} color="black" />
+                </TouchableOpacity>
             </View>
         </LinearGradient>
     )

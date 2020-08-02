@@ -13,7 +13,6 @@ export default ()=>{
     const [ results, createResults ] = useState([])
 
     const navigation = useNavigation()
-    const Search = useAsync(search, false)
 
     async function search(){
         Axios.get(server + '/voters', {
@@ -50,17 +49,11 @@ export default ()=>{
                     value={value}
                     onChangeText={(text)=> onValueChange(text)}
                     returnKeyType='google'
-                    onSubmitEditing={ ()=>Search.execute() }
+                    onSubmitEditing={ ()=> search() }
                     style={{ minWidth: '80%' }}
                 />
-                <TouchableOpacity onPress={ ()=>Search.execute() }>
-                    {
-                        Search.pending
-                        ?
-                        <ActivityIndicator size='small' />
-                        :
-                        <Feather name="search" size={24} color="black" />
-                    }
+                <TouchableOpacity onPress={ ()=> search() }>
+                    <Feather name="search" size={24} color="black" />
                 </TouchableOpacity>
             </View>
         </LinearGradient>

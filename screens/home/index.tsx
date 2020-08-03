@@ -58,12 +58,33 @@ const HouseList = ()=>{
 
 
 export default ()=>{
+    const [ progress, setProgress ] = useState(0)
+    const [ totalHouses, setTotal ] = useState(0)
+    const [ completed, setCompleted ] = useState(0)
+
+    useEffect(()=>{
+        (
+            async ()=>{
+                Axios.get(server + '/progress', {
+                    params:{
+                        ward: await AsyncStorage.getItem('ward')
+                    }
+                }).then((res)=>{
+                    setProgress(res.data.completed / res.data.totalHouses);
+                    setTotal(res.data.totalHouses);
+                    setCompleted(res.data.completed)
+                })
+            }
+        )()
+    }, [])
+
     const config = {
         duration: 1000,
         from: 0,
-        to: 0.4,
+        to: progress,
         easing: Easing.bezier(0.5, 1, 0.89, 1),
     }
+
     return(
         <View style={styles.container}>
             <View>
@@ -76,8 +97,8 @@ export default ()=>{
                     <Text style={{
                         fontWeight: "bold",
                         fontSize: 40,
-                    }}>{323}</Text>
-                    <Text style={{fontSize: 20, marginTop: 10}}>{1002}</Text>
+                    }}>{completed}</Text>
+                    <Text style={{fontSize: 20, marginTop: 10}}>{totalHouses}</Text>
                     <Text style={{color: '#888'}}>Houses</Text>
                 </View>
             </View>

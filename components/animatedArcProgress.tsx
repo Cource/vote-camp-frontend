@@ -25,7 +25,7 @@ const y2 = -r * sin(endAngle) + cy;
 const d = `M ${x1} ${y1} A ${r} ${r} 0 1 0 ${x2} ${y2}`;
 
 interface CircularProgressProps {
-  progress: Animated.Value<number>;
+  progress: Animated.Node<number>;
 }
 
 export default ({ progress }: CircularProgressProps) => {

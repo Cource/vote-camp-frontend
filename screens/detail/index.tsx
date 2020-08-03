@@ -42,9 +42,7 @@ const parties: Array<party> = [
 ]
 
 
-const ButtonContainer = (props)=>{
-    const [ disabled, setAbility ] = useState(false)
-
+const ButtonContainer = (props:any)=>{
     if (!props.hidden){
         return(
             <View style={ detailStyles.buttonContainer }>
@@ -52,7 +50,7 @@ const ButtonContainer = (props)=>{
                     {
                         parties.map((party:party)=>{
                             return(
-                                <TouchableOpacity onPress={ ()=> props.setHide({ backgroundColor:'#ddd', borderRadius: 10 }) } key={ party.key as string } style={[ detailStyles.button, { backgroundColor: party.color } ]}>
+                                <TouchableOpacity onPress={ ()=> props.setHide({ backgroundColor:'#ddd', borderRadius: 10 }) } key={ party.key as string } style={[ detailStyles.button, { backgroundColor: party.color } as ViewStyle ]}>
                                     <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>{party.key}</Text>
                                 </TouchableOpacity>
                             )
@@ -123,7 +121,7 @@ const detailStyles = StyleSheet.create({
     }
 })
 
-const ConfirmBtn = (props:Props)=>{
+const ConfirmBtn = ()=>{
     const navigation = useNavigation()
     return(
         <TouchableOpacity onPress={ ()=> navigation.goBack() } style={{ marginBottom: 20, marginRight: 20, alignSelf: "flex-end" }}>

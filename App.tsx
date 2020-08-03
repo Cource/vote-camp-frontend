@@ -11,7 +11,7 @@ import SignIn from "./screens/signIn";
 export type StackParamList = {
     landing: undefined;
     home: undefined;
-    detail: { name:string, members: Member[] }
+    detail: { houseName: string, houseNumber: Number }
 }
 
 const Stack = createStackNavigator();

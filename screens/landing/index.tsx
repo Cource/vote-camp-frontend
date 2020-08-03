@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Picker, TouchableOpacity } from 'react-native';
+import AsyncStorage from "@react-native-community/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { Option, districts } from "../../model/landing";
 import { StackScreenProps } from '@react-navigation/stack';
@@ -75,7 +76,12 @@ export default ({ navigation }:Props)=>{
             <LinearGradient
                 colors={['#5ABDFF', '#88E7FF']}
                 style={styles.cta}>
-                <TouchableOpacity onPress={()=> navigation.navigate('home')}>
+                <TouchableOpacity onPress={()=> {
+                    navigation.navigate('home')
+                    AsyncStorage.setItem('district', district)
+                    AsyncStorage.setItem('city', city)
+                    AsyncStorage.setItem('ward', ward)
+                }}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 20,

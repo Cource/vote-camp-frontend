@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import AsyncStorage from "@react-native-community/async-storage";
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { Easing } from 'react-native-reanimated';
@@ -8,8 +9,6 @@ import ArcProgress from '../../components/animatedArcProgress'
 import SearchBar from "../../components/searchbar";
 import { House, server } from "../../model/houses";
 import Axios from "axios";
-import useAsync from '../../hooks/useAsync';
-
 
 const HouseListItem = (props:House)=>{
     const navigation = useNavigation()
@@ -31,17 +30,17 @@ const HouseListItem = (props:House)=>{
 const HouseList = ()=>{
     const [ data, setData ] = useState([])
     useEffect(()=>{
-            Axios.get(server + '/users', {
-                params: {
-                    district: 'kottayam',
-                    city: 'poonjar',
-                    ward: 'perunnilam',
-                }
-            })
-            .then((res)=>{
-                setData(res.data)
-            })
-    })
+            (async ()=>{
+                Axios.get(server + '/users', {
+                    params: {
+                        district: await AsyncStorage.getItem('district'),
+                        city: await AsyncStorage.getItem('city'),
+                        ward: await AsyncStorage.getItem('ward'),
+                    }
+                })
+                .then((res)=> {setData(res.data)})
+            })()
+    }, [])
     return(<>
             {
                 data.map((house:House)=> {

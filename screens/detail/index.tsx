@@ -8,39 +8,10 @@ import SearchBar from "../../components/searchbar";
 import { Member, server } from "../../model/houses";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import { party, parties } from "./parties";
 import Axios from "axios";
 
 type Props = StackScreenProps<StackParamList, 'detail'>
-
-interface party {
-    key: String,
-    color: String,
-    image: String,
-}
-
-const parties: Array<party> = [
-    {
-        key: 'LDF',
-        color: '#f55',
-        image: '',
-    },
-    {
-        key: 'UDF',
-        color: '#58f',
-        image: '',
-    },
-    {
-        key: 'BJP',
-        color: '#fa5',
-        image: '',
-    },
-    {
-        key: 'NOTA',
-        color: '#887',
-        image: ''
-    }
-]
-
 
 const ButtonContainer = (props:any)=>{
     if (!props.hidden){

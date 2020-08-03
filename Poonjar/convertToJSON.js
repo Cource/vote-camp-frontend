@@ -1,14 +1,5 @@
 const fs = require('fs')
 
-// export interface Voter{
-//   name: String,
-//   guardian: String,
-//   houseNo: Number,
-//   houseName: String,
-//   genderAge: String,
-//   id: String
-// }
-
 function csvJSON(csv){
 
     let lines =csv.split("\n");

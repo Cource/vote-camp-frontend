@@ -9,18 +9,24 @@ import { useNavigation } from '@react-navigation/native';
 import useAsync from '../hooks/useAsync';
 
 export default ()=>{
-    const [ value , onValueChange ] = useState('Search for houses or people')
+    const [ value , onValueChange ] = useState('')
     const [ results, createResults ] = useState([])
+    const [ search, doSearch ] = useState(false)
+    function Search(){
+        doSearch(!search)
+    }
 
     const navigation = useNavigation()
 
-    async function search(){
-        Axios.get(server + '/voters', {
-            params:{
-                search: value
-            }
-        }).then((res)=> {createResults(res.data)})
-    }
+    useEffect(()=>{
+        if (value !== ''){
+            Axios.get(server + '/voters', {
+                params:{
+                    search: value
+                }
+            }).then((res)=> {createResults(res.data)})
+        } else createResults([])
+    }, [search])
 
     return(
         <LinearGradient colors={['#5ABDFF', '#88E7FF']} style={styles.searchBarBg} >
@@ -48,11 +54,10 @@ export default ()=>{
                 <TextInput
                     value={value}
                     onChangeText={(text)=> onValueChange(text)}
-                    returnKeyType='google'
-                    onSubmitEditing={ ()=> search() }
                     style={{ minWidth: '80%' }}
+                    onSubmitEditing={ Search }
                 />
-                <TouchableOpacity onPress={ ()=> search() }>
+                <TouchableOpacity onPress={()=> Search() }>
                     <Feather name="search" size={24} color="black" />
                 </TouchableOpacity>
             </View>

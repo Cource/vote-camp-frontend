@@ -4,7 +4,6 @@ import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Ionicons, Feather, Fontisto } from '@expo/vector-icons';
 import { StackParamList } from "../../App";
-import SearchBar from "../../components/searchbar";
 import { Member, server } from "../../model/houses";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -14,6 +13,7 @@ import Axios from "axios";
 type Props = StackScreenProps<StackParamList, 'detail'>
 
 const ButtonContainer = (props:any)=>{
+
     if (!props.hidden){
         return(
             <View style={ detailStyles.buttonContainer }>
@@ -21,7 +21,12 @@ const ButtonContainer = (props:any)=>{
                     {
                         parties.map((party:party)=>{
                             return(
-                                <TouchableOpacity onPress={ ()=> props.setHide({ backgroundColor:'#ddd', borderRadius: 10 }) } key={ party.key as string } style={[ detailStyles.button, { backgroundColor: party.color } as ViewStyle ]}>
+                                <TouchableOpacity
+                                    onPress={ ()=> {
+                                        props.setHide({ backgroundColor:'#ddd', borderRadius: 10 })
+                                    }}
+                                    key={ party.key as string }
+                                    style={[ detailStyles.button, { backgroundColor: party.color } as ViewStyle ]}>
                                     <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>{party.key}</Text>
                                 </TouchableOpacity>
                             )
@@ -109,6 +114,7 @@ export default ({ route, navigation }:Props)=>{
     const { houseNumber } = route.params
 
     const [ members, setMembers ] = useState([])
+
     useEffect(()=>{
         Axios.get(server + '/familyDetails', {
             params: {

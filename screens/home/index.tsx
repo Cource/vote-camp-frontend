@@ -31,9 +31,11 @@ const HouseList = ()=>{
     const [ data, setData ] = useState([])
     useEffect(()=>{
             (async ()=>{
+                console.log(await AsyncStorage.getItem('city'))
                 Axios.get(server + '/users', {
                     params: {
-                        district: await AsyncStorage.getItem('district'),
+                        // district: await AsyncStorage.getItem('district'),
+                        district: 'kottayam',
                         city: await AsyncStorage.getItem('city'),
                         ward: await AsyncStorage.getItem('ward'),
                     }
@@ -63,19 +65,19 @@ export default ()=>{
     const [ completed, setCompleted ] = useState(0)
 
     useEffect(()=>{
-        (
-            async ()=>{
-                Axios.get(server + '/progress', {
-                    params:{
-                        ward: await AsyncStorage.getItem('ward')
-                    }
-                }).then((res)=>{
-                    setProgress(res.data.completed / res.data.totalHouses);
-                    setTotal(res.data.totalHouses);
-                    setCompleted(res.data.completed)
-                })
-            }
-        )()
+        // (
+        //     async ()=>{
+        //         Axios.get(server + '/progress', {
+        //             params:{
+        //                 ward: await AsyncStorage.getItem('ward')
+        //             }
+        //         }).then((res)=>{
+        //             setProgress(res.data.completed / res.data.totalHouses);
+        //             setTotal(res.data.totalHouses);
+        //             setCompleted(res.data.completed)
+        //         })
+        //     }
+        // )()
     }, [])
 
     const config = {

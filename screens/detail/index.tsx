@@ -1,101 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ViewStyle } from 'react-native';
-import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
+import { Feather, Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Ionicons, Feather, Fontisto } from '@expo/vector-icons';
+import Axios from "axios";
+import { LinearGradient } from 'expo-linear-gradient';
+import { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, AsyncStorage } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { StackParamList } from "../../App";
 import { Member, server } from "../../model/houses";
-import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import { party, parties } from "./parties";
-import Axios from "axios";
+import Card from './card';
 
 type Props = StackScreenProps<StackParamList, 'detail'>
-
-const ButtonContainer = (props:any)=>{
-
-    if (!props.hidden){
-        return(
-            <View style={ detailStyles.buttonContainer }>
-                <View style={{ flexDirection: 'row' }}>
-                    {
-                        parties.map((party:party)=>{
-                            return(
-                                <TouchableOpacity
-                                    onPress={ ()=> {
-                                        props.setHide({ backgroundColor:'#ddd', borderRadius: 10 })
-                                    }}
-                                    key={ party.key as string }
-                                    style={[ detailStyles.button, { backgroundColor: party.color } as ViewStyle ]}>
-                                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>{party.key}</Text>
-                                </TouchableOpacity>
-                            )
-                        })
-                    }
-                </View>
-                <View>
-                    <TouchableOpacity style={[ detailStyles.button ]} >
-                        <Fontisto name="paralysis-disability" size={20} color="white" />
-                    </TouchableOpacity>
-                </View>
-            </View>
-        )
-    }
-    else return null
-}
-
-const Detail = (props:Member)=>{
-    const [ hidden, setHide ] = useState({})
-
-    return(
-        <View style={{ marginBottom: 10 }}>
-            <TouchableOpacity style={[ styles.detailsItem, hidden ]} onPress={ ()=> setHide({}) } >
-                <View>
-                    <View>
-                        <Text style={ detailStyles.title } >Name</Text>
-                        <Text>{ props.name }</Text>
-                    </View>
-                    <View>
-                        <Text style={ detailStyles.title } >Guardian</Text>
-                        <Text>{ props.guardian }</Text>
-                    </View>
-                </View>
-                <View>
-                    <View>
-                        <Text style={ detailStyles.title } >Voters Id</Text>
-                        <Text>{ props.voterId } </Text>
-                    </View>
-                    <View>
-                        <Text style={ detailStyles.title } >Sex/Age</Text>
-                        <Text>{ props.gender }</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-            <ButtonContainer setHide={ setHide } hidden={ Object.keys(hidden).length } />
-        </View>
-    );
-}
-
-const detailStyles = StyleSheet.create({
-    title: {
-        fontWeight: 'bold',
-        marginTop: 10,
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: "space-between",
-        backgroundColor: '#ddd',
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-    },
-    button: {
-        backgroundColor: "#555",
-        padding: 10,
-        borderRadius: 100,
-        marginHorizontal: 5,
-        marginVertical: 5,
-    }
-})
 
 const ConfirmBtn = ()=>{
     const navigation = useNavigation()
@@ -115,16 +30,23 @@ export default ({ route, navigation }:Props)=>{
 
     const [ members, setMembers ] = useState([])
 
-    useEffect(()=>{
-        Axios.get(server + '/familyDetails', {
-            params: {
-                ward: 'perunnilam',
-                houseNumber: houseNumber,
-            }
-        }).then((res)=>{
-            setMembers(res.data)
-        })
-    }, [])
+    useEffect(
+        ()=>{
+            (
+                async()=>{
+                    Axios.get(server + '/familyDetails', {
+                        params: {
+                            ward: await AsyncStorage.getItem('ward'),
+                            houseNumber: houseNumber,
+                        }
+                    })
+                        .then((res)=>{
+                            setMembers(res.data)
+                        })
+                }
+            )()
+        },
+    [])
 
     return(
         <View style={styles.screen}>
@@ -143,7 +65,7 @@ export default ({ route, navigation }:Props)=>{
                     {
                         members.map((member:Member)=> {
                             return (
-                                <Detail name={ member.name } voterId={ member.voterId } guardian={ member.guardian } gender={ member.gender } key={ member.voterId as string } />
+                                <Card name={ member.name } voterId={ member.voterId } guardian={ member.guardian } gender={ member.gender } key={ member.voterId as string } />
                             )
                         })
                     }
@@ -179,18 +101,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 30,
         marginTop: 30,
         marginBottom: 100,
-    },
-    detailsItem: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginTop: 5,
-        paddingBottom: 15,
-        backgroundColor: "white",
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        elevation: 1,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
     },
     detailsHeader: {
         justifyContent: "space-between",

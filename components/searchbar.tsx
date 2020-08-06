@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Text, ActivityIndicator } from "react-native";
+import { View, TextInput, StyleSheet, Text } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Axios from 'axios';
 import { server, House } from '../model/houses';
 import { useNavigation } from '@react-navigation/native';
-import useAsync from '../hooks/useAsync';
+import Barcode from "./barcode";
 
 export default ()=>{
-    const [ value , onValueChange ] = useState('')
+    const [ value , onValueChange ] = useState('Search..')
     const [ results, createResults ] = useState([])
+    const [barcodeShown, setBarcodeShown] = useState(false)
     const [ search, doSearch ] = useState(false)
     function Search(){
         doSearch(!search)
@@ -54,13 +55,22 @@ export default ()=>{
                 <TextInput
                     value={value}
                     onChangeText={(text)=> onValueChange(text)}
-                    style={{ minWidth: '80%' }}
+                    style={{ minWidth: '70%' }}
                     onSubmitEditing={ Search }
                 />
                 <TouchableOpacity onPress={()=> Search() }>
                     <Feather name="search" size={24} color="black" />
                 </TouchableOpacity>
+                <TouchableOpacity style={{ marginLeft: 10 }} onPress={ ()=> setBarcodeShown(true) } >
+                    <Feather name="camera" size={24} color="black" />
+                </TouchableOpacity>
             </View>
+            {
+                barcodeShown
+                ?
+                <Barcode valueSetter={onValueChange} onScanned={ ()=> setBarcodeShown(false) } />
+                :null
+            }
         </LinearGradient>
     )
 }

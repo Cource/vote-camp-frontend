@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
 import AsyncStorage from "@react-native-community/async-storage";
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import Axios from "axios";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Easing } from 'react-native-reanimated';
 import { timing } from "react-native-redash";
-import ArcProgress from '../../components/animatedArcProgress'
+import ArcProgress from '../../components/animatedArcProgress';
 import SearchBar from "../../components/searchbar";
 import { House, server } from "../../model/houses";
-import Axios from "axios";
 
 const HouseListItem = (props:House)=>{
     const navigation = useNavigation()
@@ -31,11 +31,9 @@ const HouseList = ()=>{
     const [ data, setData ] = useState([])
     useEffect(()=>{
             (async ()=>{
-                console.log(await AsyncStorage.getItem('city'))
                 Axios.get(server + '/users', {
                     params: {
-                        // district: await AsyncStorage.getItem('district'),
-                        district: 'kottayam',
+                        district: await AsyncStorage.getItem('district'),
                         city: await AsyncStorage.getItem('city'),
                         ward: await AsyncStorage.getItem('ward'),
                     }
@@ -65,19 +63,19 @@ export default ()=>{
     const [ completed, setCompleted ] = useState(0)
 
     useEffect(()=>{
-        // (
-        //     async ()=>{
-        //         Axios.get(server + '/progress', {
-        //             params:{
-        //                 ward: await AsyncStorage.getItem('ward')
-        //             }
-        //         }).then((res)=>{
-        //             setProgress(res.data.completed / res.data.totalHouses);
-        //             setTotal(res.data.totalHouses);
-        //             setCompleted(res.data.completed)
-        //         })
-        //     }
-        // )()
+        (
+            async ()=>{
+                Axios.get(server + '/progress', {
+                    params:{
+                        ward: await AsyncStorage.getItem('ward')
+                    }
+                }).then((res)=>{
+                    setProgress(res.data.completed / res.data.totalHouses)
+                    setTotal(res.data.totalHouses)
+                    setCompleted(res.data.completed)
+                })
+            }
+        )()
     }, [])
 
     const config = {

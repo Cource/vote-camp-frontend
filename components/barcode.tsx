@@ -39,8 +39,7 @@ export default (props:barcodeProps)=> {
         <BarCodeScanner
             onBarCodeScanned={handleBarCodeScanned}
             style={{
-            width: 500,
-            height: 500
+                height: 500
             }}
         />
         </View>

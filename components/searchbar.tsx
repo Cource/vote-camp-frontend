@@ -61,7 +61,7 @@ export default ()=>{
                 <TouchableOpacity onPress={()=> Search() }>
                     <Feather name="search" size={24} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={{ marginLeft: 10 }} onPress={ ()=> setBarcodeShown(true) } >
+                <TouchableOpacity style={{ marginLeft: 10 }} onPress={ ()=> setBarcodeShown(!barcodeShown) } >
                     <Feather name="camera" size={24} color="black" />
                 </TouchableOpacity>
             </View>

@@ -7,6 +7,7 @@ import Landing from './screens/landing';
 import Home from './screens/home';
 import Detail from "./screens/detail"
 import SignIn from "./screens/signIn";
+import AsyncStorage from '@react-native-community/async-storage';
 
 export type StackParamList = {
     landing: undefined;
@@ -17,10 +18,17 @@ export type StackParamList = {
 const Stack = createStackNavigator();
 
 export default function App() {
+
+    function getStartPage(){
+        if(AsyncStorage.getItem('ward')){
+            return 'home'
+        }else return 'landing'
+    }
+
     return (
         <NavigationContainer>
             <StatusBar style="auto" />
-            <Stack.Navigator initialRouteName="landing" screenOptions={{ headerShown: false }} >
+            <Stack.Navigator initialRouteName={getStartPage()} screenOptions={{ headerShown: false }} >
                 <Stack.Screen name="signIn" component={SignIn}/>
                 <Stack.Screen name="landing" component={Landing} />
                 <Stack.Screen name="home" component={Home}/>

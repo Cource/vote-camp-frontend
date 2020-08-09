@@ -17,7 +17,7 @@ export const districts =[
   "thrissur",
   "eranakulam",
   "idukki",
-  "thiruvananthapuram",
+  "THIRUVANANTHAPURAM",
   "kollam",
   "alappuzha",
   "pathanamthitta",

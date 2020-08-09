@@ -6,32 +6,33 @@ import { parties, party } from "./parties";
 
 
 const ButtonContainer = (props:{ hidden: boolean })=>{
-    if (props.hidden){
-        return(
-            <View style={ styles.buttonContainer }>
-                <View style={{ flexDirection: 'row' }}>
-                    {
-                        parties.map((party:party)=>{
-                            return(
-                                <TouchableOpacity
-                                    onPress={ ()=> {}}
-                                    key={ party.key as string }
-                                    style={[ styles.button, { backgroundColor: party.color } as ViewStyle ]}>
-                                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>{party.key}</Text>
-                                </TouchableOpacity>
-                            )
-                        })
-                    }
-                </View>
-                <View>
-                    <TouchableOpacity style={[ styles.button ]} >
-                        <Fontisto name="paralysis-disability" size={20} color="white" />
-                    </TouchableOpacity>
-                </View>
+    if (props.hidden) return null
+
+    return(
+        <View style={ styles.buttonContainer }>
+            <View style={{ flexDirection: 'row' }} >
+                <TouchableOpacity style={[ styles.button ]} >
+                    <Text style={[styles.buttonText, { marginRight: 10 }]} >Needs Help</Text>
+                    <Fontisto name="paralysis-disability" size={20} color="white" />
+                </TouchableOpacity>
             </View>
-        )
-    }
-    else return null
+            <View style={{ flexDirection: 'row' }}>
+                {
+                    parties.map((party:party)=>{
+                        return(
+                            <TouchableOpacity
+                                onPress={ ()=> {}}
+                                key={ party.key as string }
+                                style={[ styles.button, { backgroundColor: party.color } as ViewStyle ]}>
+                                <Text style={styles.buttonText}>{party.key}</Text>
+                            </TouchableOpacity>
+                        )
+                    })
+                }
+            </View>
+            
+        </View>
+    )
 }
 
 export default (props:Member)=>{
@@ -72,13 +73,14 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     buttonContainer: {
-        flexDirection: 'row',
         justifyContent: "space-between",
         backgroundColor: '#ddd',
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
+        padding: 5,
     },
     button: {
+        flexDirection: 'row',
         backgroundColor: "#555",
         padding: 10,
         borderRadius: 100,
@@ -97,4 +99,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5,
     },
+    buttonText: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: 'white',
+    }
 })

@@ -2,41 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Picker, TouchableOpacity } from 'react-native';
 import AsyncStorage from "@react-native-community/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
-import { Option, districts } from "../../model/landing";
+import { districts } from "../../model/landing";
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from "../../App";
 import Axios from 'axios';
 import { server } from '../../model/houses';
+import OptionPicker from './optionPicker'
 
 type Props = StackScreenProps<StackParamList, 'landing'>
 
-const OptionPicker = (props:Option)=>{
-    return (
-        <View>
-            <Text style={styles.optionTitle}>{props.title}</Text>
-            <View style={{ borderRadius: 10, borderColor: "#555", borderStyle: "solid", borderWidth: 2 }}>
-                <Picker 
-                    selectedValue={props.state as string}
-                    onValueChange={(itemValue)=> {
-                        props.changeState
-                        ?
-                        props.changeState(itemValue)
-                        : null
-                    }}
-                    style={{ height: 50, width: 300 }}
-                    >
-                    {
-                        props.list.map((item)=>{
-                            return(
-                                <Picker.Item key={item as string} label={item as string} value={item as string}></Picker.Item>
-                            )
-                        })
-                    }
-                </Picker>
-            </View>
-        </View>  
-    )
-}
+
 
 export default ({ navigation }:Props)=>{
     const [ district, setDistrict ] = useState('')
@@ -109,12 +84,6 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         fontSize: 20,
         fontWeight: '700'
-    },
-    optionTitle: {
-        fontSize: 20,
-        fontWeight: "bold",
-        marginTop: 20,
-        marginBottom: 10,
     },
     cta: {
         paddingHorizontal: 25,

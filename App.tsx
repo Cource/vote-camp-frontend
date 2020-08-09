@@ -1,13 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Member } from "./model/houses";
-import Landing from './screens/landing';
+import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import addVoter from "./screens/addVoter";
+import Detail from "./screens/detail";
 import Home from './screens/home';
-import Detail from "./screens/detail"
+import Landing from './screens/landing';
 import SignIn from "./screens/signIn";
-import AsyncStorage from '@react-native-community/async-storage';
 
 export type StackParamList = {
     landing: undefined;
@@ -33,6 +33,7 @@ export default function App() {
                 <Stack.Screen name="landing" component={Landing} />
                 <Stack.Screen name="home" component={Home}/>
                 <Stack.Screen name="detail" component={Detail}/>
+                <Stack.Screen name="addVoter" component={addVoter}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

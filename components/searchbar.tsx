@@ -43,6 +43,7 @@ export default ()=>{
                                         houseNumber: result.houseNumber,
                                     })
                                 } }
+                                key={ result.houseNumber as number }
                             >
                                 <Text style={{ color: 'white' }}>{ result.houseName }</Text>
                                 <Text style={{ color: 'white' }}>{ result.houseNumber }</Text>

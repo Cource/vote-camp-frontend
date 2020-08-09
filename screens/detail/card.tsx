@@ -2,7 +2,7 @@ import { Fontisto } from "@expo/vector-icons";
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Member } from "../../model/houses";
-import { parties, party } from "./parties";
+import { parties, party } from "../../model/parties";
 
 
 const ButtonContainer = (props:{ hidden: boolean })=>{

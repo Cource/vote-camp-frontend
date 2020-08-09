@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import Axios from "axios";
 import { LinearGradient } from 'expo-linear-gradient';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, AsyncStorage } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { StackParamList } from "../../App";

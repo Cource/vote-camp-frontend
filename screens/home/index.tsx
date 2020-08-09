@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-community/async-storage";
 import { useNavigation } from '@react-navigation/native';
 import Axios from "axios";
@@ -9,6 +10,10 @@ import { timing } from "react-native-redash";
 import ArcProgress from '../../components/animatedArcProgress';
 import SearchBar from "../../components/searchbar";
 import { House, server } from "../../model/houses";
+import { StackScreenProps } from '@react-navigation/stack';
+import { StackParamList } from '../../App';
+
+type Props = StackScreenProps<StackParamList, 'home'>
 
 const HouseListItem = (props:House)=>{
     const navigation = useNavigation()
@@ -57,26 +62,26 @@ const HouseList = ()=>{
 }
 
 
-export default ()=>{
+export default ({ navigation }:Props)=>{
     const [ progress, setProgress ] = useState(0)
     const [ totalHouses, setTotal ] = useState(0)
     const [ completed, setCompleted ] = useState(0)
 
-    useEffect(()=>{
-        (
-            async ()=>{
-                Axios.get(server + '/progress', {
-                    params:{
-                        ward: await AsyncStorage.getItem('ward')
-                    }
-                }).then((res)=>{
-                    setProgress(res.data.completed / res.data.totalHouses)
-                    setTotal(res.data.totalHouses)
-                    setCompleted(res.data.completed)
-                })
-            }
-        )()
-    }, [])
+    // useEffect(()=>{
+    //     (
+    //         async ()=>{
+    //             Axios.get(server + '/progress', {
+    //                 params:{
+    //                     ward: await AsyncStorage.getItem('ward')
+    //                 }
+    //             }).then((res)=>{
+    //                 setProgress(res.data.completed / res.data.totalHouses)
+    //                 setTotal(res.data.totalHouses)
+    //                 setCompleted(res.data.completed)
+    //             })
+    //         }
+    //     )()
+    // }, [])
 
     const config = {
         duration: 1000,
@@ -87,9 +92,17 @@ export default ()=>{
 
     return(
         <View style={styles.container}>
-            <View>
-                <Text style={styles.header}>Campaign Progress</Text>
-                <Text style={styles.subHeader}>Poonjar</Text>
+            <View style={{ flexDirection: 'row', justifyContent: "space-around", alignItems: "center", marginTop: 40 }}>
+                <View>
+                    <Text style={styles.header}>Campaign Progress</Text>
+                    <Text style={styles.subHeader}>Poonjar</Text>
+                </View>
+                <TouchableOpacity onPress={()=>{
+                    AsyncStorage.setItem('ward', '')
+                    navigation.navigate('landing')
+                }}>
+                    <Ionicons name="md-exit" size={30} color="black" />
+                </TouchableOpacity>
             </View>
             <View style={{ alignSelf: "center", alignItems: "center", justifyContent: 'center', marginTop: 20 }}>
                 <ArcProgress progress={timing(config)} />
@@ -122,13 +135,10 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 30,
         fontWeight: "700",
-        paddingLeft: 30,
-        paddingTop: 40,
     },
     subHeader: {
         fontSize: 15,
         fontWeight: "600",
-        paddingLeft: 32
     },
     houseListItem: {
         flexDirection: 'row',

@@ -1,23 +1,23 @@
 export interface party {
-    key: string,
+    title: string,
     color: string,
 }
 
-export const parties: Array<party> = [
+export const parties: party[] = [
     {
-        key: 'LDF',
+        title: 'LDF',
         color: '#f55',
     },
     {
-        key: 'UDF',
+        title: 'UDF',
         color: '#58f',
     },
     {
-        key: 'BJP',
+        title: 'BJP',
         color: '#fa5',
     },
     {
-        key: 'NOTA',
+        title: 'NOTA',
         color: '#887',
     }
 ]

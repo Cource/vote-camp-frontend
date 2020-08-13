@@ -53,15 +53,12 @@ export default ({ route, navigation }:Props)=>{
             <View>
                 <View style={styles.header}>
                     <TouchableOpacity
-                        style={[styles.header, { justifyContent: "flex-start", marginTop: 0, marginHorizontal: 0 }]}
-                        onPress={()=>{navigation.navigate("home")}}
+                        style={{ flexDirection: 'row', justifyContent: "flex-start", marginTop: 0, marginHorizontal: 0 }}
+                        onPress={()=>{navigation.goBack()}}
                     >
                         <Ionicons name="ios-arrow-back" size={30} color="#888" />
                         <Text style={styles.name}>{ houseName }</Text>
                         <Text style={[styles.name, {fontWeight: "500"}]} >{ houseNumber }</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={()=> navigation.navigate('addVoter', { houseNumber: houseNumber })} >
-                        <Feather name='user-plus' size={30} color="black" />
                     </TouchableOpacity>
                 </View>
                 <ScrollView style={styles.details}>

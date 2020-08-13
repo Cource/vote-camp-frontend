@@ -1,10 +1,10 @@
 import { BarCodeScanner } from "expo-barcode-scanner";
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { Text } from 'react-native';
 
 interface barcodeProps {
     valueSetter: React.Dispatch<React.SetStateAction<string>>;
-    onScanned: Function;
+    onScanned?: Function;
 }
 
 export default (props:barcodeProps)=> {
@@ -20,11 +20,10 @@ export default (props:barcodeProps)=> {
     },[])
 
     const handleBarCodeScanned = ({ type, data }: { type:String, data:string }) => {
-        type === '32'
-        ?
         props.valueSetter(data)
-        :null;
+        props.onScanned?
         props.onScanned()
+        :null
     }
 
     if (hasPermission === null) {
@@ -35,13 +34,11 @@ export default (props:barcodeProps)=> {
     }
 
     return (
-        <View>
         <BarCodeScanner
             onBarCodeScanned={handleBarCodeScanned}
             style={{
-                height: 500
+                flex: 1
             }}
         />
-        </View>
     )
 }

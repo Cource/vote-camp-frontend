@@ -4,6 +4,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialIcons } from '@expo/vector-icons';
 import { parties, party } from "../model/parties";
 import OptionPicker from '../screens/landing/optionPicker'
+import Chooser from "./chooser"
 
 export default ()=> {
     const [ religion, setReligion ] = useState<'Select'|'Christian'|'Muslim'|'Hindu'|'Buddhist'>('Select')
@@ -17,37 +18,9 @@ export default ()=> {
                 </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row' }} >
-                {
-                    parties.map((party:party)=>{
-                        return(
-                            <TouchableOpacity
-                                onPress={ ()=> {}}
-                                key={ party.key }
-                                style={[ styles.button, { backgroundColor: party.color } ]}>
-                                <Text style={styles.buttonText}>{party.key}</Text>
-                            </TouchableOpacity>
-                        )
-                    })
-                }
+                <Chooser items={parties} onSelect={()=> null} />
             </View>
             <OptionPicker title="Religion" list={["Christian", "Muslim", "Hindu", "Buddhist"]} state={religion} changeState={setReligion} />
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    button: {
-        flexDirection: 'row',
-        backgroundColor: "#555",
-        padding: 10,
-        paddingHorizontal: 18,
-        borderRadius: 100,
-        marginRight: 10,
-        marginVertical: 5,
-    },
-    buttonText: {
-        fontSize: 15,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-})

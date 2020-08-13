@@ -8,6 +8,6 @@ export interface Member{
 }
 
 export interface House{
-    houseName: String,
-    houseNumber: Number,
+    houseName: string,
+    houseNumber: number,
 }

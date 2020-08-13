@@ -1,72 +1,75 @@
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-community/async-storage";
-import { useNavigation } from '@react-navigation/native';
 import Axios from "axios";
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Easing } from 'react-native-reanimated';
 import { timing } from "react-native-redash";
 import ArcProgress from '../../components/animatedArcProgress';
-import SearchBar from "../../components/searchbar";
-import { House, server } from "../../model/houses";
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../App';
 
-type Props = StackScreenProps<StackParamList, 'home'>
+type Props = StackScreenProps<StackParamList, 'tabs'>
 
-const HouseListItem = (props:House)=>{
-    const navigation = useNavigation()
-    return(
-        <TouchableOpacity style={ styles.houseListItem }
-            onPress={(()=> 
-                navigation.navigate('detail',{
-                    houseName: props.houseName,
-                    houseNumber: props.houseNumber,
-                })
-            )}
-        >
-            <Text style={styles.listText}>{ props.houseName }</Text>
-            <Text style={styles.listText}>{ props.houseNumber }</Text>
-        </TouchableOpacity>
-    )
-}
+// const HouseListItem = (props:House)=>{
+//     const navigation = useNavigation()
+//     return(
+//         <TouchableOpacity style={ styles.houseListItem }
+//             onPress={(()=> 
+//                 navigation.navigate('detail',{
+//                     houseName: props.houseName,
+//                     houseNumber: props.houseNumber,
+//                 })
+//             )}
+//         >
+//             <Text style={styles.listText}>{ props.houseName }</Text>
+//             <Text style={styles.listText}>{ props.houseNumber }</Text>
+//         </TouchableOpacity>
+//     )
+// }
 
-const HouseList = ()=>{
-    const [ data, setData ] = useState([])
-    useEffect(()=>{
-            (async ()=>{
-                Axios.get(server + '/users', {
-                    params: {
-                        district: await AsyncStorage.getItem('district'),
-                        city: await AsyncStorage.getItem('city'),
-                        ward: await AsyncStorage.getItem('ward'),
-                    }
-                })
-                .then((res)=> {setData(res.data)})
-            })()
-    }, [])
-    return(<>
-            {
-                data.map((house:House)=> {
-                return(
-                    <HouseListItem
-                        houseNumber={ house.houseNumber }
-                        houseName={ house.houseName.charAt(0).toUpperCase() +house.houseName.slice(1).toLowerCase() }
-                        key={ house.houseNumber as number }
-                    />
-                )
-                })
-            }
-    </>)
-}
+// const HouseList = ()=>{
+//     const [ data, setData ] = useState([])
+//     useEffect(()=>{
+//             (async ()=>{
+//                 Axios.get(server + '/users', {
+//                     params: {
+//                         district: await AsyncStorage.getItem('district'),
+//                         city: await AsyncStorage.getItem('city'),
+//                         ward: await AsyncStorage.getItem('ward'),
+//                     }
+//                 })
+//                 .then((res)=> {setData(res.data)})
+//             })()
+//     }, [])
+//     return(<>
+//             {
+//                 data.map((house:House)=> {
+//                 return(
+//                     <HouseListItem
+//                         houseNumber={ house.houseNumber }
+//                         houseName={ house.houseName.charAt(0).toUpperCase() +house.houseName.slice(1).toLowerCase() }
+//                         key={ house.houseNumber as number }
+//                     />
+//                 )
+//                 })
+//             }
+//     </>)
+// }
 
 
 export default ({ navigation }:Props)=>{
     const [ progress, setProgress ] = useState(0)
     const [ totalHouses, setTotal ] = useState(0)
     const [ completed, setCompleted ] = useState(0)
+    const [ward, setWard] = useState<null|string>('')
 
+    useEffect(()=>{
+        (async()=>{
+            setWard(await AsyncStorage.getItem('ward'))
+        })()
+    }, [])
     // useEffect(()=>{
     //     (
     //         async ()=>{
@@ -92,17 +95,11 @@ export default ({ navigation }:Props)=>{
 
     return(
         <View style={styles.container}>
-            <View style={{ flexDirection: 'row', justifyContent: "space-around", alignItems: "center", marginTop: 40 }}>
+            <View style={{ marginTop: 40, marginHorizontal: 30 }}>
                 <View>
                     <Text style={styles.header}>Campaign Progress</Text>
-                    <Text style={styles.subHeader}>Poonjar</Text>
+                    <Text style={styles.subHeader}>{ward}</Text>
                 </View>
-                <TouchableOpacity onPress={()=>{
-                    AsyncStorage.setItem('ward', '')
-                    navigation.navigate('landing')
-                }}>
-                    <Ionicons name="md-exit" size={30} color="black" />
-                </TouchableOpacity>
             </View>
             <View style={{ alignSelf: "center", alignItems: "center", justifyContent: 'center', marginTop: 20 }}>
                 <ArcProgress progress={timing(config)} />
@@ -114,15 +111,21 @@ export default ({ navigation }:Props)=>{
                     <Text style={{fontSize: 20, marginTop: 10}}>{totalHouses}</Text>
                     <Text style={{color: '#888'}}>Houses</Text>
                 </View>
+                <TouchableOpacity onPress={()=>{
+                    AsyncStorage.setItem('ward', '')
+                    navigation.navigate('landing')
+                }}>
+                    <Ionicons name="md-exit" size={30} color="black" />
+                </TouchableOpacity>
             </View>
-            <View style={[styles.houseListItem, styles.listHeader]}>
+            <View></View>
+            {/* <View style={[styles.houseListItem, styles.listHeader]}>
                 <Text style={[styles.listHeaderText, styles.listText]}>Housename</Text>
                 <Text style={[styles.listHeaderText, styles.listText]}>House number</Text>
             </View>
             <ScrollView style={{ marginBottom: 70, }} >
                 <HouseList/>
-            </ScrollView>
-            <SearchBar/>
+            </ScrollView> */}
         </View>
     )
 }

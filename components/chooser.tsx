@@ -35,8 +35,8 @@ export default ({ items, onSelect, style }:items)=>{
             if (item.title != title ){
                 list[index] = 'grey'
             }
-            else setColors(list)
         }
+        setColors(list)
     }
     
     return(

@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Picker, Text, StyleSheet } from 'react-native';
-import { Option } from '../../model/landing'
+import { Picker, StyleSheet, Text, View } from 'react-native';
+import { Option } from '../../model/landing';
 
 export default (props:Option)=>{
     return (

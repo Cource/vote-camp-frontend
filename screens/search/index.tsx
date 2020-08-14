@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react"
-import { View, Text, AsyncStorage, StyleSheet } from "react-native"
-import { TextInput, TouchableOpacity, ScrollView } from "react-native-gesture-handler"
 import { Feather } from '@expo/vector-icons';
-import Axios from 'axios';
-import { server, House } from '../../model/houses';
 import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { AsyncStorage, StyleSheet, Text, View } from "react-native";
+import { ScrollView, TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import { searchAPI } from '../../api/v1';
+import { House } from '../../model/houses';
 
 
 export default ()=>{
@@ -23,12 +23,9 @@ export default ()=>{
 
     useEffect(()=>{
         if (query !== ''){
-            Axios.get(server + '/voters', {
-                params:{
-                    search: query
-                }
-            }).then((res)=> {setResults(res.data)})
-        } else setResults([])
+            searchAPI(query).then((res)=> setResults(res.data))
+        }
+        else setResults([])
     }, [search])
 
     return(

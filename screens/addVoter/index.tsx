@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, ViewStyle } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
 import { TextInput } from 'react-native-gesture-handler';
-import AddDetails from "../../components/addDetails";
-import Chooser from "../../components/chooser"
+import { AddDetails, Chooser } from "../../components";
 
 const Tbox = ({ placeholder, style }: { placeholder: string, style?: ViewStyle })=>{
     const [value, setValue] = useState(placeholder)

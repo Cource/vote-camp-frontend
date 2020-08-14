@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Barcode from '../../components/barcode'
-import { useNavigation } from '@react-navigation/native';
-import Axios from 'axios';
-import { server } from '../../model/houses'
-import { View, Text, StyleSheet } from 'react-native';
-import { StatusBar } from 'expo-status-bar'
 import AsyncStorage from '@react-native-community/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { searchAPI } from '../../api/v1';
+import { Barcode } from '../../components';
 
 export default ()=>{
     const navigation = useNavigation()
@@ -15,11 +14,7 @@ export default ()=>{
 
     useEffect(()=>{
         voterId!==''?
-            Axios.get(server + '/voters', {
-                params:{
-                    search: voterId
-                }
-            }).then((res)=> {
+            searchAPI(voterId).then((res)=> {
                 navigation.navigate('detail', {
                     houseName: res.data[0].houseName,
                     houseNumber: res.data[0].houseNumber,

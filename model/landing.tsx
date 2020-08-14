@@ -4,7 +4,7 @@ export interface Option{
   title: String,
   list: Array<String>,
   state: String
-  changeState: Dispatch<SetStateAction<string>>,
+  changeState: Dispatch<SetStateAction<any>>,
 }
   
 export const districts =[

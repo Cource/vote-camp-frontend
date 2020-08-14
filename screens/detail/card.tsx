@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Member } from "../../model/houses";
-import AddDetails from "../../components/addDetails";
-
 
 export default (props:Member)=>{
     const [ hidden, setHide ] = useState(true)

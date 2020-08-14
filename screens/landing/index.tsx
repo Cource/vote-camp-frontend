@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Picker, TouchableOpacity } from 'react-native';
 import AsyncStorage from "@react-native-community/async-storage";
-import { LinearGradient } from "expo-linear-gradient";
-import { districts } from "../../model/landing";
 import { StackScreenProps } from '@react-navigation/stack';
+import { LinearGradient } from "expo-linear-gradient";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { getCitiesAPI, getWardsAPI } from '../../api/v1';
 import { StackParamList } from "../../App";
-import Axios from 'axios';
-import { server } from '../../model/houses';
-import OptionPicker from './optionPicker'
+import { districts } from "../../model/landing";
+import OptionPicker from './optionPicker';
 
 type Props = StackScreenProps<StackParamList, 'landing'>
 
@@ -21,20 +20,11 @@ export default ({ navigation }:Props)=>{
     const [ wards, setWards ] = useState([])
 
     useEffect(()=>{
-        Axios.get(server + '/cities', {
-            params: {
-                district: district,
-            }
-        }).then((res)=> setCities(res.data) )
+        getCitiesAPI(district).then((res)=> setCities(res.data) )
     }, [district])
     
     useEffect(()=>{
-        Axios.get(server + '/wards', {
-            params: {
-                district: district,
-                city: city,
-            }
-        }).then((res)=> setWards(res.data) )
+        getWardsAPI(district, city).then((res)=> setWards(res.data) )
     }, [city])
 
     return(

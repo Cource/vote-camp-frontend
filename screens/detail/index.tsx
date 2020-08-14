@@ -1,13 +1,13 @@
 import { Feather, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import Axios from "axios";
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, AsyncStorage } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { familyDetailsAPI } from '../../api/v1';
 import { StackParamList } from "../../App";
-import { Member, server } from "../../model/houses";
+import { Member } from "../../model/houses";
 import Card from './card';
 
 type Props = StackScreenProps<StackParamList, 'detail'>
@@ -30,23 +30,15 @@ export default ({ route, navigation }:Props)=>{
 
     const [ members, setMembers ] = useState([])
 
-    useEffect(
-        ()=>{
-            (
-                async()=>{
-                    Axios.get(server + '/familyDetails', {
-                        params: {
-                            ward: await AsyncStorage.getItem('ward'),
-                            houseNumber: houseNumber,
-                        }
+    useEffect(()=>{
+        (
+            async()=>{
+                familyDetailsAPI(houseNumber).then((res)=>{
+                        setMembers(res.data)
                     })
-                        .then((res)=>{
-                            setMembers(res.data)
-                        })
-                }
-            )()
-        },
-    [])
+            }
+        )()
+    }, [])
 
     return(
         <View style={styles.screen}>
@@ -72,7 +64,6 @@ export default ({ route, navigation }:Props)=>{
                     <View style={{ height: 200 }} />
                 </ScrollView>
             </View>
-            {/* <SearchBar/> */}
             <View style={{ position: 'absolute', bottom: 0, minWidth: '100%' }}>
                 <ConfirmBtn/>
             </View>

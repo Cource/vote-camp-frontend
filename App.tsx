@@ -1,24 +1,25 @@
+import { Feather } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-community/async-storage';
-import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import addVoter from "./screens/addVoter";
 import Detail from "./screens/detail";
 import Home from './screens/home';
 import Landing from './screens/landing';
+import Scan from "./screens/scan";
+import Search from "./screens/search";
 import SignIn from "./screens/signIn";
-import Search from "./screens/search"
-import Scan from "./screens/scan"
-import { Feather } from "@expo/vector-icons"
-import { LinearGradient } from 'expo-linear-gradient';
 
 export type StackParamList = {
     landing: undefined,
     tabs: undefined,
     detail: { houseName: string, houseNumber: number },
-    addVoter: { houseNumber: number },
+    voter: { type: 'detail'|'add', name?: string, guardian?: string, dob?: Date, sex?: 'M'|'F'|'T', houseName?: string, houseNumber?: number, voterId?: string },
 }
 
 const Stack = createStackNavigator();
@@ -40,6 +41,7 @@ export default function App() {
                 <Stack.Screen name="landing" component={Landing} />
                 <Stack.Screen name="tabs" component={Tabs}/>
                 <Stack.Screen name="detail" component={Detail}/>
+                <Stack.Screen name="voter" component={addVoter}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
@@ -48,7 +50,7 @@ const Tabs = ()=>{
     return(
         <Tab.Navigator
             screenOptions={({ route })=>({
-                tabBarIcon: ({ focused, color, size })=>{
+                tabBarIcon: ({ color, size })=>{
                     let iconName = '';
                     if (route.name==='home'){
                         iconName = 'home'
@@ -69,11 +71,16 @@ const Tabs = ()=>{
             <Tab.Screen name="home" component={Home} />
             <Tab.Screen name="search" component={Search} />
             <Tab.Screen name="scan" component={Scan} />
-            <Tab.Screen name="add" component={addVoter} options={{
+            <Tab.Screen name="add" component={nullPage} options={{
                 tabBarIcon: ()=> {
                     return(
-                        <LinearGradient colors={['#52dcff', '#5abdff']} style={{ padding: 15, marginBottom: 15, alignSelf: "flex-end", borderTopLeftRadius: 20 }} >
-                            <Feather name="plus" size={36} color="white"/>
+                        <LinearGradient
+                            colors={['#52dcff', '#5abdff']}
+                            style={{ padding: 15, marginBottom: 15, alignSelf: "flex-end", borderTopLeftRadius: 20 }}
+                        >
+                            <TouchableOpacity onPress={ ()=> useNavigation().navigate('voter',{ type: 'add' }) }>
+                                <Feather name="plus" size={36} color="white"/>
+                            </TouchableOpacity>
                         </LinearGradient>
                     )
                 }}

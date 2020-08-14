@@ -1,4 +1,3 @@
-
 export interface Member{
     name: String,
     voterId: String,

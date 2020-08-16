@@ -1,9 +1,13 @@
 import { Dispatch, SetStateAction } from 'react';
+import { ViewStyle, TextStyle } from "react-native";
 
 export interface Option{
-  title: String,
-  list: Array<String>,
-  state: String
+  title: string,
+  list: Array<string>,
+  state: string,
+  style?: ViewStyle,
+  titleStyle?: TextStyle,
+  width?: number,
   changeState: Dispatch<SetStateAction<any>>,
 }
   

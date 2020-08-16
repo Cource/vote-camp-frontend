@@ -34,15 +34,15 @@ export default ({ navigation }:Props)=>{
                 <Text style={styles.party}>Kerala Janapaksham</Text>
             </View>
             <View>
-                <OptionPicker title='District' list={districts} state={ district } changeState={ setDistrict } />
-                <OptionPicker title='City/Town' list={cities} state={ city } changeState={ setCity } />
-                <OptionPicker title='Ward' list={wards} state={ ward } changeState={ setWard } />
+                <OptionPicker title='District' list={districts} state={ district } changeState={ setDistrict } titleStyle={{ marginBottom: 10 }} />
+                <OptionPicker title='City/Town' list={cities} state={ city } changeState={ setCity } titleStyle={{ marginBottom: 10 }} style={{ marginTop: 20 }} />
+                <OptionPicker title='Ward' list={wards} state={ ward } changeState={ setWard } titleStyle={{ marginBottom: 10 }} style={{ marginTop: 20 }} />
             </View>
             <LinearGradient
                 colors={['#5ABDFF', '#88E7FF']}
                 style={styles.cta}>
                 <TouchableOpacity onPress={()=> {
-                    navigation.navigate('home')
+                    navigation.navigate('tabs')
                     AsyncStorage.setItem('district', district)
                     AsyncStorage.setItem('city', city)
                     AsyncStorage.setItem('ward', ward)

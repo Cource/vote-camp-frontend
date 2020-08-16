@@ -1,13 +1,26 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Member } from "../../model/houses";
+import { useNavigation } from '@react-navigation/native';
 
 export default (props:Member)=>{
     const [ hidden, setHide ] = useState(true)
-
+    const navigation = useNavigation()
     return(
         <View style={{ marginBottom: 10 }}>
-            <TouchableOpacity style={[ styles.detailsItem ]} onPress={ ()=> setHide(!hidden) } >
+            <TouchableOpacity style={[ styles.detailsItem ]} onPress={ ()=> {
+                navigation.navigate('voter', {
+                    type: 'detail',
+                    name: props.name,
+                    guardian: props.guardian,
+                    dob: props.dob,
+                    sex: props.gender.split(' ')[0],
+                    voterId: props.voterId,
+                    houseName: props.houseName,
+                    houseNumber: props.houseNumber,
+                    id: props.id
+                })
+            }} >
                 <View>
                     <View>
                         <Text style={ styles.title } >Name</Text>

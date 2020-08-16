@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
 
 interface items{
@@ -7,10 +7,11 @@ interface items{
         color: string;
     }[],
     onSelect: Function,
-    style?: ViewStyle
+    style?: ViewStyle,
+    value: string
 }
 
-export default ({ items, onSelect, style }:items)=>{
+export default ({ items, onSelect, style, value }:items)=>{
     const [colors, setColors] = useState(()=>{
         let list = []
         for (const item of items) {
@@ -18,34 +19,29 @@ export default ({ items, onSelect, style }:items)=>{
         }
         return list
     })
-    
-    const selectEffect = (title:string)=>{
-        for (const i of colors){
-            if (i === 'grey') {
-                let list = []
-                for (const item of items) {
-                    list.push(item.color)
-                }
-                setColors(list)
-                return
-            }
+
+    const [selection, Select] = useState(value ? value : undefined)
+
+    useEffect(()=>{
+        let list = []
+        for (const item of items){
+            list.push(item.color)
         }
-        let list = colors
         for (const [index, item] of items.entries()){
-            if (item.title != title ){
+            if (item.title != selection ){
                 list[index] = 'grey'
             }
         }
         setColors(list)
-    }
+        onSelect(selection)
+    }, [selection])
     
     return(
         <View style={[{ flexDirection: 'row'}, style]} >
             <TouchableOpacity
                 style={[_Chooser.button, { backgroundColor: colors[0], borderTopRightRadius: 0, borderBottomRightRadius: 0 }]}
                 onPress={()=> {
-                    selectEffect(items[0].title)
-                    onSelect(items[0].title)
+                    Select(items[0].title)
                 }}
             >
                 <Text style={_Chooser.text} >{ items[0].title }</Text>
@@ -57,8 +53,7 @@ export default ({ items, onSelect, style }:items)=>{
                             style={[_Chooser.button, { backgroundColor: colors[index+1], borderRadius: 0 }]}
                             key={item.title}
                             onPress={()=> {
-                                selectEffect(item.title)
-                                onSelect(item.title)
+                                Select(item.title)
                             }}
                         >
                             <Text style={_Chooser.text} >{ item.title }</Text>
@@ -69,8 +64,7 @@ export default ({ items, onSelect, style }:items)=>{
             <TouchableOpacity
                 style={[_Chooser.button, { backgroundColor: colors[colors.length-1], borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }]}
                 onPress={()=> {
-                    selectEffect(items[items.length-1].title)
-                    onSelect(items[items.length-1].title)
+                    Select(items[items.length-1].title)
                 }}
             >
                 <Text style={_Chooser.text} >{ items[items.length-1].title }</Text>

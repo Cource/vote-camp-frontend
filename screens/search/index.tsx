@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { AsyncStorage, StyleSheet, Text, View } from "react-native";
+import { AsyncStorage, StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { ScrollView, TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { searchAPI } from '../../api/v1';
 import { House } from '../../model/houses';
@@ -14,6 +14,7 @@ export default ()=>{
     const [query, setQuery] = useState('Search')
     const [search, doSearch] = useState(false)
     const [results, setResults] = useState([])
+    const [isLoading, setLoading] = useState(true)
 
     useEffect(()=>{
         (async()=>{
@@ -23,7 +24,7 @@ export default ()=>{
 
     useEffect(()=>{
         if (query !== ''){
-            searchAPI(query).then((res)=> setResults(res.data))
+            searchAPI(query).then((res)=> setResults(res.data)).finally(()=>setLoading(false))
         }
         else setResults([])
     }, [search])
@@ -41,12 +42,15 @@ export default ()=>{
                     style={{ flexGrow: 1 }}
                     onSubmitEditing={ ()=> doSearch(!search) }
                 />
-                <TouchableOpacity onPress={ ()=> doSearch(!search) } >
+                <TouchableOpacity onPress={ ()=> {doSearch(!search); setLoading(true)} } >
                     <Feather name="search" size={25} color="black" />
                 </TouchableOpacity>
             </View>
             <ScrollView style={styles.resultContainer} >
                 {
+                    isLoading?
+                    <ActivityIndicator size='large'/>
+                    :
                     results.map(({ houseName, houseNumber }:House)=>{
                         return(
                             <TouchableOpacity

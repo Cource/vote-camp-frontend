@@ -2,8 +2,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
 
-export default ()=>{
+export default ({navigation})=>{
 
     const [ email, onEmailChange ] = useState('')
     const [ phone, onPhoneChange ] = useState('')
@@ -18,7 +19,7 @@ export default ()=>{
                 <TextInput value={phone} onChangeText={onPhoneChange} style={styles.input} />
             </View>
             <View style={{ alignItems: 'center' }}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={navigation.navigate('landing')}>
                     <LinearGradient colors={['#5ABDFF', '#88E7FF']} style={ styles.cta } >
                         <Text style={{
                             color: 'white',

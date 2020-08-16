@@ -1,40 +1,30 @@
-import { Feather, Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
-import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { familyDetailsAPI } from '../../api/v1';
 import { StackParamList } from "../../App";
 import { Member } from "../../model/houses";
 import Card from './card';
+import { ConfirmBtn } from '../../components';
 
 type Props = StackScreenProps<StackParamList, 'detail'>
-
-const ConfirmBtn = ()=>{
-    const navigation = useNavigation()
-    return(
-        <TouchableOpacity onPress={ ()=> navigation.goBack() } style={{ marginBottom: 20, marginRight: 20, alignSelf: "flex-end" }}>
-            <LinearGradient colors={['#5ABDFF', '#88E7FF']} style={ styles.confirmBtn }>
-                <Feather name="check-circle" size={35} color="white" />
-                <Text style={{ fontSize: 25, color: "white", marginHorizontal: 10, fontWeight:"bold" }}>Confirm</Text>
-            </LinearGradient>
-        </TouchableOpacity>
-    )
-}
 
 export default ({ route, navigation }:Props)=>{
     const { houseName } = route.params
     const { houseNumber } = route.params
 
     const [ members, setMembers ] = useState([])
+    const [isLoading, setLoading] = useState(true)
 
     useEffect(()=>{
         (
             async()=>{
                 familyDetailsAPI(houseNumber).then((res)=>{
                         setMembers(res.data)
+                    }).finally(()=>{
+                        setLoading(false)
                     })
             }
         )()
@@ -55,13 +45,16 @@ export default ({ route, navigation }:Props)=>{
                 </View>
                 <ScrollView style={styles.details}>
                     {
+                        isLoading?
+                        <ActivityIndicator size="large"/>
+                        :
                         members.map((member:Member)=> {
                             return (
-                                <Card name={ member.name } voterId={ member.voterId } guardian={ member.guardian } gender={ member.gender } key={ member.voterId as string } />
+                                <Card name={ member.name } voterId={ member.voterId } guardian={ member.guardian } dob={ member.dob } gender={ member.gender } houseName={ member.houseName } houseNumber={ member.houseNumber } id={ member.id } key={ member.voterId as string } />
                             )
                         })
                     }
-                    <View style={{ height: 200 }} />
+                    <View style={{ height: 100 }} />
                 </ScrollView>
             </View>
             <View style={{ position: 'absolute', bottom: 0, minWidth: '100%' }}>
@@ -71,7 +64,7 @@ export default ({ route, navigation }:Props)=>{
     )
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     screen: {
         flex: 1,
         justifyContent: 'space-between'
@@ -89,7 +82,7 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     details:{
-        marginHorizontal: 30,
+        paddingHorizontal: 30,
         marginTop: 30,
         marginBottom: 100,
     },
@@ -98,11 +91,4 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginTop: 5,
     },
-    confirmBtn: {
-        flexDirection: "row",
-        alignItems: "center",
-        paddingHorizontal: 8,
-        paddingVertical: 8,
-        borderRadius: 100,
-    }
 })

@@ -1,8 +1,12 @@
 export interface Member{
-    name: String,
-    voterId: String,
-    guardian: String,
-    gender: String,
+    name: string,
+    voterId: string,
+    guardian: string,
+    gender: string,
+    houseName: string,
+    houseNumber: string,
+    dob: Date,
+    id: number,
 }
 
 export interface House{

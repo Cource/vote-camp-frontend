@@ -4,18 +4,18 @@ import { Option } from '../../model/landing';
 
 export default (props:Option)=>{
     return (
-        <View>
-            <Text style={styles.optionTitle}>{props.title}</Text>
-            <View style={{ borderRadius: 10, borderColor: "#555", borderStyle: "solid", borderWidth: 2 }}>
+        <View style={props.style} >
+            <Text style={[styles.optionTitle, props.titleStyle]}>{props.title}</Text>
+            <View style={{ borderRadius: 7, borderColor: "#555", borderStyle: "solid", borderWidth: 2 }}>
                 <Picker 
-                    selectedValue={props.state as string}
+                    selectedValue={props.state}
                     onValueChange={(itemValue)=> {
                         props.changeState
                         ?
                         props.changeState(itemValue)
                         : null
                     }}
-                    style={{ height: 50, width: 300 }}
+                    style={{ height: 40, width: props.width? props.width : 300 }}
                     >
                     {
                         props.list.map((item)=>{
@@ -34,7 +34,5 @@ const styles = StyleSheet.create({
     optionTitle: {
         fontSize: 20,
         fontWeight: "bold",
-        marginTop: 20,
-        marginBottom: 10,
     },
 })

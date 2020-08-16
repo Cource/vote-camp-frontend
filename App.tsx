@@ -1,12 +1,11 @@
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-community/async-storage';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import addVoter from "./screens/addVoter";
 import Detail from "./screens/detail";
 import Home from './screens/home';
@@ -19,7 +18,7 @@ export type StackParamList = {
     landing: undefined,
     tabs: undefined,
     detail: { houseName: string, houseNumber: number },
-    voter: { type: 'detail'|'add', name?: string, guardian?: string, dob?: Date, sex?: 'M'|'F'|'T', houseName?: string, houseNumber?: number, voterId?: string },
+    voter: { type: 'detail'|'add', name?: string, guardian?: string, dob?: string, sex?: 'M'|'F'|'T', houseName?: string, houseNumber?: string, voterId?: string, id?: number },
 }
 
 const Stack = createStackNavigator();
@@ -46,6 +45,7 @@ export default function App() {
         </NavigationContainer>
     );
 }
+
 const Tabs = ()=>{
     return(
         <Tab.Navigator
@@ -71,16 +71,14 @@ const Tabs = ()=>{
             <Tab.Screen name="home" component={Home} />
             <Tab.Screen name="search" component={Search} />
             <Tab.Screen name="scan" component={Scan} />
-            <Tab.Screen name="add" component={nullPage} options={{
+            <Tab.Screen name="add" component={addVoter} options={{
                 tabBarIcon: ()=> {
                     return(
                         <LinearGradient
                             colors={['#52dcff', '#5abdff']}
                             style={{ padding: 15, marginBottom: 15, alignSelf: "flex-end", borderTopLeftRadius: 20 }}
                         >
-                            <TouchableOpacity onPress={ ()=> useNavigation().navigate('voter',{ type: 'add' }) }>
-                                <Feather name="plus" size={36} color="white"/>
-                            </TouchableOpacity>
+                            <Feather name="plus" size={36} color="white"/>
                         </LinearGradient>
                     )
                 }}

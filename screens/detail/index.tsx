@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { familyDetailsAPI } from '../../api/v1';
+import { familyDetailsAPI, increaseProgressAPI } from '../../api/v1';
 import { StackParamList } from "../../App";
 import { Member } from "../../model/houses";
 import Card from './card';
@@ -15,20 +15,23 @@ export default ({ route, navigation }:Props)=>{
     const { houseName } = route.params
     const { houseNumber } = route.params
 
-    const [ members, setMembers ] = useState([])
+    const [members, setMembers] = useState([])
+    const [confirm, setConfirm] = useState(false)
     const [isLoading, setLoading] = useState(true)
 
     useEffect(()=>{
-        (
-            async()=>{
-                familyDetailsAPI(houseNumber).then((res)=>{
-                        setMembers(res.data)
-                    }).finally(()=>{
-                        setLoading(false)
-                    })
-            }
-        )()
+        familyDetailsAPI(houseNumber).then((res)=>{
+                setMembers(res.data)
+            }).finally(()=>{
+                setLoading(false)
+            })
     }, [])
+
+    useEffect(()=>{
+        if (confirm){
+            increaseProgressAPI()
+        }
+    }, [confirm])
 
     return(
         <View style={styles.screen}>
@@ -58,7 +61,15 @@ export default ({ route, navigation }:Props)=>{
                 </ScrollView>
             </View>
             <View style={{ position: 'absolute', bottom: 0, minWidth: '100%' }}>
-                <ConfirmBtn/>
+                <ConfirmBtn onPress={()=>{
+                    setConfirm(!confirm)
+                    navigation.reset({
+                        routes: [
+                            { name: 'tabs' },
+                        ]
+                    })
+                    navigation.goBack()
+                }} />
             </View>
         </View>
     )

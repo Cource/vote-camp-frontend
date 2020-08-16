@@ -11,14 +11,13 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { parties } from "../../model/parties";
 import { addVoterAPI } from '../../api/v1'
 import { useNavigation } from '@react-navigation/native';
-import { NavigationAction } from '@react-navigation/native'
 
 type Props = StackScreenProps<StackParamList, 'voter'>
 type Religion = 'Select'|'Christian'|'Muslim'|'Hindu'|'Buddhist'
 type Party = 'LDF'|'UDF'|'BJP'|'NOTA'
 
 export default (props:Props)=> {
-    const { type, name, guardian, sex, dob, voterId, houseName, houseNumber, id } = props.route.params || { type: 'add', name: 'Name', guardian: 'Guardian', sex: undefined, dob: undefined, voterId: 'VoterId', houseName: 'House Name', houseNumber: "House Number" }
+    const { type, name, guardian, sex, dob, voterId, houseName, houseNumber, id } = props.route.params || {}
     const navigation = useNavigation()
 
     const [showDatePicker, setDatePicker] = useState(false)
@@ -33,8 +32,8 @@ export default (props:Props)=> {
     const [_voterId, set_VoterId] = useState(voterId)
     const [_houseName, set_HouseName] = useState(houseName)
     const [_houseNumber, set_HouseNumber] = useState(houseNumber)
-    const [_mobileNumber, set_MobileNumber] = useState('Mobile Number')
-    const [_email, set_Email] = useState('Email')
+    const [_mobileNumber, set_MobileNumber] = useState('')
+    const [_email, set_Email] = useState('')
     const [_religion, set_Religion] = useState<Religion>('Select')
     const [_education, set_Education] = useState<'Select'|'Christian'|'Muslim'|'Hindu'|'Buddhist'>('Select')
     const [_cast, set_Cast] = useState<'Select'|'Christian'|'Muslim'|'Hindu'|'Buddhist'>('Select')
@@ -81,11 +80,15 @@ export default (props:Props)=> {
             page==0?
             <View>
                 <TextInput
+                    placeholder="Name"
+                    placeholderTextColor="#888"
                     value={_name}
                     onChangeText={(val:string) => set_Name(val)}
                     style={styles.TextBox}
                 />
                 <TextInput
+                    placeholder="Guardian"
+                    placeholderTextColor="#888"
                     value={_guardian}
                     onChangeText={(val:string) => set_Guardian(val)}
                     style={styles.TextBox}
@@ -93,8 +96,9 @@ export default (props:Props)=> {
                 <View style={{ flexDirection: 'row', justifyContent: "center" }} >
                     <TouchableOpacity
                         onPress={()=> setDatePicker(true)}
+                        style={{ backgroundColor: '#CCCCCC', paddingHorizontal: 20, padding: 10, borderRadius: 7 }}
                     >
-                        <Text style={{ backgroundColor: '#CCCCCC', paddingHorizontal: 20, padding: 10, borderRadius: 7 }} >{_dob.toDateString() === 'Thu Jan 01 1970' ? "Date Of Birth" : _dob.toDateString()}</Text>
+                        <Text style={{  }} >{_dob.toDateString() === 'Thu Jan 01 1970' ? "Select Date Of Birth" : _dob.toDateString()}</Text>
                     </TouchableOpacity>
                     {
                         showDatePicker && (
@@ -123,17 +127,23 @@ export default (props:Props)=> {
                     </View>
                 </View>
                 <TextInput
+                    placeholder="Voter ID"
+                    placeholderTextColor="#888"
                     value={_voterId}
                     onChangeText={(val:string) => set_VoterId(val)}
                     style={styles.TextBox}
                 />
                 <View style={{ flexDirection: 'row' }} >
                     <TextInput
+                        placeholder="House Name"
+                        placeholderTextColor="#888"
                         value={_houseName}
                         onChangeText={(val:string) => set_HouseName(val)}
                         style={styles.TextBox}
                     />
                     <TextInput
+                        placeholder="House Number"
+                        placeholderTextColor="#888"
                         value={_houseNumber}
                         onChangeText={(val:string) => set_HouseNumber(val)}
                         style={[styles.TextBox, { marginLeft: 10 }]}
@@ -143,15 +153,19 @@ export default (props:Props)=> {
             :
             <View style={{ marginBottom: 10 }} >
                 <TextInput
+                    placeholder="Mobile Number"
+                    placeholderTextColor="#888"
                     value={_mobileNumber}
                     onChangeText={(val:string) => set_MobileNumber(val)}
                     style={styles.TextBox}
                 />
                 <TextInput
-                        value={_email}
-                        onChangeText={(val:string) => set_Email(val)}
-                        style={styles.TextBox}
-                    />
+                    placeholder="Email"
+                    placeholderTextColor="#888"
+                    value={_email}
+                    onChangeText={(val:string) => set_Email(val)}
+                    style={styles.TextBox}
+                />
                 <View style={{ flexDirection: 'row' }} >
                     <OptionPicker title="Religion" list={[ "Religion", "Christian", "Muslim", "Hindu", "Buddhist"]} state={_religion} changeState={set_Religion} titleStyle={{ fontSize: 0 }} width={180} />
                     <OptionPicker title="Cast" list={[ "Cast", "Christian", "Muslim", "Hindu", "Buddhist"]} state={_cast} changeState={set_Cast} titleStyle={{ fontSize: 0 }} style={{ marginLeft: 10 }} width={100} />
@@ -190,6 +204,11 @@ export default (props:Props)=> {
                 } else {
                     setSubmit(!submit)
                     setPage(0)
+                    navigation.reset({
+                        routes: [
+                            { name: 'tabs' },
+                        ]
+                    })
                     type==='detail'?
                         navigation.navigate('detail')
                     :

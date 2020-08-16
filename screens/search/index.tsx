@@ -11,7 +11,7 @@ export default ()=>{
     const navigation = useNavigation()
 
     const [ward, setWard] = useState<null|string>('')
-    const [query, setQuery] = useState('Search')
+    const [query, setQuery] = useState('')
     const [search, doSearch] = useState(false)
     const [results, setResults] = useState([])
     const [isLoading, setLoading] = useState(true)
@@ -26,7 +26,10 @@ export default ()=>{
         if (query !== ''){
             searchAPI(query).then((res)=> setResults(res.data)).finally(()=>setLoading(false))
         }
-        else setResults([])
+        else {
+            setResults([])
+            setLoading(false)
+        }
     }, [search])
 
     return(
@@ -37,6 +40,8 @@ export default ()=>{
             </View>
             <View style={styles.searchBar}>
                 <TextInput
+                    placeholder="Search"
+                    placeholderTextColor="#888"
                     value={query}
                     onChangeText={(text)=> setQuery(text)}
                     style={{ flexGrow: 1 }}

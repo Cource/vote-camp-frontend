@@ -46,6 +46,12 @@ export const familyDetailsAPI = async (houseNumber:number)=>{
     })
 }
 
+export const increaseProgressAPI = async ()=>{
+    return Axios.post(`${server}/campaignTrack`, {
+        ward: await AsyncStorage.getItem('ward')
+    })
+}
+
 export const addVoterAPI = async ({
     name, guardian, dob, sex,
     houseName, houseNumber, voterId, email,

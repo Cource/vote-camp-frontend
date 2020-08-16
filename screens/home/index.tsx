@@ -25,15 +25,11 @@ export default ({ navigation }:Props)=>{
     }, [])
     
     useEffect(()=>{
-        (
-            async ()=>{
-                progressAPI().then((res)=>{
-                    setProgress(res.data.completed / res.data.totalHouses)
-                    setTotal(res.data.totalHouses)
-                    setCompleted(res.data.completed)
-                })
-            }
-        )()
+        progressAPI().then((res)=>{
+            setProgress(res.data.completed / res.data.totalHouses)
+            setTotal(res.data.totalHouses)
+            setCompleted(res.data.completed)
+        })
     }, [])
 
     const config = {

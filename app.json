@@ -1,14 +1,18 @@
 {
   "expo": {
-    "name": "voteCamp",
+    "name": "Vote Camp",
     "slug": "voteCamp",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+    },
+    "android": {
+      "package": "com.upar.votecamp",
+      "versionCode": 1
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,11 +21,10 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "sdkVersion": "38.0.0"
+    }
   }
 }

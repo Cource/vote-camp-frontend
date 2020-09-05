@@ -1,11 +1,11 @@
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-community/async-storage';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import addVoter from "./screens/addVoter";
 import Detail from "./screens/detail";
 import Home from './screens/home';
@@ -26,16 +26,10 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
 
-    function getStartPage(){
-        if(AsyncStorage.getItem('ward')){
-            return 'tabs'
-        }else return 'landing'
-    }
-
     return (
         <NavigationContainer>
             <StatusBar style="auto" />
-            <Stack.Navigator initialRouteName={getStartPage()} screenOptions={{ headerShown: false }} >
+            <Stack.Navigator initialRouteName={'tabs'} screenOptions={{ headerShown: false }} >
                 <Stack.Screen name="signIn" component={SignIn}/>
                 <Stack.Screen name="landing" component={Landing} />
                 <Stack.Screen name="tabs" component={Tabs}/>

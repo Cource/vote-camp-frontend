@@ -42,7 +42,10 @@ export default ({ navigation }:Props)=>{
                 colors={['#5ABDFF', '#88E7FF']}
                 style={styles.cta}>
                 <TouchableOpacity onPress={()=> {
-                    navigation.navigate('tabs')
+                    navigation.reset({
+                        index: 1,
+                        routes:[{name: 'tabs'}]
+                    })
                     AsyncStorage.setItem('district', district)
                     AsyncStorage.setItem('city', city)
                     AsyncStorage.setItem('ward', ward)

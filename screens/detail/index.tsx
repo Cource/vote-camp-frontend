@@ -64,11 +64,9 @@ export default ({ route, navigation }:Props)=>{
                 <ConfirmBtn onPress={()=>{
                     setConfirm(!confirm)
                     navigation.reset({
-                        routes: [
-                            { name: 'tabs' },
-                        ]
+                        index: 0,
+                        routes: [{ name: 'tabs' }]
                     })
-                    navigation.goBack()
                 }} />
             </View>
         </View>

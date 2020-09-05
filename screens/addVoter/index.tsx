@@ -204,15 +204,13 @@ export default (props:Props)=> {
                 } else {
                     setSubmit(!submit)
                     setPage(0)
-                    navigation.reset({
-                        routes: [
-                            { name: 'tabs' },
-                        ]
-                    })
                     type==='detail'?
                         navigation.navigate('detail')
                     :
-                        navigation.navigate('home')
+                        navigation.reset({
+                            index: 1,
+                            routes:[{name: 'tabs'}]
+                        })
                     
                 }
             }}

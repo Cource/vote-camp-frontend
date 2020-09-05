@@ -24,7 +24,7 @@ export default ()=>{
 
     useEffect(()=>{
         if (query !== ''){
-            searchAPI(query).then((res)=> setResults(res.data)).finally(()=>setLoading(false))
+            searchAPI(query, ward).then((res)=> setResults(res.data)).finally(()=>setLoading(false))
         }
         else {
             setResults([])
@@ -45,7 +45,7 @@ export default ()=>{
                     value={query}
                     onChangeText={(text)=> setQuery(text)}
                     style={{ flexGrow: 1 }}
-                    onSubmitEditing={ ()=> doSearch(!search) }
+                    onSubmitEditing={ ()=> {doSearch(!search); setLoading(true)} }
                 />
                 <TouchableOpacity onPress={ ()=> {doSearch(!search); setLoading(true)} } >
                     <Feather name="search" size={25} color="black" />
@@ -56,6 +56,7 @@ export default ()=>{
                     isLoading?
                     <ActivityIndicator size='large'/>
                     :
+                    results.length > 0?
                     results.map(({ houseName, houseNumber }:House)=>{
                         return(
                             <TouchableOpacity
@@ -73,6 +74,8 @@ export default ()=>{
                             </TouchableOpacity>
                         )
                     })
+                    :
+                    <Text style={{ alignSelf: "center" }}>No Results Found</Text>
                 }
             </ScrollView>
         </View>

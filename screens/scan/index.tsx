@@ -11,6 +11,7 @@ export default ()=>{
 
     const [ward, setWard] = useState<null|string>('')
     const [voterId, setVoterId] = useState('')
+    const [invalid, setInvalid] = useState(false)
 
     useEffect(()=>{
         voterId!==''?
@@ -19,7 +20,14 @@ export default ()=>{
                     houseName: res.data[0].houseName,
                     houseNumber: res.data[0].houseNumber,
                 })
-            }).then(()=> setVoterId(''))
+            })
+            .catch(()=> {
+                setInvalid(true)
+                setTimeout(()=>{
+                    setInvalid(false)
+                }, 3000)
+            })
+            .finally(()=> setVoterId(''))
         :null
     }, [voterId])
 
@@ -31,8 +39,15 @@ export default ()=>{
 
     return(
         <View style={{ flex: 1, backgroundColor: 'black' }}>
-            <StatusBar style="light" backgroundColor="#0003" />
             <Barcode valueSetter={setVoterId} />
+            <StatusBar style="light" backgroundColor="#0003" hidden={invalid} />
+            {
+                invalid?
+                <View style={{ position: "absolute", top: 0, right: 0, left: 0, height: 24, backgroundColor: '#FF4D4D', justifyContent: "center", alignItems: 'center' }} >
+                    <Text style={{ color: 'white' }} >Invalid Voter ID</Text>
+                </View>
+                :null
+            }
             <View style={[styles.header, { position: 'absolute' }]}>
                 <Text style={styles.headerText} >Scan</Text>
                 <Text style={{

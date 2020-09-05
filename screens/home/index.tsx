@@ -19,17 +19,18 @@ export default ({ navigation }:Props)=>{
     const [ward, setWard] = useState<null|string>('')
 
     useEffect(()=>{
-        (async()=>{
-            setWard(await AsyncStorage.getItem('ward'))
-        })()
-    }, [])
-    
-    useEffect(()=>{
-        progressAPI().then((res)=>{
-            setProgress(res.data.completed / res.data.totalHouses)
-            setTotal(res.data.totalHouses)
-            setCompleted(res.data.completed)
-        })
+        AsyncStorage.getItem('ward')
+            .then((ward)=>{
+                if (ward==='') navigation.navigate('landing')
+                else{
+                    setWard(ward)
+                    progressAPI().then((res)=>{
+                        setProgress(res.data.completed / res.data.totalHouses)
+                        setTotal(res.data.totalHouses)
+                        setCompleted(res.data.completed)
+                    })
+                }
+            })
     }, [])
 
     const config = {

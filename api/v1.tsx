@@ -12,10 +12,11 @@ export const progressAPI = async ()=>{
     })
 }
 
-export const searchAPI = (query:string)=>{
+export const searchAPI = (query:string, ward:string)=>{
     return Axios.get(server + '/voters', {
         params:{
-            search: query
+            search: query,
+            ward: ward
         }
     })
 }

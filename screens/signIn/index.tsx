@@ -12,10 +12,10 @@ export default ({navigation})=>{
     return(
         <View style={{ justifyContent: 'space-between', flex: 1 }}>
             <View style={styles.top}>
-                <Text style={[styles.header, { marginBottom: 40 }]}>Sign in</Text>
+                <Text style={[styles.header, { marginBottom: 40 }]}>Sign up</Text>
                 <Text style={[styles.header, {fontSize: 20}]} >Email</Text>
                 <TextInput value={email} onChangeText={onEmailChange} style={styles.input} />
-                <Text style={[styles.header, {fontSize: 20}]} >Phone Number</Text>
+                <Text style={[styles.header, {fontSize: 20}]} >Password</Text>
                 <TextInput value={phone} onChangeText={onPhoneChange} style={styles.input} />
             </View>
             <View style={{ alignItems: 'center' }}>
@@ -25,7 +25,7 @@ export default ({navigation})=>{
                             color: 'white',
                             fontSize: 20,
                             fontWeight: 'bold'
-                        }}>Sign in</Text>
+                        }}>Submit</Text>
                     </LinearGradient>
                 </TouchableOpacity>
             </View>

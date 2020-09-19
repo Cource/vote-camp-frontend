@@ -23,7 +23,7 @@ export default ()=>{
     }, [])
 
     useEffect(()=>{
-        if (query !== ''){
+        if (query !== '' && ward !== null){
             searchAPI(query, ward).then((res)=> setResults(res.data)).finally(()=>setLoading(false))
         }
         else {

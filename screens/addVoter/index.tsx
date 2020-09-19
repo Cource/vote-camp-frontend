@@ -215,7 +215,7 @@ export default (props:Props)=> {
                 }
             }}
         >
-            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 20 }} >{page===0? 'Add More Details' : 'Create Voter'}</Text>
+            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 20 }} >{page===0? 'Add More Details' : type==='detail'? 'Submit Details' : 'Create Voter'}</Text>
             <Ionicons name="md-arrow-round-forward" size={30} color="white" />
         </TouchableOpacity>
     </View>)

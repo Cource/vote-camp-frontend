@@ -21,7 +21,7 @@ export default ({ navigation }:Props)=>{
     useEffect(()=>{
         AsyncStorage.getItem('ward')
             .then((ward)=>{
-                if (ward==='') navigation.navigate('landing')
+                if (ward===null) navigation.navigate('landing')
                 else{
                     setWard(ward)
                     progressAPI().then((res)=>{

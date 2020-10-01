@@ -39,7 +39,7 @@ export default (props:Props)=> {
     const [_cast, set_Cast] = useState<'Select'|'Christian'|'Muslim'|'Hindu'|'Buddhist'>('Select')
     const [_party, set_Party] = useState<Party>('LDF')
     const [_support, set_Support] = useState(false)
-
+    console.log(_dob.toDateString())
     useEffect(()=>{
         if (initial.current){
             initial.current = false
@@ -96,30 +96,27 @@ export default (props:Props)=> {
                 <View style={{ flexDirection: 'row', justifyContent: "center" }} >
                     <TouchableOpacity
                         onPress={()=> setDatePicker(true)}
-                        style={{ backgroundColor: '#CCCCCC', paddingHorizontal: 20, padding: 10, borderRadius: 7 }}
+                            style={{ backgroundColor: 'grey', paddingHorizontal: 20, padding: 10, borderRadius: 7 }}
                     >
-                        <Text style={{  }} >{_dob.toDateString() === 'Thu Jan 01 1970' ? "Select Date Of Birth" : _dob.toDateString()}</Text>
+                            <Text style={{ color: 'white', fontWeight: "bold" }}>{_dob.toDateString() === 'Thu Jan 01 1970' ? "Select Date Of Birth" : _dob.toDateString()}</Text>
                     </TouchableOpacity>
                     {
                         showDatePicker && (
-                        <DateTimePicker
-                            testID="dateTimePicker"
-                            value={_dob}
-                            mode="date"
-                            is24Hour={true}
-                            display="default"
-                            onChange={(event, date)=> {
-                                setDatePicker(false)
-                                set_Dob(date || _dob)
-                            }}
-                        />
+                                <DateTimePicker
+                                    value={_dob}
+                                    mode="date"
+                                    onChange={(event, date)=> {
+                                        setDatePicker(false)
+                                        set_Dob(date || _dob)
+                                }}
+                                />
                     )}
                     <View style={{ flexDirection: 'row', marginBottom: 10, marginLeft: 10 }}>
                         <Chooser
                             items={[
-                                {color: '#FF6188', title: 'F'},
-                                {color: '#BA70FF', title: 'T'},
-                                {color: '#66C2FF', title: 'M'}
+                                    { color: '#66C2FF', title: 'M' },
+                                    { color: '#FF6188', title: 'F' },
+                                    { color: '#BA70FF', title: 'T' },
                             ]}
                             onSelect={(item:any)=> set_Sex(item)}
                             value={_sex as string}

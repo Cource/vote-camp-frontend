@@ -1,9 +1,9 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-community/async-storage";
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Easing } from 'react-native-reanimated';
 import { timing } from "react-native-redash";
 import { progressAPI } from '../../api/v1';
@@ -21,7 +21,10 @@ export default ({ navigation }:Props)=>{
     useEffect(()=>{
         AsyncStorage.getItem('ward')
             .then((ward)=>{
-                if (ward===null) navigation.navigate('landing')
+                if (ward === null) navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'landing' }]
+                })
                 else{
                     setWard(ward)
                     progressAPI().then((res)=>{
@@ -42,29 +45,48 @@ export default ({ navigation }:Props)=>{
 
     return(
         <View style={styles.container}>
-            <View style={{ marginTop: 40, marginHorizontal: 30 }}>
+            <View style={{ marginTop: 40, marginHorizontal: 30, flexDirection: 'row', justifyContent: "space-between" }}>
                 <View>
                     <Text style={styles.header}>Campaign Progress</Text>
                     <Text style={styles.subHeader}>{ward}</Text>
                 </View>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('profile')
+                    }}
+                    style={{ paddingVertical: 10, paddingLeft: 10 }}
+                >
+                    <Feather name="user" size={24} color="black" />
+                </TouchableOpacity>
             </View>
-            <View style={{ alignSelf: "center", alignItems: "center", justifyContent: 'center', marginTop: 20 }}>
-                <ProgressArc progress={timing(config)} />
-                <View style={{position: "absolute", alignItems: "center"}}>
+            <ScrollView style={{ marginTop: 20 }} contentContainerStyle={{ alignItems: "center", justifyContent: 'center' }}>
+                <ProgressArc progress={timing(config)} style={{ marginTop: 20 }} />
+                <View style={{ marginTop: -150, marginBottom: 60, alignItems: "center" }}>
                     <Text style={{
                         fontWeight: "bold",
                         fontSize: 40,
                     }}>{completed}</Text>
                     <Text style={{fontSize: 20, marginTop: 10}}>{totalHouses}</Text>
-                    <Text style={{color: '#888'}}>Houses</Text>
+                    <Text style={{ color: '#888' }}>Houses</Text>
                 </View>
-                <TouchableOpacity onPress={()=>{
-                    AsyncStorage.setItem('ward', '')
-                    navigation.navigate('landing')
+                {/* <TouchableOpacity onPress={()=>{
+                    AsyncStorage.multiRemove(['auth', 'ward', 'district', 'city'])
+                        .then(() => navigation.navigate('signIn'))
                 }}>
                     <Ionicons name="md-exit" size={30} color="black" />
-                </TouchableOpacity>
-            </View>
+                </TouchableOpacity> */}
+                <Text style={{ fontSize: 20, fontWeight: "bold", alignSelf: 'flex-start', marginLeft: 40, marginBottom: 20 }} >Houses Left</Text>
+                {
+                    [{ houseName: 'Gololo', houseNumber: '1' }, { houseName: 'lodho', houseNumber: '2' }, { houseName: 'Sanjo Bhavan', houseNumber: '3' }, { houseName: 'Sanjo Bhavan', houseNumber: '4' }, { houseName: 'Sanjo Bhavan', houseNumber: '5' }, { houseName: 'Sanjo Bhavan', houseNumber: '6' }, { houseName: 'Sanjo Bhavan', houseNumber: '7' },].map((item) => {
+                        return (
+                            <TouchableOpacity key={item.houseNumber} style={{ flexDirection: "row", justifyContent: 'space-between', elevation: 1, backgroundColor: '#f9f9f9', padding: 10, width: 300, marginBottom: 10, borderRadius: 10 }}>
+                                <Text>{item.houseName}</Text>
+                                <Text>{item.houseNumber}</Text>
+                            </TouchableOpacity>
+                        )
+                    })
+                }
+            </ScrollView>
             <View></View>
         </View>
     )

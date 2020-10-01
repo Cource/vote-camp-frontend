@@ -4,7 +4,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialIcons } from '@expo/vector-icons';
 import { parties } from "../model/parties";
 import OptionPicker from '../screens/landing/optionPicker'
-import { Chooser, Tbox } from "./"
+import Chooser from "./chooser"
+import Tbox from "./Tbox"
 
 export default ()=> {
     const [ religion, setReligion ] = useState<'Select'|'Christian'|'Muslim'|'Hindu'|'Buddhist'>('Select')

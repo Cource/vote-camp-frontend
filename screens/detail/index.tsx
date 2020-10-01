@@ -61,13 +61,17 @@ export default ({ route, navigation }:Props)=>{
                 </ScrollView>
             </View>
             <View style={{ position: 'absolute', bottom: 0, minWidth: '100%' }}>
-                <ConfirmBtn onPress={()=>{
-                    setConfirm(!confirm)
-                    navigation.reset({
-                        index: 0,
-                        routes: [{ name: 'tabs' }]
-                    })
-                }} />
+                <ConfirmBtn
+                    onPress={() => {
+                        setConfirm(!confirm)
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'tabs' }]
+                        })
+                    }}
+                    icon={true}
+                    position="right"
+                />
             </View>
         </View>
     )

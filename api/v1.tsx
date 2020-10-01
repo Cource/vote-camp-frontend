@@ -3,8 +3,18 @@ import Axios from 'axios'
 import { Voter } from '../model/voter'
 
 export const server = 'http://18.224.184.235:8002'
-const headers = {
-    "authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTY1NDk2MCwicm9sZSI6bnVsbCwiaWF0IjoxNjAwNDM2MTIxLCJleHAiOjE2MDA0NDYxMjV9.6yuDVr5wO1Biv7FuEEPltCWvpsxgOdZIM8kKN0YajG8"
+
+export const reqOtpAPI = async (phone: string) => {
+    return Axios.post(server + '/otp', {
+        phone: phone
+    })
+}
+
+export const verifyOtpAPI = async (phone: string, otp: string) => {
+    return Axios.put(server + '/otp', {
+        phone: phone,
+        otp: otp
+    })
 }
 
 export const progressAPI = async ()=>{
@@ -12,36 +22,45 @@ export const progressAPI = async ()=>{
         params:{
             ward: await AsyncStorage.getItem('ward')
         },
-        headers
+        headers: {
+            Authorization: await AsyncStorage.getItem('auth')
+        }
     })
 }
 
-export const searchAPI = (query:string, ward:string)=>{
+export const searchAPI = async (query: string, ward: string) => {
     return Axios.get(server + '/voters', {
         params:{
             search: query,
             ward: ward
         },
-        headers
+        headers: {
+            Authorization: await AsyncStorage.getItem('auth')
+        }
+
     })
 }
 
-export const getCitiesAPI = (district:string)=>{
+export const getCitiesAPI = async (district: string) => {
     return Axios.get(server + '/cities', {
         params: {
             district: district,
         },
-        headers
+        headers: {
+            Authorization: await AsyncStorage.getItem('auth')
+        }
     })
 }
 
-export const getWardsAPI = (district:string, city:string)=>{
+export const getWardsAPI = async (district: string, city: string) => {
     return Axios.get(server + '/wards', {
         params: {
             district: district,
             city: city,
         },
-        headers
+        headers: {
+            Authorization: await AsyncStorage.getItem('auth')
+        }
     })
 }
 
@@ -51,14 +70,20 @@ export const familyDetailsAPI = async (houseNumber:number)=>{
             ward: await AsyncStorage.getItem('ward'),
             houseNumber: houseNumber,
         },
-        headers
+        headers: {
+            Authorization: await AsyncStorage.getItem('auth')
+        }
     })
 }
 
 export const increaseProgressAPI = async ()=>{
     return Axios.post(`${server}/campaignTrack`, {
         ward: await AsyncStorage.getItem('ward')
-    },{headers: headers})
+    }, {
+        headers: {
+            Authorization: await AsyncStorage.getItem('auth')
+        }
+    })
 }
 
 export const addVoterAPI = async ({
@@ -88,8 +113,16 @@ export const addVoterAPI = async ({
         education: education,
     }
     if (type === 'add'){
-        Axios.post(`${server}/voters`, body, {headers: headers})
+        Axios.post(`${server}/voters`, body, {
+            headers: {
+                Authorization: await AsyncStorage.getItem('auth')
+            }
+        })
     } else if (type === 'detail'){
-        Axios.put(`${server}/voters/${id}`, body, {headers: headers})
+        Axios.put(`${server}/voters/${id}`, body, {
+            headers: {
+                Authorization: await AsyncStorage.getItem('auth')
+            }
+        })
     }
 }

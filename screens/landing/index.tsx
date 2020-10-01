@@ -1,10 +1,11 @@
 import AsyncStorage from "@react-native-community/async-storage";
 import { StackScreenProps } from '@react-navigation/stack';
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { getCitiesAPI, getWardsAPI } from '../../api/v1';
 import { StackParamList } from "../../App";
+import { ConfirmBtn } from "../../components";
 import { districts } from "../../model/landing";
 import OptionPicker from './optionPicker';
 
@@ -18,45 +19,49 @@ export default ({ navigation }:Props)=>{
     const [ ward, setWard ] = useState('')
     const [ cities, setCities ] = useState([])
     const [ wards, setWards ] = useState([])
-
+    
+    const initial1 = useRef(false)
     useEffect(()=>{
-        getCitiesAPI(district).then((res)=> setCities(res.data) )
+        if (initial1.current) {
+            initial1.current = false
+        } else {
+            getCitiesAPI(district).then((res)=> setCities(res.data) )
+        }
     }, [district])
     
+    const initial2 = useRef(false)
     useEffect(()=>{
-        getWardsAPI(district, city).then((res)=> setWards(res.data) )
+        if (initial2.current) {
+            initial2.current = false
+        } else {
+            getWardsAPI(district, city).then((res)=> setWards(res.data) )
+        }
     }, [city])
 
     return(
         <View style={styles.container}>
             <View>
                 <Text style={styles.header}>Campaign Details</Text>
-                <Text style={styles.party}>Kerala Janapaksham</Text>
+                <Text style={styles.party}>LDF</Text>
             </View>
             <View>
                 <OptionPicker title='District' list={districts} state={ district } changeState={ setDistrict } titleStyle={{ marginBottom: 10 }} />
                 <OptionPicker title='City/Town' list={cities} state={ city } changeState={ setCity } titleStyle={{ marginBottom: 10 }} style={{ marginTop: 20 }} />
                 <OptionPicker title='Ward' list={wards} state={ ward } changeState={ setWard } titleStyle={{ marginBottom: 10 }} style={{ marginTop: 20 }} />
             </View>
-            <LinearGradient
-                colors={['#5ABDFF', '#88E7FF']}
-                style={styles.cta}>
-                <TouchableOpacity onPress={()=> {
+            <ConfirmBtn
+                onPress={() => {
                     navigation.reset({
                         index: 1,
-                        routes:[{name: 'tabs'}]
+                        routes: [{ name: 'tabs' }]
                     })
                     AsyncStorage.setItem('district', district)
                     AsyncStorage.setItem('city', city)
                     AsyncStorage.setItem('ward', ward)
-                }}>
-                    <Text style={{
-                        color: '#fff',
-                        fontSize: 20,
-                        fontWeight: "700",
-                    }}>Start Campaign</Text>
-                </TouchableOpacity>
-            </LinearGradient>
+                }}
+                icon={true}
+                text="Set Location"
+            />
         </View>
     )
 }

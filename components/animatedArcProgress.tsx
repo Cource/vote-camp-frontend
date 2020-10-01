@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Dimensions} from "react-native";
+import { Dimensions, ViewStyle } from "react-native";
 import Svg, {
   Path,
 } from "react-native-svg";
@@ -26,9 +26,10 @@ const d = `M ${x1} ${y1} A ${r} ${r} 0 1 0 ${x2} ${y2}`;
 
 interface CircularProgressProps {
   progress: Animated.Node<number>;
+  style?: ViewStyle
 }
 
-export default ({ progress }: CircularProgressProps) => {
+export default ({ progress, style }: CircularProgressProps) => {
   const circumference = r * A;
   const α = interpolate(progress, {
     inputRange: [0, 1],
@@ -36,7 +37,7 @@ export default ({ progress }: CircularProgressProps) => {
   });
   const strokeDashoffset = multiply(α, r);
   return (
-    <Svg width={size} height={size}>
+    <Svg width={size} height={size} style={style}>
       <Path
         stroke="#5ABDFF"
         fill="none"

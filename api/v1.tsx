@@ -4,6 +4,17 @@ import { Voter } from '../model/voter'
 
 export const server = 'http://18.224.184.235:8002'
 
+export const setLocationAPI = async (lattitude: number, longitude: number) => {
+    Axios.post(server + '/location', {
+        lattitude: lattitude,
+        longitude: longitude
+    }, {
+        headers: {
+            Authorization: await AsyncStorage.getItem('auth')
+        }
+    })
+}
+
 export const reqOtpAPI = async (phone: string) => {
     return Axios.post(server + '/otp', {
         phone: phone
@@ -68,7 +79,7 @@ export const getCitiesAPI = async (district: string): Promise<area> => {
     })
 }
 
-export const getWardsAPI = async (districtId: number, cityId: number): Promise<[area]> => {
+export const getWardsAPI = async (districtId: number, cityId: number): Promise<area> => {
     return Axios.get(server + '/wards', {
         params: {
             districtId: districtId,
@@ -83,7 +94,7 @@ export const getWardsAPI = async (districtId: number, cityId: number): Promise<[
 export const familyDetailsAPI = async (houseNumber:number)=>{
     return Axios.get(server + '/familyDetails', {
         params: {
-            wardId: await AsyncStorage.getItem('ward'),
+            wardId: await AsyncStorage.getItem('wardId'),
             houseNumber: houseNumber,
         },
         headers: {

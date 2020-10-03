@@ -6,7 +6,7 @@ import { Ionicons, Feather } from "@expo/vector-icons"
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../App';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import OptionPicker from '../landing/optionPicker';
+import OptionPicker from '../../components/optionPicker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { parties } from "../../model/parties";
 import { addVoterAPI } from '../../api/v1'

@@ -5,8 +5,12 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { getWardsAPI, reqOtpAPI, verifyOtpAPI } from '../../api/v1';
 import { ConfirmBtn } from '../../components';
 import { Feather } from '@expo/vector-icons';
+import { StackScreenProps } from '@react-navigation/stack';
+import { StackParamList } from '../../App';
 
-export default ({ navigation }) => {
+type props = StackScreenProps<StackParamList, 'signIn'>
+
+export default ({ navigation }: props) => {
 
     const [ phone, onPhoneChange ] = useState('')
     const [otp, onOtpChange] = useState('')

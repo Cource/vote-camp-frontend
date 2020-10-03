@@ -29,6 +29,10 @@ export default ({ navigation }:Props)=>{
                 setTotal(res.data.totalHouses)
                 setCompleted(res.data.completed)
             })
+            .catch(() => {
+                AsyncStorage.multiRemove(['auth', 'ward', 'wardId', 'uid'])
+                    .then(() => navigation.navigate('signIn'))
+            })
     }, [])
 
     const config = {

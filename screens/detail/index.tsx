@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
@@ -41,7 +41,7 @@ export default ({ route, navigation }:Props)=>{
                         style={{ flexDirection: 'row', justifyContent: "flex-start", marginTop: 0, marginHorizontal: 0 }}
                         onPress={()=>{navigation.goBack()}}
                     >
-                        <Ionicons name="ios-arrow-back" size={30} color="#888" />
+                        <Feather name="chevron-left" size={30} color="#555" />
                         <Text style={styles.name}>{ houseName }</Text>
                         <Text style={[styles.name, {fontWeight: "500"}]} >{ houseNumber }</Text>
                     </TouchableOpacity>

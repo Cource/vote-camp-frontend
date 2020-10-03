@@ -20,7 +20,8 @@ export const verifyOtpAPI = async (phone: string, otp: string) => {
 export const progressAPI = async ()=>{
     return Axios.get(server + '/progress', {
         params:{
-            ward: await AsyncStorage.getItem('ward')
+            wardId: await AsyncStorage.getItem('wardId'),
+            districtId: 9
         },
         headers: {
             Authorization: await AsyncStorage.getItem('auth')
@@ -37,11 +38,26 @@ export const searchAPI = async (query: string, ward: string) => {
         headers: {
             Authorization: await AsyncStorage.getItem('auth')
         }
-
+        
     })
 }
 
-export const getCitiesAPI = async (district: string) => {
+export const profileAPI = async (): Promise<{ data: { name: string, phone: string } }> => {
+    return Axios.get(server + '/users/' + await AsyncStorage.getItem('uid'), {
+        headers: {
+            Authorization: await AsyncStorage.getItem('auth')
+        }
+    })
+}
+
+interface area {
+    data: {
+        id: number,
+        name: string
+    }[]
+}
+
+export const getCitiesAPI = async (district: string): Promise<area> => {
     return Axios.get(server + '/cities', {
         params: {
             district: district,
@@ -52,11 +68,11 @@ export const getCitiesAPI = async (district: string) => {
     })
 }
 
-export const getWardsAPI = async (district: string, city: string) => {
+export const getWardsAPI = async (districtId: number, cityId: number): Promise<[area]> => {
     return Axios.get(server + '/wards', {
         params: {
-            district: district,
-            city: city,
+            districtId: districtId,
+            cityId: cityId,
         },
         headers: {
             Authorization: await AsyncStorage.getItem('auth')
@@ -67,7 +83,7 @@ export const getWardsAPI = async (district: string, city: string) => {
 export const familyDetailsAPI = async (houseNumber:number)=>{
     return Axios.get(server + '/familyDetails', {
         params: {
-            ward: await AsyncStorage.getItem('ward'),
+            wardId: await AsyncStorage.getItem('ward'),
             houseNumber: houseNumber,
         },
         headers: {

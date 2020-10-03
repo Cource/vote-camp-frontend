@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
-import { reqOtpAPI, verifyOtpAPI } from '../../api/v1';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { getWardsAPI, reqOtpAPI, verifyOtpAPI } from '../../api/v1';
 import { ConfirmBtn } from '../../components';
+import { Feather } from '@expo/vector-icons';
 
 export default ({ navigation }) => {
 
@@ -40,7 +41,16 @@ export default ({ navigation }) => {
     return(
         <View style={{ justifyContent: 'space-between', flex: 1 }}>
             <View style={styles.top}>
-                <Text style={[styles.header, { marginBottom: 40 }]}>Login</Text>
+                <TouchableOpacity
+                    style={{ flexDirection: 'row', alignItems: "center", marginBottom: 40 }}
+                    onPress={() => { setPage(0) }}
+                >
+                    {page !== 0 ?
+                        <Feather name="chevron-left" size={30} color="#555" />
+                        : null
+                    }
+                    <Text style={styles.header}>Login</Text>
+                </TouchableOpacity>
                 {page === 0 ?
                     <>
                         <Text style={[styles.header, { fontSize: 20 }]}>Phone Number</Text>
@@ -75,7 +85,7 @@ export default ({ navigation }) => {
                                     setPage(1)
                                 }
                             })
-                            .catch((err) => err.response.status === 401 ? inputErr() : null)
+                            .catch((err) => err.response.status === 400 ? inputErr() : null)
                             .catch(() => setNetErr(true))
                             .finally(() => setLoading(false))
                     } else {
@@ -84,9 +94,17 @@ export default ({ navigation }) => {
                 } else {
                     if (/[0-9]{6}/.test(otp)) {
                         verifyOtpAPI(phone, otp)
-                            .then((res) => {
+                            .then(async (res) => {
                                 AsyncStorage.setItem('auth', res.data.token)
-                                navigation.navigate('landing')
+                                AsyncStorage.setItem('uid', res.data.id.toString())
+                                AsyncStorage.setItem('wardId', res.data.wardId.toString())
+                                const wards = await getWardsAPI(res.data.districtId, res.data.cityId)
+                                for (let ward of wards.data) {
+                                    if (ward.id === res.data.wardId) {
+                                        await AsyncStorage.setItem('ward', ward.name)
+                                    }
+                                }
+                                navigation.navigate('tabs')
                             })
                     } else {
                         inputErr()
@@ -103,7 +121,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 25,
     },
     header: {
-        marginLeft: 10,
+        marginLeft: 5,
         fontSize: 50,
         fontWeight: 'bold',
     },

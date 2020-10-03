@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, TextInput, StyleSheet, ActivityIndicator } from "react-native";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Chooser } from "../../components";
-import { Ionicons } from "@expo/vector-icons"
+import { Ionicons, Feather } from "@expo/vector-icons"
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../App';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -39,7 +39,6 @@ export default (props:Props)=> {
     const [_cast, set_Cast] = useState<'Select'|'Christian'|'Muslim'|'Hindu'|'Buddhist'>('Select')
     const [_party, set_Party] = useState<Party>('LDF')
     const [_support, set_Support] = useState(false)
-    console.log(_dob.toDateString())
     useEffect(()=>{
         if (initial.current){
             initial.current = false
@@ -71,7 +70,7 @@ export default (props:Props)=> {
         }} >
             {
                 page===1?
-                <Ionicons name="ios-arrow-back" size={30} color="#555" />
+                    <Feather name="chevron-left" size={30} color="#555" />
                 :null
             }
             <Text style={{ fontSize: 36, fontWeight: 'bold', marginLeft: 10}} >{type==='detail' ? 'Details' :'Add a voter'}</Text>

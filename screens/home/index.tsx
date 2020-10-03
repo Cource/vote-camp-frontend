@@ -20,19 +20,14 @@ export default ({ navigation }:Props)=>{
 
     useEffect(()=>{
         AsyncStorage.getItem('ward')
-            .then((ward)=>{
-                if (ward === null) navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'landing' }]
-                })
-                else{
-                    setWard(ward)
-                    progressAPI().then((res)=>{
-                        setProgress(res.data.completed / res.data.totalHouses)
-                        setTotal(res.data.totalHouses)
-                        setCompleted(res.data.completed)
-                    })
-                }
+            .then((ward) => {
+                setWard(ward)
+            })
+        progressAPI()
+            .then((res) => {
+                setProgress(res.data.completed / res.data.totalHouses)
+                setTotal(res.data.totalHouses)
+                setCompleted(res.data.completed)
             })
     }, [])
 
@@ -69,12 +64,6 @@ export default ({ navigation }:Props)=>{
                     <Text style={{fontSize: 20, marginTop: 10}}>{totalHouses}</Text>
                     <Text style={{ color: '#888' }}>Houses</Text>
                 </View>
-                {/* <TouchableOpacity onPress={()=>{
-                    AsyncStorage.multiRemove(['auth', 'ward', 'district', 'city'])
-                        .then(() => navigation.navigate('signIn'))
-                }}>
-                    <Ionicons name="md-exit" size={30} color="black" />
-                </TouchableOpacity> */}
                 <Text style={{ fontSize: 20, fontWeight: "bold", alignSelf: 'flex-start', marginLeft: 40, marginBottom: 20 }} >Houses Left</Text>
                 {
                     [{ houseName: 'Gololo', houseNumber: '1' }, { houseName: 'lodho', houseNumber: '2' }, { houseName: 'Sanjo Bhavan', houseNumber: '3' }, { houseName: 'Sanjo Bhavan', houseNumber: '4' }, { houseName: 'Sanjo Bhavan', houseNumber: '5' }, { houseName: 'Sanjo Bhavan', houseNumber: '6' }, { houseName: 'Sanjo Bhavan', houseNumber: '7' },].map((item) => {

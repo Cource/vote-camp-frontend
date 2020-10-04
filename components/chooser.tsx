@@ -39,7 +39,7 @@ export default ({ items, onSelect, style, value }:items)=>{
     return(
         <View style={[{ flexDirection: 'row'}, style]} >
             <TouchableOpacity
-                style={[_Chooser.button, { backgroundColor: colors[0], borderTopRightRadius: 0, borderBottomRightRadius: 0 }]}
+                style={[_Chooser.button, { backgroundColor: colors[0], borderTopRightRadius: 0, borderBottomRightRadius: 0, marginRight: 1 }]}
                 onPress={()=> {
                     Select(items[0].title)
                 }}
@@ -50,7 +50,7 @@ export default ({ items, onSelect, style, value }:items)=>{
                 items.slice(1,items.length-1).map((item, index)=> {
                     return(
                         <TouchableOpacity
-                            style={[_Chooser.button, { backgroundColor: colors[index+1], borderRadius: 0 }]}
+                            style={[_Chooser.button, { backgroundColor: colors[index + 1], borderRadius: 0, marginRight: 1 }]}
                             key={item.title}
                             onPress={()=> {
                                 Select(item.title)

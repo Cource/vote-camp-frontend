@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { getWardsAPI, reqOtpAPI, verifyOtpAPI } from '../../api/v1';
-import { ConfirmBtn } from '../../components';
+import ConfirmBtn from '../../components/ConfirmBtn';
 import { Feather } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../App';
@@ -38,7 +38,7 @@ export default ({ navigation }: props) => {
         if (netErr) {
             setTimeout(() => {
                 setNetErr(false)
-            }, 10000)
+            }, 6000)
         }
     }, [netErr])
 
@@ -102,6 +102,8 @@ export default ({ navigation }: props) => {
                                 AsyncStorage.setItem('auth', res.data.token)
                                 AsyncStorage.setItem('uid', res.data.id.toString())
                                 AsyncStorage.setItem('wardId', res.data.wardId.toString())
+                                AsyncStorage.setItem('cityId', res.data.cityId.toString())
+                                AsyncStorage.setItem('districtId', res.data.districtId.toString())
                                 const wards = await getWardsAPI(res.data.districtId, res.data.cityId)
                                 for (let ward of wards.data) {
                                     if (ward.id === res.data.wardId) {
@@ -110,6 +112,8 @@ export default ({ navigation }: props) => {
                                 }
                                 navigation.navigate('tabs')
                             })
+                            .catch((err) => err.response.status === 400 ? inputErr() : null)
+                            .catch(() => setNetErr(true))
                     } else {
                         inputErr()
                     }

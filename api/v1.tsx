@@ -4,6 +4,14 @@ import { Voter } from '../model/voter'
 
 export const server = 'http://18.224.184.235:8002'
 
+export const housesLeftAPI = async () => {
+    return Axios.get(server + '/home', {
+        headers: {
+            Authorization: await AsyncStorage.getItem('auth')
+        }
+    })
+}
+
 export const setLocationAPI = async (lattitude: number, longitude: number) => {
     Axios.post(server + '/location', {
         lattitude: lattitude,
@@ -40,11 +48,10 @@ export const progressAPI = async ()=>{
     })
 }
 
-export const searchAPI = async (query: string, ward: string) => {
+export const searchAPI = async (query: string) => {
     return Axios.get(server + '/voters', {
         params:{
-            search: query,
-            ward: ward
+            search: query
         },
         headers: {
             Authorization: await AsyncStorage.getItem('auth')
@@ -103,9 +110,11 @@ export const familyDetailsAPI = async (houseNumber:number)=>{
     })
 }
 
-export const increaseProgressAPI = async ()=>{
+export const increaseProgressAPI = async (voterIdArray: string[]) => {
     return Axios.post(`${server}/campaignTrack`, {
-        ward: await AsyncStorage.getItem('ward')
+        wardId: await AsyncStorage.getItem('wardId'),
+        districtId: await AsyncStorage.getItem('districtId'),
+        voterIdArray: voterIdArray
     }, {
         headers: {
             Authorization: await AsyncStorage.getItem('auth')

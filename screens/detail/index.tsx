@@ -7,7 +7,7 @@ import { familyDetailsAPI, increaseProgressAPI } from '../../api/v1';
 import { StackParamList } from "../../App";
 import { Member } from "../../model/houses";
 import Card from './card';
-import { ConfirmBtn } from '../../components';
+import ConfirmBtn from '../../components/ConfirmBtn';
 
 type Props = StackScreenProps<StackParamList, 'detail'>
 
@@ -19,6 +19,14 @@ export default ({ route, navigation }:Props)=>{
     const [confirm, setConfirm] = useState(false)
     const [isLoading, setLoading] = useState(true)
 
+    function getVoterIds() {
+        let voterIds: string[] = []
+        members.forEach(({ voterId }) => {
+            voterIds.push(voterId)
+        })
+        return voterIds
+    }
+
     useEffect(()=>{
         familyDetailsAPI(houseNumber).then((res)=>{
                 setMembers(res.data)
@@ -29,7 +37,7 @@ export default ({ route, navigation }:Props)=>{
 
     useEffect(()=>{
         if (confirm){
-            increaseProgressAPI()
+            increaseProgressAPI(getVoterIds())
         }
     }, [confirm])
 
@@ -57,7 +65,7 @@ export default ({ route, navigation }:Props)=>{
                             )
                         })
                     }
-                    <View style={{ height: 100 }} />
+                    <View style={{ height: 160 }} />
                 </ScrollView>
             </View>
             <View style={{ position: 'absolute', bottom: 0, minWidth: '100%' }}>
@@ -97,7 +105,6 @@ export const styles = StyleSheet.create({
     details:{
         paddingHorizontal: 30,
         marginTop: 30,
-        marginBottom: 100,
     },
     detailsHeader: {
         justifyContent: "space-between",

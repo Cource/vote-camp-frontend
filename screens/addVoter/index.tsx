@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, TextInput, StyleSheet, ActivityIndicator } from "react-native";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Chooser } from "../../components";
+import Chooser from "../../components/chooser";
 import { Ionicons, Feather } from "@expo/vector-icons"
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../App';
@@ -95,9 +95,9 @@ export default (props:Props)=> {
                 <View style={{ flexDirection: 'row', justifyContent: "center" }} >
                     <TouchableOpacity
                         onPress={()=> setDatePicker(true)}
-                            style={{ backgroundColor: 'grey', paddingHorizontal: 20, padding: 10, borderRadius: 7 }}
+                            style={{ backgroundColor: 'grey', paddingHorizontal: 20, padding: 10, borderRadius: 7, elevation: 1 }}
                     >
-                            <Text style={{ color: 'white', fontWeight: "bold" }}>{_dob.toDateString() === 'Thu Jan 01 1970' ? "Select Date Of Birth" : _dob.toDateString()}</Text>
+                            <Text style={{ color: '#fff', fontWeight: "bold" }}>{_dob.toDateString() === 'Thu Jan 01 1970' ? "Select Date Of Birth" : _dob.toDateString()}</Text>
                     </TouchableOpacity>
                     {
                         showDatePicker && (

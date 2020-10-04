@@ -6,9 +6,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Easing } from 'react-native-reanimated';
 import { timing } from "react-native-redash";
-import { progressAPI } from '../../api/v1';
+import { housesLeftAPI, progressAPI } from '../../api/v1';
 import { StackParamList } from '../../App';
-import { ProgressArc } from '../../components';
+import ProgressArc from '../../components/animatedArcProgress';
 
 type Props = StackScreenProps<StackParamList, 'tabs'>
 
@@ -17,6 +17,7 @@ export default ({ navigation }:Props)=>{
     const [ totalHouses, setTotal ] = useState(0)
     const [ completed, setCompleted ] = useState(0)
     const [ward, setWard] = useState<null|string>('')
+    const [houses, setHouses] = useState<{ houseName: string, houseNumber: string }[]>([])
 
     useEffect(()=>{
         AsyncStorage.getItem('ward')
@@ -30,9 +31,11 @@ export default ({ navigation }:Props)=>{
                 setCompleted(res.data.completed)
             })
             .catch(() => {
-                AsyncStorage.multiRemove(['auth', 'ward', 'wardId', 'uid'])
+                AsyncStorage.multiRemove(['auth', 'ward', 'wardId', 'cityId', 'districtId', 'uid'])
                     .then(() => navigation.navigate('signIn'))
             })
+        housesLeftAPI()
+            .then((res) => setHouses(res.data))
     }, [])
 
     const config = {
@@ -70,11 +73,19 @@ export default ({ navigation }:Props)=>{
                 </View>
                 <Text style={{ fontSize: 20, fontWeight: "bold", alignSelf: 'flex-start', marginLeft: 40, marginBottom: 20 }} >Houses Left</Text>
                 {
-                    [{ houseName: 'Gololo', houseNumber: '1' }, { houseName: 'lodho', houseNumber: '2' }, { houseName: 'Sanjo Bhavan', houseNumber: '3' }, { houseName: 'Sanjo Bhavan', houseNumber: '4' }, { houseName: 'Sanjo Bhavan', houseNumber: '5' }, { houseName: 'Sanjo Bhavan', houseNumber: '6' }, { houseName: 'Sanjo Bhavan', houseNumber: '7' },].map((item) => {
+                    houses.map(({ houseName, houseNumber }) => {
                         return (
-                            <TouchableOpacity key={item.houseNumber} style={{ flexDirection: "row", justifyContent: 'space-between', elevation: 1, backgroundColor: '#f9f9f9', padding: 10, width: 300, marginBottom: 10, borderRadius: 10 }}>
-                                <Text>{item.houseName}</Text>
-                                <Text>{item.houseNumber}</Text>
+                            <TouchableOpacity key={houseNumber}
+                                style={{ flexDirection: "row", justifyContent: 'space-between', elevation: 1, backgroundColor: '#f9f9f9', padding: 10, width: 300, marginBottom: 10, borderRadius: 10 }}
+                                onPress={() => {
+                                    navigation.navigate('detail', {
+                                        houseName: houseName,
+                                        houseNumber: parseInt(houseNumber),
+                                    })
+                                }}
+                            >
+                                <Text>{houseName}</Text>
+                                <Text>{houseNumber}</Text>
                             </TouchableOpacity>
                         )
                     })

@@ -17,7 +17,6 @@ export default ({ navigation }: props) => {
     useEffect(() => {
         profileAPI()
             .then(({ data }) => {
-                console.log()
                 setName(data.name)
                 setPhone(data.phone)
             })

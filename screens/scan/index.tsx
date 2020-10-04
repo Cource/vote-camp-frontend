@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { searchAPI } from '../../api/v1';
-import { Barcode } from '../../components';
+import Barcode from '../../components/barcode';
 
 export default ()=>{
     const navigation = useNavigation()

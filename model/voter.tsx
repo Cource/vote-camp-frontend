@@ -1,7 +1,8 @@
 export interface Voter {
     name?: string,
     guardian?: string,
-    dob?: string,
+    age?: string,
+    gender: string
     sex?: 'M'|'F'|'T',
     houseName?: string,
     houseNumber?: string,
@@ -9,10 +10,13 @@ export interface Voter {
     email?: string,
     mobileNumber?: string,
     religion?: string,
-    cast?: string,
     party?: string,
     status?: string,
     education?: string,
     type?: 'add'|'detail',
     id?: number
+}
+export interface House {
+    houseName: string,
+    houseNumber: number,
 }

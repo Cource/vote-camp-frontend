@@ -2,8 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-community/async-storage";
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Easing } from 'react-native-reanimated';
 import { timing } from "react-native-redash";
 import { housesLeftAPI, progressAPI } from '../../api/v1';
@@ -90,8 +89,8 @@ export default ({ navigation }:Props)=>{
                         )
                     })
                 }
+                <View style={{ height: 20 }} ></View>
             </ScrollView>
-            <View></View>
         </View>
     )
 }

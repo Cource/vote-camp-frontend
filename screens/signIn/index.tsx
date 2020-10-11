@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { ActivityIndicator, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { getWardsAPI, reqOtpAPI, verifyOtpAPI } from '../../api/v1';
 import ConfirmBtn from '../../components/ConfirmBtn';
 import { Feather } from '@expo/vector-icons';
@@ -58,12 +57,16 @@ export default ({ navigation }: props) => {
                 {page === 0 ?
                     <>
                         <Text style={[styles.header, { fontSize: 20 }]}>Phone Number</Text>
-                        <TextInput value={phone} onChangeText={onPhoneChange} style={[styles.input, border]} />
+                        <TextInput value={phone} onChangeText={onPhoneChange} style={[styles.input, border]}
+                            keyboardType='phone-pad'
+                            maxLength={10} />
                     </>
                     :
                     <>
                         <Text style={[styles.header, { fontSize: 20 }]} >Verification Code</Text>
-                        <TextInput value={otp} onChangeText={onOtpChange} style={[styles.input, border]} placeholder="Enter the One Time Pin" />
+                        <TextInput value={otp} onChangeText={onOtpChange} style={[styles.input, border]} placeholder="Enter the One Time Pin"
+                            keyboardType='numeric'
+                            maxLength={6} />
                     </>
                 }
                 {

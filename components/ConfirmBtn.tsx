@@ -1,8 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Text, TouchableOpacity } from 'react-native';
 
 export default (props: { onPress: Function, icon?: boolean, text?: string, position?: "center" | "right" }) => {
     return (

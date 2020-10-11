@@ -1,7 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { StackParamList } from '../../App'
 import { Feather } from "@expo/vector-icons"
 import AsyncStorage from '@react-native-community/async-storage'

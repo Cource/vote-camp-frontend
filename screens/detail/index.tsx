@@ -1,11 +1,10 @@
 import { Feather } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { familyDetailsAPI, increaseProgressAPI } from '../../api/v1';
 import { StackParamList } from "../../App";
-import { Member } from "../../model/houses";
+import { Voter } from "../../model/voter";
 import Card from './card';
 import ConfirmBtn from '../../components/ConfirmBtn';
 
@@ -59,16 +58,16 @@ export default ({ route, navigation }:Props)=>{
                         isLoading?
                         <ActivityIndicator size="large"/>
                         :
-                        members.map((member:Member)=> {
-                            return (
-                                <Card name={ member.name } voterId={ member.voterId } guardian={ member.guardian } dob={ member.dob } gender={ member.gender } houseName={ member.houseName } houseNumber={ member.houseNumber } id={ member.id } key={ member.voterId as string } />
-                            )
+                            members.map((member: Voter) => {
+                                return (
+                                    <Card name={member.name} voterId={member.voterId} guardian={member.guardian} gender={member.gender} houseName={member.houseName} houseNumber={member.houseNumber} id={member.id} key={member.voterId as string} />
+                                )
                         })
                     }
                     <View style={{ height: 160 }} />
                 </ScrollView>
             </View>
-            <View style={{ position: 'absolute', bottom: 0, minWidth: '100%' }}>
+            <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
                 <ConfirmBtn
                     onPress={() => {
                         setConfirm(!confirm)

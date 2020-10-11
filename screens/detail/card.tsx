@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Member } from "../../model/houses";
+import { Voter } from "../../model/voter";
 import { useNavigation } from '@react-navigation/native';
 
-export default (props:Member)=>{
-    const [ hidden, setHide ] = useState(true)
+export default (props: Voter) => {
     const navigation = useNavigation()
     return(
         <View style={{ marginBottom: 10 }}>
@@ -13,8 +12,8 @@ export default (props:Member)=>{
                     type: 'detail',
                     name: props.name,
                     guardian: props.guardian,
-                    dob: props.dob,
-                    sex: props.gender.split(' ')[0],
+                    sex: props.gender.split(' / ')[0],
+                    age: props.gender.split(' / ')[1],
                     voterId: props.voterId,
                     houseName: props.houseName,
                     houseNumber: props.houseNumber,

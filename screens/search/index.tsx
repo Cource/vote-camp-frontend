@@ -1,10 +1,9 @@
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
-import { AsyncStorage, StyleSheet, Text, View, ActivityIndicator } from "react-native";
-import { ScrollView, TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import { AsyncStorage, StyleSheet, Text, View, ActivityIndicator, ScrollView, TextInput, TouchableOpacity } from "react-native";
 import { searchAPI } from '../../api/v1';
-import { House } from '../../model/houses';
+import { House } from '../../model/voter';
 
 
 export default ()=>{

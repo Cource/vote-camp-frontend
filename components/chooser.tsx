@@ -8,7 +8,7 @@ interface items{
     }[],
     onSelect: Function,
     style?: ViewStyle,
-    value: string
+    value?: string
 }
 
 export default ({ items, onSelect, style, value }:items)=>{
@@ -78,6 +78,7 @@ const _Chooser = StyleSheet.create({
         padding: 10,
         paddingHorizontal: 15,
         borderRadius: 7,
+        elevation: 2,
     },
     text: {
         color: 'white',

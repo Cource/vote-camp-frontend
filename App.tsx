@@ -15,11 +15,12 @@ import SignIn from "./screens/signIn";
 import Profile from "./screens/profile"
 import * as Location from "expo-location";
 import { setLocationAPI } from "./api/v1";
+import { Voter } from './model/voter'
 
 export type StackParamList = {
     tabs: undefined,
     detail: { houseName: string, houseNumber: number },
-    voter: { type: 'detail'|'add', name?: string, guardian?: string, dob?: string, sex?: 'M'|'F'|'T', houseName?: string, houseNumber?: string, voterId?: string, id?: number },
+    voter: Voter,
     signIn: undefined,
     profile: undefined
 }

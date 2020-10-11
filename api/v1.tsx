@@ -14,7 +14,7 @@ export const housesLeftAPI = async () => {
 
 export const setLocationAPI = async (lattitude: number, longitude: number) => {
     Axios.post(server + '/location', {
-        lattitude: lattitude,
+        latitude: lattitude,
         longitude: longitude
     }, {
         headers: {
@@ -123,9 +123,9 @@ export const increaseProgressAPI = async (voterIdArray: string[]) => {
 }
 
 export const addVoterAPI = async ({
-    name, guardian, dob, sex,
+    name, guardian, age, sex,
     houseName, houseNumber, voterId, email,
-    mobileNumber, religion, cast, party,
+    mobileNumber, religion, party,
     status, education, type, id
 }: Voter)=>{
     const body = {
@@ -135,15 +135,10 @@ export const addVoterAPI = async ({
         houseName: houseName,
         gender: sex,
         voterId: voterId,
-        district: await AsyncStorage.getItem('district'),
-        city: await AsyncStorage.getItem('city'),
-        ward: await AsyncStorage.getItem('ward'),
-        constituency: "poonjar",
-        dob: dob,
+        age: age,
         email: email,
         phone: mobileNumber,
         religion: religion,
-        cast: cast,
         party: party,
         status: status,
         education: education,

@@ -56,7 +56,10 @@ export default ({ navigation }: props) => {
             <TouchableOpacity
                 onPress={() => {
                     AsyncStorage.multiRemove(['auth', 'ward', 'wardId', 'uid'])
-                        .then(() => navigation.navigate('signIn'))
+                        .then(() => navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'signIn' }]
+                        }))
                 }}
                 style={{ backgroundColor: '#f67', justifyContent: "center", padding: 15, flexDirection: 'row', borderRadius: 10 }}
             >

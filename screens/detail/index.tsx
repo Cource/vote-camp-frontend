@@ -20,8 +20,8 @@ export default ({ route, navigation }:Props)=>{
 
     function getVoterIds() {
         let voterIds: string[] = []
-        members.forEach(({ voterId }) => {
-            voterIds.push(voterId)
+        members.forEach(({ id }) => {
+            voterIds.push(id)
         })
         return voterIds
     }
@@ -36,6 +36,7 @@ export default ({ route, navigation }:Props)=>{
 
     useEffect(()=>{
         if (confirm){
+            console.log(getVoterIds())
             increaseProgressAPI(getVoterIds())
         }
     }, [confirm])

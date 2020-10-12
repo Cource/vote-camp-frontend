@@ -29,7 +29,10 @@ export default ({ navigation }: props) => {
         AsyncStorage.getItem('auth')
             .then((res) => {
                 if (res !== null) {
-                    navigation.navigate('tabs')
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'tabs' }]
+                    })
                 }
             })
     }, [])

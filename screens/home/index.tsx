@@ -1,8 +1,9 @@
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-community/async-storage";
+import { useFocusEffect } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, RefreshControl, BackHandler } from 'react-native';
 import { Easing } from 'react-native-reanimated';
 import { timing } from "react-native-redash";
 import { housesLeftAPI, progressAPI } from '../../api/v1';
@@ -12,23 +13,49 @@ import ProgressArc from '../../components/animatedArcProgress';
 type Props = StackScreenProps<StackParamList, 'tabs'>
 
 export default ({ navigation }:Props)=>{
+    //exit app on back
+    useFocusEffect(
+        React.useCallback(() => {
+            const onBackPress = () => {
+                BackHandler.exitApp()
+                return true
+            }
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+            return () =>
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+    );
+
     const [ progress, setProgress ] = useState(0)
     const [ totalHouses, setTotal ] = useState(0)
     const [ completed, setCompleted ] = useState(0)
     const [ward, setWard] = useState<null|string>('')
     const [houses, setHouses] = useState<{ houseName: string, houseNumber: string }[]>([])
+    const [refreshing, setRefreshing] = React.useState(false);
 
-    useEffect(()=>{
-        AsyncStorage.getItem('ward')
-            .then((ward) => {
-                setWard(ward)
-            })
-        progressAPI()
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true)
+        loadProgress()
+        housesLeftAPI()
+            .then((res) => setHouses(res.data))
+            .finally(() => setRefreshing(false))
+    }, []);
+
+    const loadProgress = async () => {
+        await progressAPI()
             .then((res) => {
                 setProgress(res.data.completed / res.data.totalHouses)
                 setTotal(res.data.totalHouses)
                 setCompleted(res.data.completed)
             })
+    }
+
+    useEffect(() => {
+        AsyncStorage.getItem('ward')
+            .then((ward) => {
+                setWard(ward)
+            })
+        loadProgress()
             .catch(() => {
                 AsyncStorage.multiRemove(['auth', 'ward', 'wardId', 'cityId', 'districtId', 'uid'])
                     .then(() => navigation.navigate('signIn'))
@@ -60,7 +87,9 @@ export default ({ navigation }:Props)=>{
                     <Feather name="user" size={24} color="black" />
                 </TouchableOpacity>
             </View>
-            <ScrollView style={{ marginTop: 20 }} contentContainerStyle={{ alignItems: "center", justifyContent: 'center' }}>
+            <ScrollView style={{ marginTop: 20 }} contentContainerStyle={{ alignItems: "center", justifyContent: 'center' }}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            >
                 <ProgressArc progress={timing(config)} style={{ marginTop: 20 }} />
                 <View style={{ marginTop: -150, marginBottom: 60, alignItems: "center" }}>
                     <Text style={{

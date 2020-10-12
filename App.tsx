@@ -16,6 +16,7 @@ import Profile from "./screens/profile"
 import * as Location from "expo-location";
 import { setLocationAPI } from "./api/v1";
 import { Voter } from './model/voter'
+import { AppState } from "react-native";
 
 export type StackParamList = {
     tabs: undefined,
@@ -37,7 +38,7 @@ export default function App() {
                 let perm = await Location.requestPermissionsAsync();
                 status = perm.status
             }
-            if (await AsyncStorage.getItem('ward') !== null) {
+            if (await AsyncStorage.getItem('auth') !== null && !AppState.currentState.match(/inactive|background/)) {
                 let location = await Location.getCurrentPositionAsync({});
                 setLocationAPI(location.coords.latitude, location.coords.longitude);
             }

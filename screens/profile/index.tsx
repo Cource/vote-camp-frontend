@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { StackParamList } from '../../App'
 import { Feather } from "@expo/vector-icons"
 import AsyncStorage from '@react-native-community/async-storage'
@@ -9,6 +9,7 @@ import { profileAPI } from '../../api/v1'
 type props = StackScreenProps<StackParamList, 'profile'>
 
 export default ({ navigation }: props) => {
+    const [loading, setLoading] = useState(true)
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [ward, setWard] = useState<null | string>('')
@@ -19,6 +20,7 @@ export default ({ navigation }: props) => {
                 setName(data.name)
                 setPhone(data.phone)
             })
+            .finally(() => setLoading(false))
         AsyncStorage.getItem('ward')
             .then((ward) => {
                 setWard(ward)
@@ -37,12 +39,14 @@ export default ({ navigation }: props) => {
                     <Feather name="chevron-left" size={30} color="#555" />
                     <Text style={{ fontSize: 36, fontWeight: 'bold', marginLeft: 10 }}>Profile</Text>
                 </TouchableOpacity>
+                {loading && <ActivityIndicator size='large' />}
                 <Text style={{ fontSize: 30, fontWeight: "bold", alignSelf: "center", marginVertical: 30 }} >{name}</Text>
                 <View style={styles.item}>
                     <View style={{ flexDirection: 'row' }}>
                         <Feather name="phone" size={20} color="#555" style={{ marginRight: 10 }} />
                         <Text style={styles.title}>Phone</Text>
                     </View>
+                    {loading && <ActivityIndicator size='small' />}
                     <Text>{phone}</Text>
                 </View>
                 <View style={styles.item}>

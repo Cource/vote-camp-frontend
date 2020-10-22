@@ -16,7 +16,8 @@ import Profile from "./screens/profile"
 import * as Location from "expo-location";
 import { setLocationAPI } from "./api/v1";
 import { Voter } from './model/voter'
-import { AppState } from "react-native";
+import { Alert, AppState } from "react-native";
+import { lwrap } from "./model/language";
 
 export type StackParamList = {
     tabs: undefined,
@@ -39,6 +40,9 @@ export default function App() {
                 status = perm.status
             }
             if (await AsyncStorage.getItem('auth') !== null && !AppState.currentState.match(/inactive|background/)) {
+                if (!(await Location.getProviderStatusAsync()).gpsAvailable) {
+                    Alert.alert('Location', lwrap('Enable GPS while using the app for live location services'))
+                }
                 let location = await Location.getCurrentPositionAsync({});
                 setLocationAPI(location.coords.latitude, location.coords.longitude);
             }

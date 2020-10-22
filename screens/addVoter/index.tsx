@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from 'react';
+import { Text, View, TextInput, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import Chooser from "../../components/chooser";
 import { Ionicons, Feather } from "@expo/vector-icons"
 import { StackScreenProps } from '@react-navigation/stack';
@@ -9,6 +9,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { parties } from "../../model/parties";
 import { addVoterAPI } from '../../api/v1'
 import { useNavigation } from '@react-navigation/native';
+import { lwrap } from '../../model/language';
 
 type Props = StackScreenProps<StackParamList, 'voter'>
 type Religion = 'Religion' | 'Christian' | 'Muslim' | 'Hindu' | 'Buddhist'
@@ -75,7 +76,7 @@ export default (props:Props)=> {
                 setPage(0)
                 setAllErr(false)
                 type === 'detail' ?
-                    navigation.navigate('detail')
+                    navigation.goBack()
                     :
                     navigation.reset({
                         index: 1,
@@ -88,7 +89,7 @@ export default (props:Props)=> {
         }
     }
 
-    return(<View style={{ paddingHorizontal: 30, paddingTop: 50, flex: 1 }} >
+    return (<ScrollView style={{ paddingHorizontal: 30, paddingTop: 50, flex: 1 }} >
         <TouchableOpacity style={{ flexDirection: 'row', alignItems: "center", marginBottom: 20  }} onPress={()=>{
             setPage(0)
         }} >
@@ -97,13 +98,13 @@ export default (props:Props)=> {
                     <Feather name="chevron-left" size={30} color="#555" style={{ marginRight: 5 }} />
                 :null
             }
-            <Text style={{ fontSize: 36, fontWeight: 'bold' }} >{type === 'detail' ? 'Details' : 'Add a voter'}</Text>
+            <Text style={{ fontSize: 30, fontWeight: 'bold' }} >{type === 'detail' ? lwrap('Details') : lwrap('Add a voter')}</Text>
         </TouchableOpacity>
         {    
             page==0?
                 <View>
                     <TextInput
-                        placeholder="Name"
+                        placeholder={lwrap("Name")}
                         placeholderTextColor="#888"
                         value={_name}
                         onChangeText={(val:string) => set_Name(val)}
@@ -111,7 +112,7 @@ export default (props:Props)=> {
                         maxLength={20}
                     />
                     <TextInput
-                        placeholder="Guardian"
+                        placeholder={lwrap("Guardian")}
                         placeholderTextColor="#888"
                         value={_guardian}
                         onChangeText={(val:string) => set_Guardian(val)}
@@ -120,7 +121,7 @@ export default (props:Props)=> {
                     />
                     <View style={{ flexDirection: 'row', alignItems: "center" }} >
                         <TextInput
-                            placeholder="Age"
+                            placeholder={lwrap("Age")}
                             placeholderTextColor="#888"
                             value={_age}
                             onChangeText={(val: string) => set_Age(val)}
@@ -140,7 +141,7 @@ export default (props:Props)=> {
                         />
                     </View>
                     <TextInput
-                        placeholder="Voter ID"
+                        placeholder={lwrap("Voter ID")}
                         placeholderTextColor="#888"
                         value={_voterId}
                         onChangeText={(val:string) => set_VoterId(val)}
@@ -150,7 +151,7 @@ export default (props:Props)=> {
                     />
                     <View style={{ flexDirection: 'row' }} >
                         <TextInput
-                            placeholder="House Name"
+                            placeholder={lwrap("House Name")}
                             placeholderTextColor="#888"
                             value={_houseName}
                             onChangeText={(val:string) => set_HouseName(val)}
@@ -158,7 +159,7 @@ export default (props:Props)=> {
                             maxLength={20}
                         />
                         <TextInput
-                            placeholder="House Number"
+                            placeholder={lwrap("House Number")}
                             placeholderTextColor="#888"
                             value={_houseNumber}
                             onChangeText={(val:string) => set_HouseNumber(val)}
@@ -172,7 +173,7 @@ export default (props:Props)=> {
                 <View style={{ marginBottom: 10 }} >
                     <View></View><View></View>
                     <TextInput
-                        placeholder="Mobile Number"
+                        placeholder={lwrap("Mobile Number")}
                         placeholderTextColor="#888"
                         value={_mobileNumber}
                         onChangeText={(val:string) => set_MobileNumber(val)}
@@ -181,7 +182,7 @@ export default (props:Props)=> {
                         maxLength={10}
                     />
                     <TextInput
-                        placeholder="Email"
+                        placeholder={lwrap("Email")}
                         placeholderTextColor="#888"
                         value={_email}
                         onChangeText={(val: string) => {
@@ -207,33 +208,38 @@ export default (props:Props)=> {
                                 set_Support(!_support)
                             }}
                         >
-                            <Text style={{ color: 'white', fontWeight: "bold", fontSize: 18, marginRight: 5 }} >Needs Support</Text>
+                            <Text style={{ color: 'white', fontWeight: "bold", fontSize: 18, marginRight: 5 }} >{lwrap('Needs Support')}</Text>
                             <MaterialIcons name="accessible" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
                 </View>
+        }
+        {allErr &&
+            <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center' }} >
+                <Ionicons name="ios-warning" size={24} color="#f55" style={{ marginRight: 10 }} />
+                <Text style={{ color: '#f55' }} >{lwrap('Complete the fields before you continue.')}</Text>
+            </View>
         }
         <TouchableOpacity
             style={{
                 flexDirection: 'row',
                 alignItems: "center",
                 justifyContent: "space-between",
-                borderRadius: 30,
+                borderRadius: 100,
                 padding: 10,
                 paddingHorizontal: 20,
                 backgroundColor: page===0? '#B2BDBD' : '#5ABDFF',
-                marginTop: 30,
+                marginTop: allErr ? 35 - 25 : 35,
                 elevation: 1,
             }}
             onPress={submitDetails}
         >
-            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 20 }} >{page === 0 ? 'Add More Details' : type === 'detail' ? 'Submit Details' : 'Create Voter'}</Text>
+            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 20 }} >{page === 0 ? lwrap('Add More Details') : type === 'detail' ? lwrap('Submit Details') : lwrap('Create Voter')}</Text>
             <View style={{ flexDirection: "row", alignItems: 'center' }}>
-                {allErr && <Ionicons name="ios-warning" size={24} color="yellow" style={{ marginRight: 10 }} />}
                 <Ionicons name="md-arrow-round-forward" size={30} color="white" />
             </View>
         </TouchableOpacity>
-    </View>)
+    </ScrollView>)
 }
 
 const styles = StyleSheet.create({

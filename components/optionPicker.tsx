@@ -1,8 +1,8 @@
+import { Picker } from '@react-native-community/picker';
 import React from 'react';
-import { Picker, StyleSheet, Text, View } from 'react-native';
-import { Option } from '../model/landing';
+import { StyleSheet, Text, View } from 'react-native';
 
-export default (props: Option) => {
+export default (props: any) => {
     return (
         <View style={props.style} >
             <Text style={[styles.optionTitle, props.titleStyle]}>{props.title}</Text>

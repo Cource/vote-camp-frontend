@@ -9,6 +9,7 @@ import { timing } from "react-native-redash";
 import { housesLeftAPI, progressAPI } from '../../api/v1';
 import { StackParamList } from '../../App';
 import ProgressArc from '../../components/animatedArcProgress';
+import { lwrap } from '../../model/language'
 
 type Props = StackScreenProps<StackParamList, 'tabs'>
 
@@ -48,6 +49,10 @@ export default ({ navigation }:Props)=>{
                 setTotal(res.data.totalHouses)
                 setCompleted(res.data.completed)
             })
+            .catch(() => {
+                AsyncStorage.multiRemove(['auth', 'ward', 'wardId', 'cityId', 'districtId', 'uid'])
+                    .then(() => navigation.navigate('signIn'))
+            })
     }
 
     useEffect(() => {
@@ -56,10 +61,6 @@ export default ({ navigation }:Props)=>{
                 setWard(ward)
             })
         loadProgress()
-            .catch(() => {
-                AsyncStorage.multiRemove(['auth', 'ward', 'wardId', 'cityId', 'districtId', 'uid'])
-                    .then(() => navigation.navigate('signIn'))
-            })
         housesLeftAPI()
             .then((res) => setHouses(res.data))
     }, [])
@@ -67,7 +68,7 @@ export default ({ navigation }:Props)=>{
     const config = {
         duration: 1000,
         from: 0,
-        to: progress,
+        to: progress || 0,
         easing: Easing.bezier(0.5, 1, 0.89, 1),
     }
 
@@ -75,7 +76,7 @@ export default ({ navigation }:Props)=>{
         <View style={styles.container}>
             <View style={{ marginTop: 40, marginHorizontal: 30, flexDirection: 'row', justifyContent: "space-between" }}>
                 <View>
-                    <Text style={styles.header}>Campaign Progress</Text>
+                    <Text style={styles.header}>{lwrap('Campaign Progress')}</Text>
                     <Text style={styles.subHeader}>{ward}</Text>
                 </View>
                 <TouchableOpacity
@@ -97,9 +98,9 @@ export default ({ navigation }:Props)=>{
                         fontSize: 40,
                     }}>{completed}</Text>
                     <Text style={{fontSize: 20, marginTop: 10}}>{totalHouses}</Text>
-                    <Text style={{ color: '#888' }}>Houses</Text>
+                    <Text style={{ color: '#888' }}>{lwrap('Houses')}</Text>
                 </View>
-                <Text style={{ fontSize: 20, fontWeight: "bold", alignSelf: 'flex-start', marginLeft: 40, marginBottom: 20 }} >Houses Left</Text>
+                <Text style={{ fontSize: 20, fontWeight: "bold", alignSelf: 'flex-start', marginLeft: 40, marginBottom: 20 }} >{lwrap('Houses Left')}</Text>
                 {
                     houses.map(({ houseName, houseNumber }) => {
                         return (

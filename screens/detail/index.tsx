@@ -35,8 +35,7 @@ export default ({ route, navigation }:Props)=>{
     }, [])
 
     useEffect(()=>{
-        if (confirm){
-            console.log(getVoterIds())
+        if (confirm) {
             increaseProgressAPI(getVoterIds())
         }
     }, [confirm])

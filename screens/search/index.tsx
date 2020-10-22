@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { AsyncStorage, StyleSheet, Text, View, ActivityIndicator, ScrollView, TextInput, TouchableOpacity } from "react-native";
 import { searchAPI } from '../../api/v1';
 import { House } from '../../model/voter';
-
+import { lwrap } from '../../model/language'
 
 export default ()=>{
     const navigation = useNavigation()
@@ -36,12 +36,12 @@ export default ()=>{
     return(
         <View style={styles.container} >
             <View style={styles.header}>
-                <Text style={styles.headerText} >Search</Text>
+                <Text style={styles.headerText} >{lwrap('Search')}</Text>
                 <Text>{ ward }</Text>
             </View>
             <View style={styles.searchBar}>
                 <TextInput
-                    placeholder="Search"
+                    placeholder={lwrap("Name, House name")}
                     placeholderTextColor="#888"
                     value={query}
                     onChangeText={(text)=> setQuery(text)}

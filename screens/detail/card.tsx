@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Voter } from "../../model/voter";
 import { useNavigation } from '@react-navigation/native';
+import { lwrap } from '../../model/language';
 
 export default (props: Voter) => {
     const navigation = useNavigation()
@@ -22,21 +23,21 @@ export default (props: Voter) => {
             }} >
                 <View>
                     <View>
-                        <Text style={ styles.title } >Name</Text>
+                        <Text style={styles.title} >{lwrap('Name')}</Text>
                         <Text>{ props.name }</Text>
                     </View>
                     <View>
-                        <Text style={ styles.title } >Guardian</Text>
+                        <Text style={styles.title} >{lwrap('Guardian')}</Text>
                         <Text>{ props.guardian }</Text>
                     </View>
                 </View>
                 <View>
                     <View>
-                        <Text style={ styles.title } >Voters Id</Text>
+                        <Text style={styles.title} >{lwrap('Voter ID')}</Text>
                         <Text>{ props.voterId } </Text>
                     </View>
                     <View>
-                        <Text style={ styles.title } >Sex/Age</Text>
+                        <Text style={styles.title} >{lwrap('Sex / Age')}</Text>
                         <Text>{ props.gender }</Text>
                     </View>
                 </View>

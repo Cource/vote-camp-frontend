@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { searchAPI } from '../../api/v1';
 import Barcode from '../../components/barcode';
+import { lwrap } from '../../model/language';
 
 export default ()=>{
     const navigation = useNavigation()
@@ -43,13 +44,13 @@ export default ()=>{
             <StatusBar style="light" backgroundColor="#0003" hidden={invalid} />
             {
                 invalid?
-                <View style={{ position: "absolute", top: 0, right: 0, left: 0, height: 24, backgroundColor: '#FF4D4D', justifyContent: "center", alignItems: 'center' }} >
-                    <Text style={{ color: 'white' }} >Invalid Voter ID</Text>
-                </View>
+                    <View style={{ position: "absolute", top: 0, right: 0, left: 0, height: 24, backgroundColor: '#FF4D4D', justifyContent: "center", alignItems: 'center' }} >
+                        <Text style={{ color: 'white' }} >{lwrap('Invalid Voter ID')}</Text>
+                    </View>
                 :null
             }
             <View style={[styles.header, { position: 'absolute' }]}>
-                <Text style={styles.headerText} >Scan</Text>
+                <Text style={styles.headerText} >{lwrap('Scan')}</Text>
                 <Text style={{
                     color: 'white', 
                     textShadowColor:'#0003',

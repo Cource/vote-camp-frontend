@@ -2,6 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
+import { lwrap } from '../model/language';
 
 export default (props: { onPress: Function, icon?: boolean, text?: string, position?: "center" | "right" }) => {
     return (
@@ -11,7 +12,7 @@ export default (props: { onPress: Function, icon?: boolean, text?: string, posit
                 <Feather name="check-circle" size={35} color="white" />
                     : null
                 }
-                <Text style={{ fontSize: 25, color: "white", marginHorizontal: 10, fontWeight: "bold" }}>{props.text ? props.text : "Confirm"}</Text>
+                <Text style={{ fontSize: 25, color: "white", marginHorizontal: 10, fontWeight: "bold" }}>{props.text ? props.text : lwrap("Confirm")}</Text>
             </LinearGradient>
         </TouchableOpacity>
     );

@@ -40,7 +40,7 @@ export const progressAPI = async ()=>{
     return Axios.get(server + '/progress', {
         params:{
             wardId: await AsyncStorage.getItem('wardId'),
-            districtId: 9
+            districtId: await AsyncStorage.getItem('districtId')
         },
         headers: {
             Authorization: await AsyncStorage.getItem('auth')

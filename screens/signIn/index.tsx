@@ -6,6 +6,7 @@ import ConfirmBtn from '../../components/ConfirmBtn';
 import { Feather } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../App';
+import { lwrap } from '../../model/language';
 
 type props = StackScreenProps<StackParamList, 'signIn'>
 
@@ -55,19 +56,19 @@ export default ({ navigation }: props) => {
                         <Feather name="chevron-left" size={30} color="#555" />
                         : null
                     }
-                    <Text style={styles.header}>Login</Text>
+                    <Text style={styles.header}>{lwrap('Login')}</Text>
                 </TouchableOpacity>
                 {page === 0 ?
                     <>
-                        <Text style={[styles.header, { fontSize: 20 }]}>Phone Number</Text>
+                        <Text style={[styles.header, { fontSize: 20 }]}>{lwrap('Phone Number')}</Text>
                         <TextInput value={phone} onChangeText={onPhoneChange} style={[styles.input, border]}
                             keyboardType='phone-pad'
                             maxLength={10} />
                     </>
                     :
                     <>
-                        <Text style={[styles.header, { fontSize: 20 }]} >Verification Code</Text>
-                        <TextInput value={otp} onChangeText={onOtpChange} style={[styles.input, border]} placeholder="Enter the One Time Pin"
+                        <Text style={[styles.header, { fontSize: 20 }]} >{lwrap('Verification Code')}</Text>
+                        <TextInput value={otp} onChangeText={onOtpChange} style={[styles.input, border]} placeholder={lwrap("Enter the One Time Pin")}
                             keyboardType='numeric'
                             maxLength={6} />
                     </>
@@ -79,7 +80,7 @@ export default ({ navigation }: props) => {
                 }
                 {
                     netErr ?
-                        <Text style={{ color: '#f55', alignSelf: 'center' }}>Network Error</Text>
+                        <Text style={{ color: '#f55', alignSelf: 'center' }}>{lwrap('Network Error')}</Text>
                         : null
                 }
             </View>
@@ -116,7 +117,10 @@ export default ({ navigation }: props) => {
                                         await AsyncStorage.setItem('ward', ward.name)
                                     }
                                 }
-                                navigation.navigate('tabs')
+                                navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'tabs' }]
+                                })
                             })
                             .catch((err) => err.response.status === 400 ? inputErr() : null)
                             .catch(() => setNetErr(true))
@@ -124,7 +128,7 @@ export default ({ navigation }: props) => {
                         inputErr()
                     }
                 }
-            }} position="center" icon={page === 0 ? false : true} text={page === 0 ? "Request OTP" : "Verify OTP"} />
+            }} position="center" icon={page === 0 ? false : true} text={page === 0 ? lwrap("Request OTP") : lwrap("Verify OTP")} />
         </View>
     )
 }

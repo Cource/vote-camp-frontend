@@ -1,18 +1,32 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView, Alert, Linking } from 'react-native'
 import { StackParamList } from '../../App'
 import { Feather } from "@expo/vector-icons"
 import AsyncStorage from '@react-native-community/async-storage'
 import { profileAPI } from '../../api/v1'
+import { Picker } from '@react-native-community/picker'
+import { lwrap } from '../../model/language'
 
 type props = StackScreenProps<StackParamList, 'profile'>
 
 export default ({ navigation }: props) => {
+    const initial = useRef(0)
+
     const [loading, setLoading] = useState(true)
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
-    const [ward, setWard] = useState<null | string>('')
+    const [ward, setWard] = useState('')
+    const [lang, setLang] = useState('')
+
+    useEffect(() => {
+        if (initial.current < 2) {
+            initial.current++
+        } else {
+            AsyncStorage.setItem('lang', lang)
+            Alert.alert(`Language set to ${lang}`, 'Restart the app to see the changes in effect')
+        }
+    }, [lang])
 
     useEffect(() => {
         profileAPI()
@@ -22,41 +36,78 @@ export default ({ navigation }: props) => {
             })
             .finally(() => setLoading(false))
         AsyncStorage.getItem('ward')
-            .then((ward) => {
-                setWard(ward)
-            })
+            .then((ward) => setWard(ward as string))
+        AsyncStorage.getItem('lang')
+            .then((res) => res && setLang(res))
     }, [])
 
     return (
-        <View style={{ marginVertical: 40, marginHorizontal: 20, justifyContent: 'space-between', flex: 1 }}>
-            <View style={{ alignItems: 'stretch' }}>
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.goBack()
-                    }}
-                    style={{ flexDirection: 'row', alignItems: "center", marginBottom: 20 }}
+        <View style={{ marginTop: 50, marginBottom: 20, justifyContent: 'space-between', flex: 1 }}>
+            <TouchableOpacity
+                onPress={() => {
+                    navigation.goBack()
+                }}
+                style={{ flexDirection: 'row', alignItems: "center", marginLeft: 20 }}
+            >
+                <Feather name="chevron-left" size={30} color="#555" />
+                <Text style={{ fontSize: 30, fontWeight: 'bold', marginLeft: 10 }}>{lwrap('Profile')}</Text>
+            </TouchableOpacity>
+            <ScrollView contentContainerStyle={{ paddingHorizontal: 20 }}>
+                {loading && <ActivityIndicator size='large' style={{ marginBottom: -75, marginTop: 40 }} />}
+                <Text style={{ fontSize: 35, fontWeight: "bold", alignSelf: "center", marginVertical: 40 }} >{name}</Text>
+                <View style={styles.item}>
+                    <Feather name="phone" size={24} color="black" style={{ marginRight: 10 }} />
+                    <View>
+                        <Text style={styles.title}>{phone}</Text>
+                        <Text style={styles.subtitle}>{lwrap('Phone number used to login to the app')}</Text>
+                    </View>
+                </View>
+                <View style={styles.item}>
+                    <Feather name="map-pin" size={24} color="black" style={{ marginRight: 10 }} />
+                    <View>
+                        <Text style={styles.title}>{ward}</Text>
+                        <Text style={styles.subtitle}>{lwrap('The ward you are working in')}</Text>
+                    </View>
+                </View>
+                <View style={[styles.item, { justifyContent: "space-between" }]}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }} >
+                        <Feather name="globe" size={24} color="black" style={{ marginRight: 10 }} />
+                        <View>
+                            <Text style={styles.title}>{lwrap('Language')}</Text>
+                            <Text style={styles.subtitle}>{lwrap('Language used in the app')}</Text>
+                        </View>
+                    </View>
+                    <Picker
+                        selectedValue={lang}
+                        onValueChange={(value) => {
+                            setLang(value as string)
+                        }}
+                        style={{ height: 50, width: 120 }}
+                        mode='dropdown'
+                    >
+                        <Picker.Item value='en' label='English' />
+                        <Picker.Item value='mal' label='മലയാളം' />
+                    </Picker>
+                </View>
+                <TouchableOpacity style={styles.item}
+                    onPress={() => Linking.openURL('https://www.virtualbull.org/votecamp/privacypolicy')}
                 >
-                    <Feather name="chevron-left" size={30} color="#555" />
-                    <Text style={{ fontSize: 36, fontWeight: 'bold', marginLeft: 10 }}>Profile</Text>
+                    <Feather name="paperclip" size={24} color="black" style={{ marginRight: 10 }} />
+                    <View>
+                        <Text style={styles.title}>{lwrap('Terms and conditions')}</Text>
+                        <Text style={styles.subtitle}>{lwrap('Things that You need to know')}</Text>
+                    </View>
                 </TouchableOpacity>
-                {loading && <ActivityIndicator size='large' />}
-                <Text style={{ fontSize: 30, fontWeight: "bold", alignSelf: "center", marginVertical: 30 }} >{name}</Text>
-                <View style={styles.item}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Feather name="phone" size={20} color="#555" style={{ marginRight: 10 }} />
-                        <Text style={styles.title}>Phone</Text>
+                <TouchableOpacity style={styles.item}
+                    onPress={() => Linking.openURL('https://www.virtualbull.org/votecamp/help')}
+                >
+                    <Feather name="help-circle" size={24} color="black" style={{ marginRight: 10 }} />
+                    <View>
+                        <Text style={styles.title}>{lwrap('Support')}</Text>
+                        <Text style={styles.subtitle}>{lwrap('Get help from us')}</Text>
                     </View>
-                    {loading && <ActivityIndicator size='small' />}
-                    <Text>{phone}</Text>
-                </View>
-                <View style={styles.item}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Feather name="map-pin" size={20} color="#555" style={{ marginRight: 10 }} />
-                        <Text style={styles.title}>Ward</Text>
-                    </View>
-                    <Text>{ward}</Text>
-                </View>
-            </View>
+                </TouchableOpacity>
+            </ScrollView>
             <TouchableOpacity
                 onPress={() => {
                     AsyncStorage.multiRemove(['auth', 'ward', 'wardId', 'uid'])
@@ -65,10 +116,10 @@ export default ({ navigation }: props) => {
                             routes: [{ name: 'signIn' }]
                         }))
                 }}
-                style={{ backgroundColor: '#f67', justifyContent: "center", padding: 15, flexDirection: 'row', borderRadius: 10 }}
+                style={{ backgroundColor: '#f67', justifyContent: "center", padding: 15, flexDirection: 'row', borderRadius: 10, marginHorizontal: 20 }}
             >
                 <Feather name="log-out" size={24} color="white" style={{ marginRight: 10 }} />
-                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 20 }} >Logout</Text>
+                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 20 }} >{lwrap('Logout')}</Text>
             </TouchableOpacity>
         </View>
     )
@@ -77,19 +128,15 @@ export default ({ navigation }: props) => {
 const styles = StyleSheet.create({
     item: {
         flexDirection: 'row',
-        justifyContent: "space-between",
         alignItems: 'center',
-        marginHorizontal: 10,
-        marginBottom: 10,
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-        elevation: 1,
-        backgroundColor: '#f9f9f9',
+        marginBottom: 25,
         borderRadius: 10
     },
     title: {
-        fontWeight: "bold",
-        color: '#555',
-        fontSize: 17
+        fontSize: 18
+    },
+    subtitle: {
+        color: '#666',
+        fontSize: 12
     }
 })

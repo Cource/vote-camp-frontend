@@ -14,6 +14,7 @@ import Search from "./screens/search";
 import SignIn from "./screens/signIn";
 import Profile from "./screens/profile"
 import * as Location from "expo-location";
+import * as IntentLauncher from 'expo-intent-launcher';
 import { setLocationAPI } from "./api/v1";
 import { Voter } from './model/voter'
 import { Alert, AppState } from "react-native";
@@ -41,7 +42,12 @@ export default function App() {
             }
             if (await AsyncStorage.getItem('auth') !== null && !AppState.currentState.match(/inactive|background/)) {
                 if (!(await Location.getProviderStatusAsync()).gpsAvailable) {
-                    Alert.alert('Location', lwrap('Enable GPS while using the app for live location services'))
+                    Alert.alert('Location', lwrap('Enable GPS while using the app for live location services'),
+                        [{
+                            text: 'Ok',
+                            onPress: () => IntentLauncher.startActivityAsync(IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS)
+                        }]
+                    )
                 }
                 let location = await Location.getCurrentPositionAsync({});
                 setLocationAPI(location.coords.latitude, location.coords.longitude);

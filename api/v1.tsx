@@ -4,6 +4,12 @@ import { Voter } from '../model/voter'
 
 export const server = 'http://18.224.184.235:8002'
 
+//logging
+Axios.interceptors.request.use(request => {
+    console.log(`[${request.method}] ${request.url}\nData: ${JSON.stringify(request.params || request.data)}\n`)
+    return request
+})
+
 export const housesLeftAPI = async () => {
     return Axios.get(server + '/home', {
         headers: {
@@ -126,7 +132,7 @@ export const addVoterAPI = async ({
     name, guardian, age, sex,
     houseName, houseNumber, voterId, email,
     mobileNumber, religion, party,
-    status, education, type, id
+    status, education, type, id, cast
 }: Voter)=>{
     const body = {
         name: name,
@@ -139,6 +145,7 @@ export const addVoterAPI = async ({
         email: email,
         phone: mobileNumber,
         religion: religion,
+        cast: cast,
         party: party,
         status: status,
         education: education,

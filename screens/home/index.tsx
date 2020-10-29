@@ -45,7 +45,7 @@ export default ({ navigation }:Props)=>{
     const loadProgress = async () => {
         await progressAPI()
             .then((res) => {
-                setProgress(res.data.completed / res.data.totalHouses)
+                setProgress(res.data.totalHouses ? res.data.completed / res.data.totalHouses : res.data.completed > res.data.totalHouses ? 1 : 0)
                 setTotal(res.data.totalHouses)
                 setCompleted(res.data.completed)
             })
@@ -68,7 +68,7 @@ export default ({ navigation }:Props)=>{
     const config = {
         duration: 1000,
         from: 0,
-        to: progress || 0,
+        to: progress,
         easing: Easing.bezier(0.5, 1, 0.89, 1),
     }
 

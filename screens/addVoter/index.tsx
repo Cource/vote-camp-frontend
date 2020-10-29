@@ -17,13 +17,14 @@ type Party = undefined | 'LDF' | 'UDF' | 'BJP' | 'NOTA'
 type Education = 'Education' | '10th' | '12th' | 'Degree' | 'PG'
 
 export default (props:Props)=> {
-    const { type, name, guardian, sex, age, voterId, houseName, houseNumber, id } = props.route.params || {}
+    const { type, name, guardian, sex, age, voterId, houseName, houseNumber, id } = props.route.params || { type: 'add' }
     const navigation = useNavigation()
     const emailExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
     const [emailErr, setEmailErr] = useState(0)
     const [allErr, setAllErr] = useState(false)
     const [page, setPage] = useState(0)
+    const [casts, setCasts] = useState(['Cast'])
     
     const [_name, set_Name] = useState(name)
     const [_guardian, set_Guardian] = useState(guardian)
@@ -35,6 +36,7 @@ export default (props:Props)=> {
     const [_mobileNumber, set_MobileNumber] = useState('')
     const [_email, set_Email] = useState('')
     const [_religion, set_Religion] = useState<Religion>('Religion')
+    const [_cast, set_Cast] = useState('Cast')
     const [_education, set_Education] = useState<Education>('Education')
     const [_party, set_Party] = useState<Party>(undefined)
     const [_support, set_Support] = useState(false)
@@ -44,6 +46,14 @@ export default (props:Props)=> {
             setAllErr(false)
         }, 10000)
     }, [allErr])
+
+    useEffect(() => {
+        if (_religion === 'Hindu') {
+            setCasts(["Cast", "Nair", "Ezhava", "Vishwakarma", "Bhramin", "Vilakithala Nair"])
+        } else { //check religion here
+            null //add cast definitions here
+        }
+    }, [_religion])
 
     function submitDetails() {
         if (page === 0) {
@@ -68,6 +78,7 @@ export default (props:Props)=> {
                     email: _email,
                     mobileNumber: _mobileNumber,
                     religion: _religion,
+                    cast: _cast,
                     party: _party,
                     status: _support.toString(),
                     education: _education,
@@ -198,7 +209,10 @@ export default (props:Props)=> {
                         autoCompleteType='email'
                         keyboardType='email-address'
                     />
-                    <OptionPicker title="Religion" list={["Religion", "Christian", "Muslim", "Hindu", "Buddhist"]} state={_religion} changeState={set_Religion} titleStyle={{ fontSize: 0 }} />
+                    <View style={{ flexDirection: 'row' }} >
+                        <OptionPicker title="Religion" list={["Religion", "Christian", "Muslim", "Hindu", "Buddhist"]} state={_religion} changeState={set_Religion} titleStyle={{ fontSize: 0 }} width={150} />
+                        <OptionPicker title="Cast" list={casts} state={_cast} changeState={set_Cast} titleStyle={{ fontSize: 0 }} style={{ marginLeft: 10 }} width={130} />
+                    </View>
                     <OptionPicker title="Education" list={["Education", "10th", "12th", "Degree", "PG"]} state={_education} changeState={set_Education} style={{ marginTop: 10 }} titleStyle={{ fontSize: 0 }} />
                     <Chooser items={parties} style={{ flexDirection: 'row', marginTop: 10 }} onSelect={(party: Party) => set_Party(party)} />
                     <View style={{ flexDirection: 'row', marginTop: 10 }} >
@@ -217,7 +231,11 @@ export default (props:Props)=> {
         {allErr &&
             <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center' }} >
                 <Ionicons name="ios-warning" size={24} color="#f55" style={{ marginRight: 10 }} />
-                <Text style={{ color: '#f55' }} >{lwrap('Complete the fields before you continue.')}</Text>
+            {parseInt(_age) < 18 ?
+                <Text style={{ color: '#f55' }} >{lwrap('A voter has to at least 18 years old.')}</Text>
+                :
+                    <Text style={{ color: '#f55' }} >{lwrap('Complete the fields before you continue.')}</Text>
+            }
             </View>
         }
         <TouchableOpacity

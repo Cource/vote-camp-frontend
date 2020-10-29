@@ -10,6 +10,7 @@ export interface Voter {
     email?: string,
     mobileNumber?: string,
     religion?: string,
+    cast?: string,
     party?: string,
     status?: string,
     education?: string,

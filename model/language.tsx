@@ -52,6 +52,7 @@ const data: Data = {
         'Request OTP': 'Request OTP',
         'Verify OTP': 'Verify OTP',
         'Complete the fields before you continue.': 'Complete the fields before you continue.',
+        'A voter has to at least 18 years old.': 'A voter has to at least 18 years old.',
         'Enable GPS while using the app for live location services': 'Enable GPS while using the app for live location services'
     },
     mal: {
@@ -96,6 +97,7 @@ const data: Data = {
         'Request OTP': 'OTP അഭ്യർത്ഥിക്കുക',
         'Verify OTP': 'OTP പരിശോധിക്കുക',
         'Complete the fields before you continue.': 'തുടരുന്നതിന് മുമ്പ് കളങ്ങൾ പൂർത്തിയാക്കുക.',
+        'A voter has to at least 18 years old.': 'ഒരു വോട്ടർക്ക് കുറഞ്ഞത് 18 വയസ്സ് പ്രായമുണ്ടായിരിക്കണം.',
         'Enable GPS while using the app for live location services': 'തത്സമയ ലൊക്കേഷൻ സേവനങ്ങൾക്കായി അപ്ലിക്കേഷൻ ഉപയോഗിക്കുമ്പോൾ ജിപിഎസ് പ്രവർത്തനക്ഷമമാക്കുക'
     }
 }

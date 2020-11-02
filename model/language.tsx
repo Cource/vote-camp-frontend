@@ -53,7 +53,9 @@ const data: Data = {
         'Verify OTP': 'Verify OTP',
         'Complete the fields before you continue.': 'Complete the fields before you continue.',
         'A voter has to at least 18 years old.': 'A voter has to at least 18 years old.',
-        'Enable GPS while using the app for live location services': 'Enable GPS while using the app for live location services'
+        'Enable GPS while using the app for live location services': 'Enable GPS while using the app for live location services',
+        "Whatsapp Number": "Whatsapp Number",
+        "Additional Remarks": "Additional Remarks"
     },
     mal: {
         'Campaign Progress': 'പ്രചാരണ പുരോഗതി',
@@ -103,5 +105,5 @@ const data: Data = {
 }
 
 export function lwrap(textVar: string) {
-    return data[currentLanguage][textVar]
+    return data[currentLanguage][textVar] || data['en'][textVar]
 }

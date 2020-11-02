@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 export default (props: any) => {
     return (
-        <View style={props.style} >
+        <View style={[props.style, styles.option]} >
             <Text style={[styles.optionTitle, props.titleStyle]}>{props.title}</Text>
             <View style={{ borderRadius: 7, borderColor: "#555", borderStyle: "solid", borderWidth: 2 }}>
                 <Picker
@@ -31,8 +31,17 @@ export default (props: any) => {
 }
 
 const styles = StyleSheet.create({
+    option: {
+        marginVertical: 5
+    },
     optionTitle: {
-        fontSize: 20,
         fontWeight: "bold",
+        zIndex: 10,
+        alignSelf: "flex-start",
+        fontSize: 15,
+        marginLeft: 5,
+        marginBottom: -10,
+        backgroundColor: '#f0f0f0',
+        paddingHorizontal: 5
     },
 })

@@ -60,7 +60,7 @@ export default ({ route, navigation }:Props)=>{
                         :
                             members.map((member: Voter) => {
                                 return (
-                                    <Card name={member.name} voterId={member.voterId} guardian={member.guardian} gender={member.gender} houseName={member.houseName} houseNumber={member.houseNumber} id={member.id} key={member.voterId as string} />
+                                    <Card {...member} key={member.voterId as string} />
                                 )
                         })
                     }

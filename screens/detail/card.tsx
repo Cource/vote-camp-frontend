@@ -3,42 +3,46 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Voter } from "../../model/voter";
 import { useNavigation } from '@react-navigation/native';
 import { lwrap } from '../../model/language';
+import { Feather } from '@expo/vector-icons';
 
 export default (props: Voter) => {
     const navigation = useNavigation()
     return(
         <View style={{ marginBottom: 10 }}>
-            <TouchableOpacity style={[ styles.detailsItem ]} onPress={ ()=> {
-                navigation.navigate('voter', {
-                    type: 'detail',
-                    name: props.name,
-                    guardian: props.guardian,
-                    sex: props.gender.split(' / ')[0],
-                    age: props.gender.split(' / ')[1],
-                    voterId: props.voterId,
-                    houseName: props.houseName,
-                    houseNumber: props.houseNumber,
-                    id: props.id
+            <TouchableOpacity style={[styles.detailsItem, { backgroundColor: props.verified ? '#AEAEAE' : '#fff' }]}
+                onPress={() => {
+                    props.gender && navigation.navigate('voter', {
+                        type: 'detail',
+                        name: props.name,
+                        guardian: props.guardian,
+                        sex: props.gender.split(' / ')[0],
+                        age: props.gender.split(' / ')[1],
+                        voterId: props.voterId,
+                        houseName: props.houseName,
+                        houseNumber: props.houseNumber,
+                        id: props.id
                 })
             }} >
+                {props.verified ? props.verified >= 1 && <Text style={styles.watermark}>Verified</Text> : null}
+                {props.keyVoter && <Feather name="key" size={25} color="#333" style={styles.watermarkKey} />}
                 <View>
-                    <View>
+                    <View style={styles.section}>
                         <Text style={styles.title} >{lwrap('Name')}</Text>
-                        <Text>{ props.name }</Text>
+                        <Text style={styles.text}>{props.name}</Text>
                     </View>
-                    <View>
+                    <View style={styles.section}>
                         <Text style={styles.title} >{lwrap('Guardian')}</Text>
-                        <Text>{ props.guardian }</Text>
+                        <Text style={styles.text}>{props.guardian}</Text>
                     </View>
                 </View>
                 <View>
-                    <View>
+                    <View style={styles.section}>
                         <Text style={styles.title} >{lwrap('Voter ID')}</Text>
-                        <Text>{ props.voterId } </Text>
+                        <Text style={styles.text}>{props.voterId} </Text>
                     </View>
-                    <View>
+                    <View style={styles.section}>
                         <Text style={styles.title} >{lwrap('Sex / Age')}</Text>
-                        <Text>{ props.gender }</Text>
+                        <Text style={styles.text}>{props.gender}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -49,17 +53,38 @@ export default (props: Voter) => {
 const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
-        marginTop: 10,
+        color: '#333'
+    },
+    text: {
+        fontSize: 15,
+        color: '#333333'
+    },
+    watermark: {
+        position: 'absolute',
+        fontSize: 60,
+        fontWeight: 'bold',
+        bottom: 0,
+        left: 10,
+        color: '#333',
+        opacity: 0.1
+    },
+    watermarkKey: {
+        position: 'absolute',
+        top: 7,
+        right: 10,
+        opacity: 0.2
+    },
+    section: {
+        paddingVertical: 5
     },
     detailsItem: {
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 5,
-        paddingBottom: 15,
         backgroundColor: "white",
         borderRadius: 10,
-        elevation: 1,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
+        elevation: 2,
+        paddingHorizontal: 15,
+        paddingVertical: 10,
     },
 })

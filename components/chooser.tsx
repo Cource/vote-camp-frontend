@@ -29,7 +29,7 @@ export default ({ items, onSelect, style, value }:items)=>{
         }
         for (const [index, item] of items.entries()){
             if (item.title != selection ){
-                list[index] = 'grey'
+                list[index] = '#AEAEAE'
             }
         }
         setColors(list)

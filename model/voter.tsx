@@ -2,20 +2,27 @@ export interface Voter {
     name?: string,
     guardian?: string,
     age?: string,
-    gender: string
+    gender?: string
     sex?: 'M'|'F'|'T',
     houseName?: string,
     houseNumber?: string,
     voterId?: string,
-    email?: string,
+    whatsappNumber?: string,
     mobileNumber?: string,
     religion?: string,
     cast?: string,
     party?: string,
-    status?: string,
+    division?: string,
+    habits?: string,
+    cash?: string,
     education?: string,
     type?: 'add'|'detail',
-    id?: number
+    id?: number,
+    verified?: number,
+    remarks?: string,
+    voteStatus?: string,
+    postalType?: string,
+    keyVoter?: boolean
 }
 export interface House {
     houseName: string,

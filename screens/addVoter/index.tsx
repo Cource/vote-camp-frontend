@@ -5,19 +5,17 @@ import { Ionicons, Feather } from "@expo/vector-icons"
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../App';
 import OptionPicker from '../../components/optionPicker';
-import { MaterialIcons } from '@expo/vector-icons';
 import { parties } from "../../model/parties";
 import { addVoterAPI } from '../../api/v1'
 import { useNavigation } from '@react-navigation/native';
 import { lwrap } from '../../model/language';
+import CheckBox from '@react-native-community/checkbox';
 
 type Props = StackScreenProps<StackParamList, 'voter'>
-type Religion = 'Religion' | 'Christian' | 'Muslim' | 'Hindu' | 'Buddhist'
-type Party = undefined | 'LDF' | 'UDF' | 'BJP' | 'NOTA'
-type Education = 'Education' | '10th' | '12th' | 'Degree' | 'PG'
 
 export default (props:Props)=> {
-    const { type, name, guardian, sex, age, voterId, houseName, houseNumber, id } = props.route.params || { type: 'add' }
+    const params = props.route.params || ''
+    const { id, type } = props.route.params || { type: 'add' }
     const navigation = useNavigation()
     const emailExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
@@ -25,87 +23,98 @@ export default (props:Props)=> {
     const [allErr, setAllErr] = useState(false)
     const [page, setPage] = useState(0)
     const [casts, setCasts] = useState(['Cast'])
+    const [divisions, setDivisions] = useState(['Main'])
     
-    const [_name, set_Name] = useState(name)
-    const [_guardian, set_Guardian] = useState(guardian)
-    const [_age, set_Age] = useState(age)
-    const [_sex, set_Sex] = useState(sex)
-    const [_voterId, set_VoterId] = useState(voterId)
-    const [_houseName, set_HouseName] = useState(houseName)
-    const [_houseNumber, set_HouseNumber] = useState(houseNumber)
-    const [_mobileNumber, set_MobileNumber] = useState('')
-    const [_email, set_Email] = useState('')
-    const [_religion, set_Religion] = useState<Religion>('Religion')
-    const [_cast, set_Cast] = useState('Cast')
-    const [_education, set_Education] = useState<Education>('Education')
-    const [_party, set_Party] = useState<Party>(undefined)
-    const [_support, set_Support] = useState(false)
+    const [name, setName] = useState(params.name)
+    const [guardian, setGuardian] = useState(params.guardian)
+    const [age, setAge] = useState(params.age)
+    const [sex, setSex] = useState(params.sex)
+    const [voterId, setVoterId] = useState(params.voterId)
+    const [houseName, setHouseName] = useState(params.houseName)
+    const [houseNumber, setHouseNumber] = useState(params.houseNumber)
+    const [mobileNumber, setMobileNumber] = useState(params.mobileNumber)
+    const [whatsappNumber, setWhatsappNumber] = useState(params.whatsappNumber)
+    const [religion, setReligion] = useState(params.religion)
+    const [cast, setCast] = useState(params.cast)
+    const [education, setEducation] = useState(params.education)
+    const [party, setParty] = useState(params.party)
+    const [division, setDivision] = useState(params.division)
+    const [habits, setHabits] = useState(params.habits)
+    const [cash, setCash] = useState(params.cash)
+    const [keyVoter, setkeyVoter] = useState(params.keyVoter)
+    const [voteStatus, setVoteStatus] = useState(params.voteStatus)
+    const [postalType, setPostalType] = useState(params.postalType)
+    const [remarks, setRemarks] = useState(params.remarks)
 
     useEffect(() => {
         allErr && setTimeout(() => {
             setAllErr(false)
-        }, 10000)
+        }, 5000)
     }, [allErr])
 
     useEffect(() => {
-        if (_religion === 'Hindu') {
-            setCasts(["Cast", "Nair", "Ezhava", "Vishwakarma", "Bhramin", "Vilakithala Nair"])
-        } else { //check religion here
-            null //add cast definitions here
+        setWhatsappNumber(mobileNumber)
+    }, [mobileNumber])
+
+    useEffect(() => {
+        if (religion === 'Hindu') {
+            setCasts(["Nair", "Ezhava", "Vishwakarma", "Bhramin", "Vilakithala Nair"])
+        } else if (religion === 'Atheist') {
+            setCasts(['Atheist'])
         }
-    }, [_religion])
+    }, [religion])
+
+    useEffect(() => {
+        if (party === 'LDF') {
+            setDivisions(['CPI(M)'])
+        } else if (party === 'NOTA') {
+            setDivisions(['NOTA'])
+        }
+    }, [party])
+
+    function submitDetails_dev() {
+        if (page === 0) {
+            setPage(1)
+        } else if (page === 1) {
+            setPage(2)
+        }
+    }
 
     function submitDetails() {
         if (page === 0) {
-            if (_name && _guardian && parseInt(_age || '0') >= 18 && _voterId && _houseName && _houseNumber && _sex) {
+            if (name && guardian && parseInt(age || '0') >= 18 && voterId && houseName && houseNumber && sex) {
                 setPage(1)
                 setAllErr(false)
-            } else {
-                setAllErr(true)
-            }
-        } else {
-            if (_party) {
-                addVoterAPI({
-                    id,
-                    type,
-                    name: _name,
-                    guardian: _guardian,
-                    age: _age,
-                    sex: _sex,
-                    houseName: _houseName,
-                    houseNumber: _houseNumber,
-                    voterId: _voterId,
-                    email: _email,
-                    mobileNumber: _mobileNumber,
-                    religion: _religion,
-                    cast: _cast,
-                    party: _party,
-                    status: _support.toString(),
-                    education: _education,
-                    gender: ''
-                })
-                setPage(0)
+            } else setAllErr(true)
+        } else if (page === 1) {
+            if (party) {
+                setPage(2)
                 setAllErr(false)
-                type === 'detail' ?
-                    navigation.goBack()
-                    :
-                    navigation.reset({
-                        index: 1,
-                        routes: [{ name: 'tabs' }]
-                    })
-            } else {
-                setAllErr(true)
-            }
-
+            } else setAllErr(true)
+        } else {
+            addVoterAPI({
+                id, name, guardian, age, sex, houseName, houseNumber,
+                voterId, whatsappNumber, mobileNumber, religion, cast, education,
+                party, division, habits, cash, keyVoter, voteStatus, postalType, remarks
+            })
+            setPage(0)
+            setAllErr(false)
+            type === 'detail' ?
+                navigation.goBack()
+                :
+                navigation.reset({
+                    index: 1,
+                    routes: [{ name: 'tabs' }]
+                })
         }
     }
 
     return (<ScrollView style={{ paddingHorizontal: 30, paddingTop: 50, flex: 1 }} >
         <TouchableOpacity style={{ flexDirection: 'row', alignItems: "center", marginBottom: 20  }} onPress={()=>{
-            setPage(0)
+            page > 0 && setPage(page - 1)
         }} >
             {
-                page===1?
+                page > 0 ?
                     <Feather name="chevron-left" size={30} color="#555" style={{ marginRight: 5 }} />
                 :null
             }
@@ -117,16 +126,16 @@ export default (props:Props)=> {
                     <TextInput
                         placeholder={lwrap("Name")}
                         placeholderTextColor="#888"
-                        value={_name}
-                        onChangeText={(val:string) => set_Name(val)}
+                        value={name}
+                        onChangeText={(val: string) => setName(val)}
                         style={styles.TextBox}
                         maxLength={20}
                     />
                     <TextInput
                         placeholder={lwrap("Guardian")}
                         placeholderTextColor="#888"
-                        value={_guardian}
-                        onChangeText={(val:string) => set_Guardian(val)}
+                        value={guardian}
+                        onChangeText={(val: string) => setGuardian(val)}
                         maxLength={20}
                         style={styles.TextBox}
                     />
@@ -134,8 +143,8 @@ export default (props:Props)=> {
                         <TextInput
                             placeholder={lwrap("Age")}
                             placeholderTextColor="#888"
-                            value={_age}
-                            onChangeText={(val: string) => set_Age(val)}
+                            value={age}
+                            onChangeText={(val: string) => setAge(val)}
                             maxLength={2}
                             style={styles.TextBox}
                             keyboardType='number-pad'
@@ -146,16 +155,16 @@ export default (props:Props)=> {
                                     { color: '#FF6188', title: 'F' },
                                     { color: '#BA70FF', title: 'T' },
                             ]}
-                            onSelect={(item:any)=> set_Sex(item)}
-                            value={_sex as string}
-                            style={{ marginBottom: 10, marginLeft: 10 }}
+                            onSelect={(item: any) => setSex(item)}
+                            value={sex as string}
+                            style={{ marginVertical: 10, marginLeft: 10 }}
                         />
                     </View>
                     <TextInput
                         placeholder={lwrap("Voter ID")}
                         placeholderTextColor="#888"
-                        value={_voterId}
-                        onChangeText={(val:string) => set_VoterId(val)}
+                        value={voterId}
+                        onChangeText={(val: string) => setVoterId(val)}
                         style={styles.TextBox}
                         maxLength={20}
                         autoCapitalize='characters'
@@ -164,16 +173,16 @@ export default (props:Props)=> {
                         <TextInput
                             placeholder={lwrap("House Name")}
                             placeholderTextColor="#888"
-                            value={_houseName}
-                            onChangeText={(val:string) => set_HouseName(val)}
+                            value={houseName}
+                            onChangeText={(val: string) => setHouseName(val)}
                             style={styles.TextBox}
                             maxLength={20}
                         />
                         <TextInput
                             placeholder={lwrap("House Number")}
                             placeholderTextColor="#888"
-                            value={_houseNumber}
-                            onChangeText={(val:string) => set_HouseNumber(val)}
+                            value={houseNumber}
+                            onChangeText={(val: string) => setHouseNumber(val)}
                             style={[styles.TextBox, { marginLeft: 10 }]}
                             keyboardType='numeric'
                             maxLength={4}
@@ -181,57 +190,99 @@ export default (props:Props)=> {
                     </View>
                 </View>
             :
-                <View style={{ marginBottom: 10 }} >
-                    <View></View><View></View>
-                    <TextInput
-                        placeholder={lwrap("Mobile Number")}
-                        placeholderTextColor="#888"
-                        value={_mobileNumber}
-                        onChangeText={(val:string) => set_MobileNumber(val)}
-                        style={styles.TextBox}
-                        keyboardType='phone-pad'
-                        maxLength={10}
-                    />
-                    <TextInput
-                        placeholder={lwrap("Email")}
-                        placeholderTextColor="#888"
-                        value={_email}
-                        onChangeText={(val: string) => {
-                            set_Email(val)
-                            if (emailExp.test(val)) {
-                                setEmailErr(0)
-                            } else {
-                                setEmailErr(2)
-                            }
-                        }}
-                        style={[styles.TextBox, { borderWidth: emailErr }]}
-                        maxLength={40}
-                        autoCompleteType='email'
-                        keyboardType='email-address'
-                    />
-                    <View style={{ flexDirection: 'row' }} >
-                        <OptionPicker title="Religion" list={["Religion", "Christian", "Muslim", "Hindu", "Buddhist"]} state={_religion} changeState={set_Religion} titleStyle={{ fontSize: 0 }} width={150} />
-                        <OptionPicker title="Cast" list={casts} state={_cast} changeState={set_Cast} titleStyle={{ fontSize: 0 }} style={{ marginLeft: 10 }} width={130} />
-                    </View>
-                    <OptionPicker title="Education" list={["Education", "10th", "12th", "Degree", "PG"]} state={_education} changeState={set_Education} style={{ marginTop: 10 }} titleStyle={{ fontSize: 0 }} />
-                    <Chooser items={parties} style={{ flexDirection: 'row', marginTop: 10 }} onSelect={(party: Party) => set_Party(party)} />
-                    <View style={{ flexDirection: 'row', marginTop: 10 }} >
-                        <TouchableOpacity
-                            style={{ flexDirection: 'row', elevation: 2, padding: 10, backgroundColor: _support ? '#5ABDFF' : '#757575', borderRadius: 7, alignItems: "center" }}
-                            onPress={()=>{
-                                set_Support(!_support)
+                page === 1 ?
+                    <View>
+                        <View></View><View></View>
+                        <TextInput
+                            placeholder={lwrap("Mobile Number")}
+                            placeholderTextColor="#888"
+                            value={mobileNumber}
+                            onChangeText={(val: string) => setMobileNumber(val)}
+                            style={styles.TextBox}
+                            keyboardType='phone-pad'
+                            maxLength={10}
+                        />
+                        <TextInput
+                            placeholder={lwrap("Whatsapp Number")}
+                            placeholderTextColor="#888"
+                            value={whatsappNumber}
+                            onChangeText={(val: string) => {
+                                setWhatsappNumber(val)
+                                // if (emailExp.test(val)) {
+                                //     setEmailErr(0)
+                                // } else {
+                                //     setEmailErr(2)
+                                // }
                             }}
-                        >
-                            <Text style={{ color: 'white', fontWeight: "bold", fontSize: 18, marginRight: 5 }} >{lwrap('Needs Support')}</Text>
-                            <MaterialIcons name="accessible" size={24} color="white" />
-                        </TouchableOpacity>
+                            style={[styles.TextBox, { borderWidth: emailErr }]}
+                            maxLength={10}
+                            // autoCompleteType='email'
+                            keyboardType='phone-pad'
+                        />
+                        <View style={{ flexDirection: 'row' }} >
+                            <OptionPicker title="Religion" list={["Atheist", "Christian", "Muslim", "Hindu", "Buddhist"]} state={religion} changeState={setReligion} width={150} />
+                            <OptionPicker title="Cast" list={casts} state={cast} changeState={setCast} style={{ marginLeft: 10 }} width={130} />
+                        </View>
+                        <OptionPicker title="Education" list={["None", "10th", "12th", "Degree", "PG"]} state={education} changeState={setEducation} />
+                        <View style={{ flexDirection: 'row' }} >
+                            <OptionPicker title="Party" list={['NOTA', 'UDF', 'BJP', 'LDF']} state={party} changeState={setParty} style={{ marginRight: 10 }} width={150} />
+                            <OptionPicker title="Division" list={divisions} state={division} changeState={setDivision} width={130} />
+                        </View>
                     </View>
-                </View>
+                    :
+                    <View>
+                        <OptionPicker title="Habits" list={['None', 'Drinking', 'Smoking']} state={habits} changeState={setHabits} />
+                        <OptionPicker title="Financial status" list={['Middle-Class', 'Poor', 'Rich']} state={cash} changeState={setCash} />
+                        <View style={{ flexDirection: 'row', alignItems: "center", justifyContent: 'space-between', padding: 7, borderWidth: 2, borderColor: '#707070', borderRadius: 7, marginVertical: 5, marginTop: 10 }}>
+                            <Text style={{ fontWeight: "bold", fontSize: 16 }}>Key Voter</Text>
+                            <CheckBox
+                                onValueChange={() => setkeyVoter(!keyVoter)}
+                                value={keyVoter}
+                                tintColors={{ true: '#5ABDFF' }}
+                            />
+                        </View>
+                        <Chooser
+                            items={[
+                                { color: '#66C2FF', title: 'Normal Vote' },
+                                { color: '#BA70FF', title: 'Postal Vote' },
+                                { color: '#FF6188', title: 'Not Voting' },
+                            ]}
+                            onSelect={(item: any) => {
+                                setVoteStatus(item)
+                                setPostalType('Not Postal')
+                            }}
+                            value={voteStatus}
+                            style={{ marginVertical: 10, alignSelf: "center" }}
+                        />
+                        {
+                            voteStatus === 'Postal Vote' && <Chooser
+                                items={[
+                                    { color: '#BA70FF', title: 'NRI' },
+                                    { color: '#BA70FF', title: 'Bed Ridden' },
+                                    { color: '#BA70FF', title: 'Election Worker' },
+                                ]}
+                                onSelect={(item: any) => setPostalType(item)}
+                                value={postalType}
+                                style={{ marginBottom: 10, alignSelf: "center" }}
+                            />
+
+                        }
+                        <TextInput
+                            placeholder={lwrap("Additional Remarks")}
+                            placeholderTextColor="#888"
+                            value={remarks}
+                            onChangeText={(val: string) => setRemarks(val)}
+                            style={styles.TextBox}
+                            maxLength={250}
+                            multiline
+                            numberOfLines={4}
+                        />
+                    </View>
         }
         {allErr &&
             <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center' }} >
                 <Ionicons name="ios-warning" size={24} color="#f55" style={{ marginRight: 10 }} />
-            {parseInt(_age) < 18 ?
+            {age && parseInt(age) < 18 ?
                 <Text style={{ color: '#f55' }} >{lwrap('A voter has to at least 18 years old.')}</Text>
                 :
                     <Text style={{ color: '#f55' }} >{lwrap('Complete the fields before you continue.')}</Text>
@@ -246,13 +297,13 @@ export default (props:Props)=> {
                 borderRadius: 100,
                 padding: 10,
                 paddingHorizontal: 20,
-                backgroundColor: page===0? '#B2BDBD' : '#5ABDFF',
+                backgroundColor: page < 2 ? '#B2BDBD' : '#5ABDFF',
                 marginTop: allErr ? 35 - 25 : 35,
                 elevation: 1,
             }}
-            onPress={submitDetails}
+            onPress={submitDetails_dev}
         >
-            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 20 }} >{page === 0 ? lwrap('Add More Details') : type === 'detail' ? lwrap('Submit Details') : lwrap('Create Voter')}</Text>
+            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 20 }} >{page < 2 ? lwrap('Add More Details') : type === 'detail' ? lwrap('Submit Details') : lwrap('Create Voter')}</Text>
             <View style={{ flexDirection: "row", alignItems: 'center' }}>
                 <Ionicons name="md-arrow-round-forward" size={30} color="white" />
             </View>
@@ -267,7 +318,7 @@ const styles = StyleSheet.create({
         borderRadius: 7,
         padding: 10,
         paddingVertical: 8,
-        marginBottom: 10,
+        marginVertical: 5,
         flexGrow: 1
     }
 })

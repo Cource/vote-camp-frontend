@@ -128,36 +128,19 @@ export const increaseProgressAPI = async (voterIdArray: string[]) => {
     })
 }
 
-export const addVoterAPI = async ({
-    name, guardian, age, sex,
-    houseName, houseNumber, voterId, email,
-    mobileNumber, religion, party,
-    status, education, type, id, cast
-}: Voter)=>{
+export const addVoterAPI = async (data: Voter) => {
     const body = {
-        name: name,
-        guardian: guardian,
-        houseNumber: houseNumber,
-        houseName: houseName,
-        gender: sex,
-        voterId: voterId,
-        age: age,
-        email: email,
-        phone: mobileNumber,
-        religion: religion,
-        cast: cast,
-        party: party,
-        status: status,
-        education: education,
+        ...data,
+        gender: `${data.sex} / ${data.age}`,
     }
-    if (type === 'add'){
+    if (data.type === 'add') {
         Axios.post(`${server}/voters`, body, {
             headers: {
                 Authorization: await AsyncStorage.getItem('auth')
             }
         })
-    } else if (type === 'detail'){
-        Axios.put(`${server}/voters/${id}`, body, {
+    } else if (data.type === 'detail') {
+        Axios.put(`${server}/voters/${data.id}`, body, {
             headers: {
                 Authorization: await AsyncStorage.getItem('auth')
             }

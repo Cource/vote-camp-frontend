@@ -104,7 +104,7 @@ export default ({ navigation }:Props)=>{
                 {
                     houses.map(({ houseName, houseNumber }) => {
                         return (
-                            <TouchableOpacity key={houseNumber}
+                            <TouchableOpacity
                                 style={{ flexDirection: "row", justifyContent: 'space-between', elevation: 1, backgroundColor: '#f9f9f9', padding: 10, width: 300, marginBottom: 10, borderRadius: 10 }}
                                 onPress={() => {
                                     navigation.navigate('detail', {

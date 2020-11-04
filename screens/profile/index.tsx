@@ -20,7 +20,7 @@ export default ({ navigation }: props) => {
     const [lang, setLang] = useState('')
 
     useEffect(() => {
-        if (initial.current < 2) {
+        if (initial.current <= 1) {
             initial.current++
         } else {
             AsyncStorage.setItem('lang', lang)
@@ -38,7 +38,9 @@ export default ({ navigation }: props) => {
         AsyncStorage.getItem('ward')
             .then((ward) => setWard(ward as string))
         AsyncStorage.getItem('lang')
-            .then((res) => res && setLang(res))
+            .then((res) => {
+                res && setLang(res)
+            })
     }, [])
 
     return (
@@ -77,17 +79,18 @@ export default ({ navigation }: props) => {
                             <Text style={styles.subtitle}>{lwrap('Language used in the app')}</Text>
                         </View>
                     </View>
-                    <Picker
-                        selectedValue={lang}
-                        onValueChange={(value) => {
-                            setLang(value as string)
-                        }}
-                        style={{ height: 50, width: 120 }}
-                        mode='dropdown'
-                    >
-                        <Picker.Item value='en' label='English' />
-                        <Picker.Item value='mal' label='മലയാളം' />
-                    </Picker>
+                    {lang ?
+                        <Picker
+                            selectedValue={lang}
+                            onValueChange={(value) => setLang(value.toString())}
+                            style={{ height: 50, width: 120 }}
+                            mode='dropdown'
+                        >
+                            <Picker.Item value='en' label='English' />
+                            <Picker.Item value='mal' label='മലയാളം' />
+                        </Picker>
+                        : null
+                    }
                 </View>
                 <TouchableOpacity style={styles.item}
                     onPress={() => Linking.openURL('https://www.virtualbull.org/votecamp/privacypolicy')}

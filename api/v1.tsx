@@ -5,10 +5,10 @@ import { Voter } from '../model/voter'
 export const server = 'http://18.224.184.235:8002'
 
 //logging
-Axios.interceptors.request.use(request => {
-    console.log(`[${request.method}] ${request.url}\nData: ${JSON.stringify(request.params || request.data)}\n`)
-    return request
-})
+// Axios.interceptors.request.use(request => {
+//     console.log(`[${request.method}] ${request.url}\nData: ${JSON.stringify(request.params || request.data)}\n`)
+//     return request
+// })
 
 export const housesLeftAPI = async () => {
     return Axios.get(server + '/home', {
@@ -133,17 +133,20 @@ export const addVoterAPI = async (data: Voter) => {
         ...data,
         gender: `${data.sex} / ${data.age}`,
     }
-    if (data.type === 'add') {
-        Axios.post(`${server}/voters`, body, {
-            headers: {
-                Authorization: await AsyncStorage.getItem('auth')
-            }
-        })
-    } else if (data.type === 'detail') {
-        Axios.put(`${server}/voters/${data.id}`, body, {
-            headers: {
-                Authorization: await AsyncStorage.getItem('auth')
-            }
-        })
+    switch (data.type) {
+        case 'add':
+            Axios.post(`${server}/voters`, body, {
+                headers: {
+                    Authorization: await AsyncStorage.getItem('auth')
+                }
+            })
+            break
+        case 'detail':
+            Axios.put(`${server}/voters/${data.id}`, body, {
+                headers: {
+                    Authorization: await AsyncStorage.getItem('auth')
+                }
+            })
+            break
     }
 }

@@ -6,6 +6,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { searchAPI } from '../../api/v1';
 import Barcode from '../../components/barcode';
 import { lwrap } from '../../model/language';
+import { Feather } from '@expo/vector-icons';
 
 export default ()=>{
     const navigation = useNavigation()
@@ -49,13 +50,24 @@ export default ()=>{
                     </View>
                 :null
             }
-            <View style={[styles.header, { position: 'absolute' }]}>
+            <View style={styles.header}>
                 <Text style={styles.headerText} >{lwrap('Scan')}</Text>
                 <Text style={{
                     color: 'white', 
                     textShadowColor:'#0003',
                     textShadowOffset:{width: 2, height: 2},
                     textShadowRadius: 3,}} >{ ward }</Text>
+            </View>
+            <View style={styles.centerOverlay}>
+                <View style={styles.box} >
+                    <Feather name="chevron-left" size={70} color="white" style={{ transform: [{ rotate: '45deg' }] }} />
+                    <Feather name="chevron-left" size={70} color="white" style={{ transform: [{ rotate: '135deg' }] }} />
+                </View>
+                <View style={styles.box}>
+                    <Feather name="chevron-left" size={70} color="white" style={{ transform: [{ rotate: '135deg' }, { rotateY: '180deg' }] }} />
+                    <Feather name="chevron-left" size={70} color="white" style={{ transform: [{ rotate: '45deg' }, { rotateY: '180deg' }] }} />
+                </View>
+                <Text style={{ color: 'white', width: 300 }} >{lwrap('Align the barcode of the votersID card within this box')}</Text>
             </View>
         </View>
     )
@@ -64,7 +76,8 @@ export default ()=>{
 const styles = StyleSheet.create({
     header: {
         marginLeft: 30,
-        marginTop: 40
+        marginTop: 40,
+        position: "absolute"
     },
     headerText: {
         fontSize: 30,
@@ -74,4 +87,18 @@ const styles = StyleSheet.create({
         textShadowOffset:{width: 2, height: 2},
         textShadowRadius: 5,
     },
+    box: {
+        flexDirection: "row",
+        justifyContent: 'space-between',
+        width: 350
+    },
+    centerOverlay: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        alignItems: "center",
+        justifyContent: 'center'
+    }
 })

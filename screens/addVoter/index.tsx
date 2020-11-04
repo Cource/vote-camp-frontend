@@ -33,7 +33,7 @@ export default (props:Props)=> {
     const [houseName, setHouseName] = useState(params.houseName)
     const [houseNumber, setHouseNumber] = useState(params.houseNumber)
     const [mobileNumber, setMobileNumber] = useState(params.mobileNumber)
-    const [whatsappNumber, setWhatsappNumber] = useState(params.whatsappNumber)
+    const [whatsAppNumber, setWhatsappNumber] = useState(params.whatsAppNumber)
     const [religion, setReligion] = useState(params.religion)
     const [cast, setCast] = useState(params.cast)
     const [education, setEducation] = useState(params.education)
@@ -57,59 +57,60 @@ export default (props:Props)=> {
     }, [mobileNumber])
 
     useEffect(() => {
-        if (religion === 'Hindu') {
-            setCasts(["Nair", "Ezhava", "Vishwakarma", "Bhramin", "Vilakithala Nair"])
-        } else if (religion === 'Atheist') {
-            setCasts(['Atheist'])
+        switch (religion) {
+            case 'Hindu':
+                setCasts(["Nair", "Ezhava", "Vishwakarma", "Bhramin", "Vilakithala Nair"])
+                break;
+            default:
+                setCasts(['Atheist'])
+                break;
         }
     }, [religion])
 
     useEffect(() => {
-        if (party === 'LDF') {
-            setDivisions(['CPI(M)'])
-        } else if (party === 'NOTA') {
-            setDivisions(['NOTA'])
+        switch (party) {
+            case 'LDF':
+                setDivisions(['CPI(M)'])
+                break;
+            default:
+                setDivisions(['NOTA'])
         }
     }, [party])
 
-    function submitDetails_dev() {
-        if (page === 0) {
-            setPage(1)
-        } else if (page === 1) {
-            setPage(2)
-        }
+    function changePage(err: boolean) {
+        setAllErr(err)
+        if (!err) setPage(page + 1)
     }
 
     function submitDetails() {
-        if (page === 0) {
-            if (name && guardian && parseInt(age || '0') >= 18 && voterId && houseName && houseNumber && sex) {
-                setPage(1)
-                setAllErr(false)
-            } else setAllErr(true)
-        } else if (page === 1) {
-            if (party) {
-                setPage(2)
-                setAllErr(false)
-            } else setAllErr(true)
-        } else {
-            addVoterAPI({
-                id, name, guardian, age, sex, houseName, houseNumber,
-                voterId, whatsappNumber, mobileNumber, religion, cast, education,
-                party, division, habits, cash, keyVoter, voteStatus, postalType, remarks
-            })
-            setPage(0)
-            setAllErr(false)
-            type === 'detail' ?
-                navigation.goBack()
-                :
-                navigation.reset({
-                    index: 1,
-                    routes: [{ name: 'tabs' }]
-                })
+        switch (page) {
+            case 0:
+                changePage(!(name && guardian && parseInt(age || '0') >= 18 && voterId && houseName && houseNumber && sex))
+                break
+            case 1:
+                changePage(!(mobileNumber && whatsAppNumber))
+                break
+            default:
+                setAllErr(!voteStatus)
+                if (voteStatus) {
+                    addVoterAPI({
+                        type, id, name, guardian, age, sex, houseName, houseNumber,
+                        voterId, whatsAppNumber, mobileNumber, religion, cast, education,
+                        party, division, habits, cash, keyVoter, voteStatus, postalType, remarks
+                    })
+                    setPage(0)
+                    type === 'detail' ?
+                        navigation.goBack()
+                        :
+                        navigation.reset({
+                            index: 1,
+                            routes: [{ name: 'tabs' }]
+                        })
+                }
         }
     }
 
-    return (<ScrollView style={{ paddingHorizontal: 30, paddingTop: 50, flex: 1 }} >
+    return (<ScrollView style={{ paddingHorizontal: 30, paddingVertical: 50, flex: 1 }} >
         <TouchableOpacity style={{ flexDirection: 'row', alignItems: "center", marginBottom: 20  }} onPress={()=>{
             page > 0 && setPage(page - 1)
         }} >
@@ -123,6 +124,7 @@ export default (props:Props)=> {
         {    
             page==0?
                 <View>
+                    <View /><View />
                     <TextInput
                         placeholder={lwrap("Name")}
                         placeholderTextColor="#888"
@@ -167,6 +169,7 @@ export default (props:Props)=> {
                         onChangeText={(val: string) => setVoterId(val)}
                         style={styles.TextBox}
                         maxLength={20}
+                        keyboardType='default'
                         autoCapitalize='characters'
                     />
                     <View style={{ flexDirection: 'row' }} >
@@ -192,7 +195,6 @@ export default (props:Props)=> {
             :
                 page === 1 ?
                     <View>
-                        <View></View><View></View>
                         <TextInput
                             placeholder={lwrap("Mobile Number")}
                             placeholderTextColor="#888"
@@ -205,7 +207,7 @@ export default (props:Props)=> {
                         <TextInput
                             placeholder={lwrap("Whatsapp Number")}
                             placeholderTextColor="#888"
-                            value={whatsappNumber}
+                            value={whatsAppNumber}
                             onChangeText={(val: string) => {
                                 setWhatsappNumber(val)
                                 // if (emailExp.test(val)) {
@@ -300,8 +302,9 @@ export default (props:Props)=> {
                 backgroundColor: page < 2 ? '#B2BDBD' : '#5ABDFF',
                 marginTop: allErr ? 35 - 25 : 35,
                 elevation: 1,
+                marginBottom: 100
             }}
-            onPress={submitDetails_dev}
+            onPress={submitDetails}
         >
             <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 20 }} >{page < 2 ? lwrap('Add More Details') : type === 'detail' ? lwrap('Submit Details') : lwrap('Create Voter')}</Text>
             <View style={{ flexDirection: "row", alignItems: 'center' }}>

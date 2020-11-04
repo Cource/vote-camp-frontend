@@ -7,7 +7,7 @@ export interface Voter {
     houseName?: string,
     houseNumber?: string,
     voterId?: string,
-    whatsappNumber?: string,
+    whatsAppNumber?: string,
     mobileNumber?: string,
     religion?: string,
     cast?: string,

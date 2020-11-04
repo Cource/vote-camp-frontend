@@ -55,7 +55,8 @@ const data: Data = {
         'A voter has to at least 18 years old.': 'A voter has to at least 18 years old.',
         'Enable GPS while using the app for live location services': 'Enable GPS while using the app for live location services',
         "Whatsapp Number": "Whatsapp Number",
-        "Additional Remarks": "Additional Remarks"
+        "Additional Remarks": "Additional Remarks",
+        'Align the barcode of the votersID card within this box': 'Align the barcode of the votersID card within this box'
     },
     mal: {
         'Campaign Progress': 'പ്രചാരണ പുരോഗതി',
@@ -100,7 +101,10 @@ const data: Data = {
         'Verify OTP': 'OTP പരിശോധിക്കുക',
         'Complete the fields before you continue.': 'തുടരുന്നതിന് മുമ്പ് കളങ്ങൾ പൂർത്തിയാക്കുക.',
         'A voter has to at least 18 years old.': 'ഒരു വോട്ടർക്ക് കുറഞ്ഞത് 18 വയസ്സ് പ്രായമുണ്ടായിരിക്കണം.',
-        'Enable GPS while using the app for live location services': 'തത്സമയ ലൊക്കേഷൻ സേവനങ്ങൾക്കായി അപ്ലിക്കേഷൻ ഉപയോഗിക്കുമ്പോൾ ജിപിഎസ് പ്രവർത്തനക്ഷമമാക്കുക'
+        'Enable GPS while using the app for live location services': 'തത്സമയ ലൊക്കേഷൻ സേവനങ്ങൾക്കായി അപ്ലിക്കേഷൻ ഉപയോഗിക്കുമ്പോൾ ജിപിഎസ് പ്രവർത്തനക്ഷമമാക്കുക',
+        "Whatsapp Number": "വാട്ട്‌സ്ആപ്പ് നമ്പർ",
+        "Additional Remarks": "അധിക പരാമർശങ്ങൾ",
+        'Align the barcode of the votersID card within this box': 'ഈ ബോക്സിനുള്ളിൽ‌ വോട്ടർ‌ഐഡി കാർ‌ഡിന്റെ ബാർ‌കോഡ് വിന്യസിക്കുക'
     }
 }
 

@@ -28,7 +28,7 @@ export default ({ route, navigation }:Props)=>{
 
     useEffect(()=>{
         familyDetailsAPI(houseNumber).then((res)=>{
-                setMembers(res.data)
+            setMembers(res.data || [])
             }).finally(()=>{
                 setLoading(false)
             })

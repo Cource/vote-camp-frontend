@@ -5,7 +5,7 @@ import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import addVoter from "./screens/addVoter";
 import Detail from "./screens/detail";
 import Home from './screens/home';
@@ -17,8 +17,10 @@ import * as Location from "expo-location";
 import * as IntentLauncher from 'expo-intent-launcher';
 import { setLocationAPI } from "./api/v1";
 import { Voter } from './model/voter'
-import { Alert, AppState } from "react-native";
+import { Alert, AppState, View, Text } from "react-native";
 import { lwrap } from "./model/language";
+import Axios from "axios";
+import Constants from 'expo-constants'
 
 export type StackParamList = {
     tabs: undefined,
@@ -32,6 +34,24 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+
+    const [error, setError] = useState('')
+
+    Axios.interceptors.response.use(res => res, (err) => {
+        setError(`${err}`)
+        setTimeout(() => {
+            setError('')
+        }, 3000)
+        return err
+    })
+
+    useEffect(() => {
+        (async () => {
+            if (await AsyncStorage.getItem('lang') === null) {
+                AsyncStorage.setItem('lang', 'en')
+            }
+        })()
+    })
 
     useEffect(() => {
         setInterval(async () => {
@@ -57,14 +77,21 @@ export default function App() {
 
     return (
         <NavigationContainer>
-            <StatusBar style="auto" />
-            <Stack.Navigator initialRouteName={'signIn'} screenOptions={{ headerShown: false }} >
+            <StatusBar style="auto" backgroundColor='#f0f0f0aa' hidden={Boolean(error)} />
+            <Stack.Navigator initialRouteName='signIn' screenOptions={{ headerShown: false }} >
                 <Stack.Screen name="signIn" component={SignIn} />
                 <Stack.Screen name="tabs" component={Tabs}/>
                 <Stack.Screen name="detail" component={Detail}/>
                 <Stack.Screen name="voter" component={addVoter}/>
                 <Stack.Screen name="profile" component={Profile} />
             </Stack.Navigator>
+            {
+                error ?
+                    <View style={{ position: "absolute", top: 0, right: 0, left: 0, height: Constants.statusBarHeight, backgroundColor: '#FF4D4D', justifyContent: "center", alignItems: 'center' }} >
+                        <Text style={{ color: 'white' }} >{error}</Text>
+                    </View>
+                    : null
+            }
         </NavigationContainer>
     );
 }

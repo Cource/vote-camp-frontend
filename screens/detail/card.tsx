@@ -12,18 +12,14 @@ export default (props: Voter) => {
             <TouchableOpacity style={[styles.detailsItem, { backgroundColor: props.verified ? '#AEAEAE' : '#fff' }]}
                 onPress={() => {
                     props.gender && navigation.navigate('voter', {
+                        ...props,
                         type: 'detail',
-                        name: props.name,
-                        guardian: props.guardian,
                         sex: props.gender.split(' / ')[0],
                         age: props.gender.split(' / ')[1],
-                        voterId: props.voterId,
-                        houseName: props.houseName,
-                        houseNumber: props.houseNumber,
-                        id: props.id
                 })
             }} >
                 {props.verified ? props.verified >= 1 && <Text style={styles.watermark}>Verified</Text> : null}
+                {props.verified ? props.verified >= 1 && <Text style={styles.visitCount}>{props.verified} visits</Text> : null}
                 {props.keyVoter && <Feather name="key" size={25} color="#333" style={styles.watermarkKey} />}
                 <View>
                     <View style={styles.section}>
@@ -73,6 +69,15 @@ const styles = StyleSheet.create({
         top: 7,
         right: 10,
         opacity: 0.2
+    },
+    visitCount: {
+        position: 'absolute',
+        bottom: -10,
+        right: 0,
+        backgroundColor: '#74deff',
+        paddingVertical: 3,
+        paddingHorizontal: 10,
+        borderRadius: 10,
     },
     section: {
         paddingVertical: 5

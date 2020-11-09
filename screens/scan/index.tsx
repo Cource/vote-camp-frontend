@@ -7,13 +7,14 @@ import { searchAPI } from '../../api/v1';
 import Barcode from '../../components/barcode';
 import { lwrap } from '../../model/language';
 import { Feather } from '@expo/vector-icons';
+import Constants from 'expo-constants'
 
 export default ()=>{
     const navigation = useNavigation()
 
     const [ward, setWard] = useState<null|string>('')
     const [voterId, setVoterId] = useState('')
-    const [invalid, setInvalid] = useState(false)
+    const [error, setError] = useState(false)
 
     useEffect(()=>{
         voterId!==''?
@@ -22,11 +23,10 @@ export default ()=>{
                     houseName: res.data[0].houseName,
                     houseNumber: res.data[0].houseNumber,
                 })
-            })
-            .catch(()=> {
-                setInvalid(true)
-                setTimeout(()=>{
-                    setInvalid(false)
+            }).catch(() => {
+                setError(true)
+                setTimeout(() => {
+                    setError(false)
                 }, 3000)
             })
             .finally(()=> setVoterId(''))
@@ -42,13 +42,12 @@ export default ()=>{
     return(
         <View style={{ flex: 1, backgroundColor: 'black' }}>
             <Barcode valueSetter={setVoterId} />
-            <StatusBar style="light" backgroundColor="#0003" hidden={invalid} />
             {
-                invalid?
-                    <View style={{ position: "absolute", top: 0, right: 0, left: 0, height: 24, backgroundColor: '#FF4D4D', justifyContent: "center", alignItems: 'center' }} >
-                        <Text style={{ color: 'white' }} >{lwrap('Invalid Voter ID')}</Text>
+                error ?
+                    <View style={{ position: "absolute", top: Constants.statusBarHeight, right: 0, left: 0, height: Constants.statusBarHeight, backgroundColor: '#FF4D4D', justifyContent: "center", alignItems: 'center' }} >
+                        <Text style={{ color: 'white' }} >Invalid Voter Id</Text>
                     </View>
-                :null
+                    : null
             }
             <View style={styles.header}>
                 <Text style={styles.headerText} >{lwrap('Scan')}</Text>

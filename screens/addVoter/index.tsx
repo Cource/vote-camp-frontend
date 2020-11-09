@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TextInput, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { Text, View, TextInput, StyleSheet, TouchableOpacity, ScrollView, Alert } from "react-native";
 import Chooser from "../../components/chooser";
 import { Ionicons, Feather } from "@expo/vector-icons"
 import { StackScreenProps } from '@react-navigation/stack';
@@ -97,15 +97,20 @@ export default (props:Props)=> {
                         type, id, name, guardian, age, sex, houseName, houseNumber,
                         voterId, whatsAppNumber, mobileNumber, religion, cast, education,
                         party, division, habits, cash, keyVoter, voteStatus, postalType, remarks
+                    }).then(() => {
+                        Alert.alert('Success', 'Successfully added Voter')
+                    }).finally(() => {
+                        setPage(0)
+                        type === 'detail' ?
+                            navigation.goBack()
+                            :
+                            navigation.reset({
+                                index: 1,
+                                routes: [{ name: 'tabs' }]
+                            })
+                    }).catch(() => {
+                        Alert.alert('Failed', 'The voter was not added')
                     })
-                    setPage(0)
-                    type === 'detail' ?
-                        navigation.goBack()
-                        :
-                        navigation.reset({
-                            index: 1,
-                            routes: [{ name: 'tabs' }]
-                        })
                 }
         }
     }

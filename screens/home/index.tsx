@@ -38,7 +38,7 @@ export default ({ navigation }:Props)=>{
         setRefreshing(true)
         loadProgress()
         housesLeftAPI()
-            .then((res) => setHouses(res.data))
+            .then((res) => setHouses(res.data || []))
             .finally(() => setRefreshing(false))
     }, []);
 
@@ -62,7 +62,7 @@ export default ({ navigation }:Props)=>{
             })
         loadProgress()
         housesLeftAPI()
-            .then((res) => setHouses(res.data))
+            .then((res) => setHouses(res.data || []))
     }, [])
 
     const config = {

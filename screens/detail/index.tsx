@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { familyDetailsAPI, increaseProgressAPI } from '../../api/v1';
 import { StackParamList } from "../../App";
 import { Voter } from "../../model/voter";
@@ -17,6 +17,16 @@ export default ({ route, navigation }:Props)=>{
     const [members, setMembers] = useState([])
     const [confirm, setConfirm] = useState(false)
     const [isLoading, setLoading] = useState(true)
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true)
+        familyDetailsAPI(houseNumber).then((res) => {
+            setMembers(res.data || [])
+        }).finally(() => {
+            setRefreshing(false)
+        })
+    }, []);
 
     function getVoterIds() {
         let voterIds: string[] = []
@@ -53,7 +63,7 @@ export default ({ route, navigation }:Props)=>{
                         <Text style={[styles.name, {fontWeight: "500"}]} >{ houseNumber }</Text>
                     </TouchableOpacity>
                 </View>
-                <ScrollView style={styles.details}>
+                <ScrollView style={styles.details} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} >
                     {
                         isLoading?
                         <ActivityIndicator size="large"/>

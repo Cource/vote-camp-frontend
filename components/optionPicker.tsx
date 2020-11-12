@@ -1,6 +1,6 @@
 import { Picker } from '@react-native-community/picker';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 
 export default (props: any) => {
     return (
@@ -15,12 +15,12 @@ export default (props: any) => {
                             props.changeState(itemValue)
                             : null
                     }}
-                    style={{ height: 40, width: props.width ? props.width : 300 }}
+                    style={{ height: 40, width: (Dimensions.get('window').width - 30 * 2) / (props.widthDividend || 1) - (props.widthOffset || 0) - 2 * 2 }}
                 >
                     {
-                        props.list.map((item) => {
+                        props.list.map((item: string) => {
                             return (
-                                <Picker.Item key={item as string} label={item as string} value={item as string}></Picker.Item>
+                                <Picker.Item key={item} label={item} value={item}></Picker.Item>
                             )
                         })
                     }

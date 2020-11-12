@@ -31,13 +31,13 @@ export const setLocationAPI = async (lattitude: number, longitude: number) => {
 
 export const reqOtpAPI = async (phone: string) => {
     return Axios.post(server + '/otp', {
-        phone: phone
+        mobileNumber: phone
     })
 }
 
 export const verifyOtpAPI = async (phone: string, otp: string) => {
     return Axios.put(server + '/otp', {
-        phone: phone,
+        mobileNumber: phone,
         otp: otp
     })
 }
@@ -131,6 +131,7 @@ export const increaseProgressAPI = async (voterIdArray: string[]) => {
 export const addVoterAPI = async (data: Voter) => {
     const body = {
         ...data,
+        verified: true,
         gender: `${data.sex} / ${data.age}`,
     }
     switch (data.type) {

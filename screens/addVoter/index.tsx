@@ -5,7 +5,6 @@ import { Ionicons, Feather } from "@expo/vector-icons"
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../App';
 import OptionPicker from '../../components/optionPicker';
-import { parties } from "../../model/parties";
 import { addVoterAPI } from '../../api/v1'
 import { useNavigation } from '@react-navigation/native';
 import { lwrap } from '../../model/language';
@@ -60,18 +59,35 @@ export default (props:Props)=> {
         switch (religion) {
             case 'Hindu':
                 setCasts(["Nair", "Ezhava", "Vishwakarma", "Bhramin", "Vilakithala Nair"])
-                break;
+                break
+            case 'Christian':
+                setCasts(["Orthodox (includes Jacobite)", "Catholic", "Knanaya (Catholic)"])
+                break
+            case 'Muslim':
+                setCasts(["General"])
+                break
+            case 'Buddhist':
+                setCasts(["General"])
+                break
             default:
                 setCasts(['Atheist'])
-                break;
         }
     }, [religion])
 
     useEffect(() => {
         switch (party) {
             case 'LDF':
-                setDivisions(['CPI(M)'])
-                break;
+                setDivisions(['CPI(M)', 'CPI', 'Others'])
+                break
+            case 'UDF':
+                setDivisions(['Others'])
+                break
+            case 'BJP':
+                setDivisions(['Others'])
+                break
+            case 'Others':
+                setDivisions(['Others'])
+                break
             default:
                 setDivisions(['NOTA'])
         }
@@ -96,9 +112,9 @@ export default (props:Props)=> {
                     addVoterAPI({
                         type, id, name, guardian, age, sex, houseName, houseNumber,
                         voterId, whatsAppNumber, mobileNumber, religion, cast, education,
-                        party, division, habits, cash, keyVoter, voteStatus, postalType, remarks
+                        party, division, habits, cash, keyVoter, voteStatus, postalType, remarks, visitCount: (params.visitCount || 0) + 1
                     }).then(() => {
-                        Alert.alert('Success', 'Successfully added Voter')
+                        Alert.alert('Success', 'Successfully added/edited Voter')
                     }).finally(() => {
                         setPage(0)
                         type === 'detail' ?
@@ -108,8 +124,8 @@ export default (props:Props)=> {
                                 index: 1,
                                 routes: [{ name: 'tabs' }]
                             })
-                    }).catch(() => {
-                        Alert.alert('Failed', 'The voter was not added')
+                    }).catch((err) => {
+                        Alert.alert('Failed', 'The voter was not added' + err)
                     })
                 }
         }
@@ -227,13 +243,13 @@ export default (props:Props)=> {
                             keyboardType='phone-pad'
                         />
                         <View style={{ flexDirection: 'row' }} >
-                            <OptionPicker title="Religion" list={["Atheist", "Christian", "Muslim", "Hindu", "Buddhist"]} state={religion} changeState={setReligion} width={150} />
-                            <OptionPicker title="Cast" list={casts} state={cast} changeState={setCast} style={{ marginLeft: 10 }} width={130} />
+                            <OptionPicker title="Religion" list={["Atheist", "Christian", "Muslim", "Hindu", "Buddhist", "Others"]} state={religion} changeState={setReligion} widthDividend={2} widthOffset={5} />
+                            <OptionPicker title="Cast" list={casts} state={cast} changeState={setCast} style={{ marginLeft: 10 }} widthDividend={2} widthOffset={5} />
                         </View>
                         <OptionPicker title="Education" list={["None", "10th", "12th", "Degree", "PG"]} state={education} changeState={setEducation} />
                         <View style={{ flexDirection: 'row' }} >
-                            <OptionPicker title="Party" list={['NOTA', 'UDF', 'BJP', 'LDF']} state={party} changeState={setParty} style={{ marginRight: 10 }} width={150} />
-                            <OptionPicker title="Division" list={divisions} state={division} changeState={setDivision} width={130} />
+                            <OptionPicker title="Party" list={['NOTA', 'UDF', 'BJP', 'LDF', 'Others']} state={party} changeState={setParty} style={{ marginRight: 10 }} widthDividend={2} widthOffset={5} />
+                            <OptionPicker title="Division" list={divisions} state={division} changeState={setDivision} widthDividend={2} widthOffset={5} />
                         </View>
                     </View>
                     :

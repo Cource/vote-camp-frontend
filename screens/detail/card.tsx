@@ -18,8 +18,8 @@ export default (props: Voter) => {
                         age: props.gender.split(' / ')[1],
                 })
             }} >
-                {props.verified ? props.verified >= 1 && <Text style={styles.watermark}>Verified</Text> : null}
-                {props.verified ? props.verified >= 1 && <Text style={styles.visitCount}>{props.verified} visits</Text> : null}
+                {props.verified && <Text style={styles.watermark}>Verified</Text>}
+                {props.visitCount ? props.visitCount >= 1 && <Text style={styles.visitCount}>{props.visitCount} visits</Text> : null}
                 {props.keyVoter && <Feather name="key" size={25} color="#333" style={styles.watermarkKey} />}
                 <View>
                     <View style={styles.section}>

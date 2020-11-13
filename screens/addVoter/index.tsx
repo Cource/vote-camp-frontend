@@ -16,9 +16,7 @@ export default (props:Props)=> {
     const params = props.route.params || ''
     const { id, type } = props.route.params || { type: 'add' }
     const navigation = useNavigation()
-    const emailExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
-    const [emailErr, setEmailErr] = useState(0)
     const [allErr, setAllErr] = useState(false)
     const [page, setPage] = useState(0)
     const [casts, setCasts] = useState(['Cast'])
@@ -231,15 +229,9 @@ export default (props:Props)=> {
                             value={whatsAppNumber}
                             onChangeText={(val: string) => {
                                 setWhatsappNumber(val)
-                                // if (emailExp.test(val)) {
-                                //     setEmailErr(0)
-                                // } else {
-                                //     setEmailErr(2)
-                                // }
                             }}
-                            style={[styles.TextBox, { borderWidth: emailErr }]}
+                            style={[styles.TextBox]}
                             maxLength={10}
-                            // autoCompleteType='email'
                             keyboardType='phone-pad'
                         />
                         <View style={{ flexDirection: 'row' }} >

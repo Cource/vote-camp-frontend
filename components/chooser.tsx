@@ -37,7 +37,7 @@ export default ({ items, onSelect, style, value }:items)=>{
     }, [selection])
     
     return(
-        <View style={[{ flexDirection: 'row'}, style]} >
+        <View style={[{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: "center" }, style]} >
             <TouchableOpacity
                 style={[_Chooser.button, { backgroundColor: colors[0], borderTopRightRadius: 0, borderBottomRightRadius: 0, marginRight: 1 }]}
                 onPress={()=> {

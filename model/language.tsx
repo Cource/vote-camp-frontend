@@ -11,7 +11,7 @@ AsyncStorage.getItem('lang')
 
 const data: Data = {
     en: {
-        'Campaign Progress': 'Campaign Progress',
+        'Progress': 'Progress',
         'Houses': 'Houses',
         'Houses Left': 'Houses Left',
         'Search': 'Search',
@@ -59,7 +59,7 @@ const data: Data = {
         'Align the barcode of the votersID card within this box': 'Align the barcode of the votersID card within this box'
     },
     mal: {
-        'Campaign Progress': 'പ്രചാരണ പുരോഗതി',
+        'Progress': 'പുരോഗതി',
         'Houses': 'വീടുകൾ',
         'Houses Left': 'അവശേഷിക്കുന്ന വീടുകൾ',
         'Search': 'തിരയുക',

@@ -9,7 +9,7 @@ export default (props: Voter) => {
     const navigation = useNavigation()
     return(
         <View style={{ marginBottom: 10 }}>
-            <TouchableOpacity style={[styles.detailsItem, { backgroundColor: props.verified ? '#AEAEAE' : '#fff' }]}
+            <TouchableOpacity style={[styles.detailsItem, { backgroundColor: props.verified ? '#ddd' : '#fff' }]}
                 onPress={() => {
                     props.gender && navigation.navigate('voter', {
                         ...props,

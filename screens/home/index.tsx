@@ -76,7 +76,7 @@ export default ({ navigation }:Props)=>{
         <View style={styles.container}>
             <View style={{ marginTop: 40, marginHorizontal: 30, flexDirection: 'row', justifyContent: "space-between" }}>
                 <View>
-                    <Text style={styles.header}>{lwrap('Campaign Progress')}</Text>
+                    <Text style={styles.header}>{lwrap('Progress')}</Text>
                     <Text style={styles.subHeader}>{ward}</Text>
                 </View>
                 <TouchableOpacity

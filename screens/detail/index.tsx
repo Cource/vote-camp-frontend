@@ -55,7 +55,7 @@ export default ({ route, navigation }:Props)=>{
             <View>
                 <View style={styles.header}>
                     <TouchableOpacity
-                        style={{ flexDirection: 'row', justifyContent: "flex-start", marginTop: 0, marginHorizontal: 0 }}
+                        style={{ flexDirection: 'row', alignItems: "center", marginTop: 0, marginHorizontal: 0 }}
                         onPress={()=>{navigation.goBack()}}
                     >
                         <Feather name="chevron-left" size={30} color="#555" />

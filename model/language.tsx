@@ -56,7 +56,15 @@ const data: Data = {
         'Enable GPS while using the app for live location services': 'Enable GPS while using the app for live location services',
         "Whatsapp Number": "Whatsapp Number",
         "Additional Remarks": "Additional Remarks",
-        'Align the barcode of the votersID card within this box': 'Align the barcode of the votersID card within this box'
+        'Align the barcode of the votersID card within this box': 'Align the barcode of the votersID card within this box',
+        "Religion": "Religion",
+        "Cast": "Cast",
+        "Education": "Education",
+        "Party": "Party",
+        "Division": "Division",
+        "Habits": "Habits",
+        "Financial status": "Financial status",
+        'Key Voter': 'Key Voter',
     },
     mal: {
         'Progress': 'പുരോഗതി',
@@ -104,7 +112,15 @@ const data: Data = {
         'Enable GPS while using the app for live location services': 'തത്സമയ ലൊക്കേഷൻ സേവനങ്ങൾക്കായി അപ്ലിക്കേഷൻ ഉപയോഗിക്കുമ്പോൾ ജിപിഎസ് പ്രവർത്തനക്ഷമമാക്കുക',
         "Whatsapp Number": "വാട്ട്‌സ്ആപ്പ് നമ്പർ",
         "Additional Remarks": "അധിക പരാമർശങ്ങൾ",
-        'Align the barcode of the votersID card within this box': 'ഈ ബോക്സിനുള്ളിൽ‌ വോട്ടർ‌ഐഡി കാർ‌ഡിന്റെ ബാർ‌കോഡ് വിന്യസിക്കുക'
+        'Align the barcode of the votersID card within this box': 'ഈ ബോക്സിനുള്ളിൽ‌ വോട്ടർ‌ഐഡി കാർ‌ഡിന്റെ ബാർ‌കോഡ് വിന്യസിക്കുക',
+        "Religion": "മതം",
+        "Cast": "ജാതി",
+        "Education": "വിദ്യാഭ്യാസം",
+        "Party": "പാർട്ടി",
+        "Division": "ഉപവിഭാഗം",
+        "Habits": "ശീലങ്ങൾ",
+        "Financial status": "സാമ്പത്തിക സ്ഥിതി",
+        'Key Voter': 'പ്രധാന വോട്ടർ',
     }
 }
 

@@ -12,7 +12,7 @@
     },
     "android": {
       "package": "com.upar.votecamp",
-      "versionCode": 1
+      "versionCode": 2
     },
     "updates": {
       "fallbackToCacheTimeout": 0

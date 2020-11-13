@@ -56,10 +56,10 @@ export default (props:Props)=> {
     useEffect(() => {
         switch (religion) {
             case 'Hindu':
-                setCasts(["Nair", "Ezhava", "Vishwakarma", "Bhramin", "Vilakithala Nair"])
+                setCasts(["Nair", "Ezhava", "Vishwakarma", "Bhramin", "Vilakithala Nair", "Others"])
                 break
             case 'Christian':
-                setCasts(["Orthodox (includes Jacobite)", "Catholic", "Knanaya (Catholic)"])
+                setCasts(["Orthodox (includes Jacobite)", "Catholic", "Knanaya (Catholic)", "Others"])
                 break
             case 'Muslim':
                 setCasts(["General"])
@@ -78,7 +78,7 @@ export default (props:Props)=> {
                 setDivisions(['CPI(M)', 'CPI', 'Others'])
                 break
             case 'UDF':
-                setDivisions(['Others'])
+                setDivisions(['Kerala Congress (M)', 'INC', 'Others'])
                 break
             case 'BJP':
                 setDivisions(['Others'])
@@ -235,21 +235,21 @@ export default (props:Props)=> {
                             keyboardType='phone-pad'
                         />
                         <View style={{ flexDirection: 'row' }} >
-                            <OptionPicker title="Religion" list={["Atheist", "Christian", "Muslim", "Hindu", "Buddhist", "Others"]} state={religion} changeState={setReligion} widthDividend={2} widthOffset={5} />
-                            <OptionPicker title="Cast" list={casts} state={cast} changeState={setCast} style={{ marginLeft: 10 }} widthDividend={2} widthOffset={5} />
+                            <OptionPicker title={lwrap("Religion")} list={["Atheist", "Christian", "Muslim", "Hindu", "Buddhist", "Others"]} state={religion} changeState={setReligion} widthDividend={2} widthOffset={5} />
+                            <OptionPicker title={lwrap("Cast")} list={casts} state={cast} changeState={setCast} style={{ marginLeft: 10 }} widthDividend={2} widthOffset={5} />
                         </View>
-                        <OptionPicker title="Education" list={["None", "10th", "12th", "Degree", "PG"]} state={education} changeState={setEducation} />
+                        <OptionPicker title={lwrap("Education")} list={["None", "10th", "12th", "Degree", "PG"]} state={education} changeState={setEducation} />
                         <View style={{ flexDirection: 'row' }} >
-                            <OptionPicker title="Party" list={['NOTA', 'UDF', 'BJP', 'LDF', 'Others']} state={party} changeState={setParty} style={{ marginRight: 10 }} widthDividend={2} widthOffset={5} />
-                            <OptionPicker title="Division" list={divisions} state={division} changeState={setDivision} widthDividend={2} widthOffset={5} />
+                            <OptionPicker title={lwrap("Party")} list={['NOTA', 'UDF', 'BJP', 'LDF', 'Others']} state={party} changeState={setParty} style={{ marginRight: 10 }} widthDividend={2} widthOffset={5} />
+                            <OptionPicker title={lwrap("Division")} list={divisions} state={division} changeState={setDivision} widthDividend={2} widthOffset={5} />
                         </View>
                     </View>
                     :
                     <View>
-                        <OptionPicker title="Habits" list={['None', 'Drinking', 'Smoking']} state={habits} changeState={setHabits} />
-                        <OptionPicker title="Financial status" list={['Middle-Class', 'Poor', 'Rich']} state={cash} changeState={setCash} />
+                        <OptionPicker title={lwrap("Habits")} list={['None', 'Drinking', 'Smoking']} state={habits} changeState={setHabits} />
+                        <OptionPicker title={lwrap("Financial status")} list={['Middle-Class', 'Poor', 'Rich']} state={cash} changeState={setCash} />
                         <View style={{ flexDirection: 'row', alignItems: "center", justifyContent: 'space-between', padding: 7, borderWidth: 2, borderColor: '#707070', borderRadius: 7, marginVertical: 5, marginTop: 10 }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 16 }}>Key Voter</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 16 }}>{lwrap('Key Voter')}</Text>
                             <CheckBox
                                 onValueChange={() => setkeyVoter(!keyVoter)}
                                 value={keyVoter}

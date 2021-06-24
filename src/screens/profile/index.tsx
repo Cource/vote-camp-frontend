@@ -1,12 +1,12 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { useEffect, useRef, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView, Alert, Linking } from 'react-native'
-import { StackParamList } from '../../App'
+import { StackParamList } from '../../../App'
 import { Feather } from "@expo/vector-icons"
 import AsyncStorage from '@react-native-community/async-storage'
 import { profileAPI } from '../../api/v1'
 import { Picker } from '@react-native-community/picker'
-import { lwrap } from '../../model/language'
+import { localize } from '../../Design/language'
 
 type props = StackScreenProps<StackParamList, 'profile'>
 
@@ -52,7 +52,7 @@ export default ({ navigation }: props) => {
                 style={{ flexDirection: 'row', alignItems: "center", marginLeft: 20 }}
             >
                 <Feather name="chevron-left" size={30} color="#555" />
-                <Text style={{ fontSize: 30, fontWeight: 'bold', marginLeft: 10 }}>{lwrap('Profile')}</Text>
+                <Text style={{ fontSize: 30, fontWeight: 'bold', marginLeft: 10 }}>{localize('Profile')}</Text>
             </TouchableOpacity>
             <ScrollView contentContainerStyle={{ paddingHorizontal: 20 }}>
                 {loading && <ActivityIndicator size='large' style={{ marginBottom: -75, marginTop: 40 }} />}
@@ -61,22 +61,22 @@ export default ({ navigation }: props) => {
                     <Feather name="phone" size={24} color="black" style={{ marginRight: 10 }} />
                     <View>
                         <Text style={styles.title}>{phone}</Text>
-                        <Text style={styles.subtitle}>{lwrap('Phone number used to login to the app')}</Text>
+                        <Text style={styles.subtitle}>{localize('Phone number used to login to the app')}</Text>
                     </View>
                 </View>
                 <View style={styles.item}>
                     <Feather name="map-pin" size={24} color="black" style={{ marginRight: 10 }} />
                     <View>
                         <Text style={styles.title}>{ward}</Text>
-                        <Text style={styles.subtitle}>{lwrap('The ward you are working in')}</Text>
+                        <Text style={styles.subtitle}>{localize('The ward you are working in')}</Text>
                     </View>
                 </View>
                 <View style={[styles.item, { justifyContent: "space-between" }]}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }} >
                         <Feather name="globe" size={24} color="black" style={{ marginRight: 10 }} />
                         <View>
-                            <Text style={styles.title}>{lwrap('Language')}</Text>
-                            <Text style={styles.subtitle}>{lwrap('Language used in the app')}</Text>
+                            <Text style={styles.title}>{localize('Language')}</Text>
+                            <Text style={styles.subtitle}>{localize('Language used in the app')}</Text>
                         </View>
                     </View>
                     {lang ?
@@ -97,8 +97,8 @@ export default ({ navigation }: props) => {
                 >
                     <Feather name="paperclip" size={24} color="black" style={{ marginRight: 10 }} />
                     <View>
-                        <Text style={styles.title}>{lwrap('Terms and conditions')}</Text>
-                        <Text style={styles.subtitle}>{lwrap('Things that You need to know')}</Text>
+                        <Text style={styles.title}>{localize('Terms and conditions')}</Text>
+                        <Text style={styles.subtitle}>{localize('Things that You need to know')}</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.item}
@@ -106,8 +106,8 @@ export default ({ navigation }: props) => {
                 >
                     <Feather name="help-circle" size={24} color="black" style={{ marginRight: 10 }} />
                     <View>
-                        <Text style={styles.title}>{lwrap('Support')}</Text>
-                        <Text style={styles.subtitle}>{lwrap('Get help from us')}</Text>
+                        <Text style={styles.title}>{localize('Support')}</Text>
+                        <Text style={styles.subtitle}>{localize('Get help from us')}</Text>
                     </View>
                 </TouchableOpacity>
             </ScrollView>
@@ -122,7 +122,7 @@ export default ({ navigation }: props) => {
                 style={{ backgroundColor: '#f67', justifyContent: "center", padding: 15, flexDirection: 'row', borderRadius: 10, marginHorizontal: 20 }}
             >
                 <Feather name="log-out" size={24} color="white" style={{ marginRight: 10 }} />
-                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 20 }} >{lwrap('Logout')}</Text>
+                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 20 }} >{localize('Logout')}</Text>
             </TouchableOpacity>
         </View>
     )

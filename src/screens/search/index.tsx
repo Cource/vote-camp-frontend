@@ -3,13 +3,13 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
 import { AsyncStorage, StyleSheet, Text, View, ActivityIndicator, ScrollView, TextInput, TouchableOpacity } from "react-native";
 import { searchAPI } from '../../api/v1';
-import { House } from '../../model/voter';
-import { lwrap } from '../../model/language'
+import { House } from '../../Design/voter';
+import { localize } from '../../Design/language'
 
-export default ()=>{
+export default () => {
     const navigation = useNavigation()
 
-    const [ward, setWard] = useState<null|string>('')
+    const [ward, setWard] = useState<null | string>('')
     const [query, setQuery] = useState('')
     const [search, doSearch] = useState(false)
     const [results, setResults] = useState([])
@@ -17,14 +17,14 @@ export default ()=>{
 
     const searched = useRef(false)
 
-    useEffect(()=>{
-        (async()=>{
+    useEffect(() => {
+        (async () => {
             setWard(await AsyncStorage.getItem('ward'))
         })()
     }, [])
 
-    useEffect(()=>{
-        if (query !== '' && ward !== null){
+    useEffect(() => {
+        if (query !== '' && ward !== null) {
             searchAPI(query).then((res) => setResults(res.data)).finally(() => setLoading(false))
         }
         else {
@@ -33,20 +33,20 @@ export default ()=>{
         }
     }, [search])
 
-    return(
+    return (
         <View style={styles.container} >
             <View style={styles.header}>
-                <Text style={styles.headerText} >{lwrap('Search')}</Text>
-                <Text>{ ward }</Text>
+                <Text style={styles.headerText} >{localize('Search')}</Text>
+                <Text>{ward}</Text>
             </View>
             <View style={styles.searchBar}>
                 <TextInput
-                    placeholder={lwrap("Name, House name")}
+                    placeholder={localize("Name, House name")}
                     placeholderTextColor="#888"
                     value={query}
-                    onChangeText={(text)=> setQuery(text)}
+                    onChangeText={(text) => setQuery(text)}
                     style={{ flexGrow: 1 }}
-                    onSubmitEditing={ ()=> {doSearch(!search); setLoading(true)} }
+                    onSubmitEditing={() => { doSearch(!search); setLoading(true) }}
                 />
                 <TouchableOpacity onPress={() => { doSearch(!search); setLoading(true); searched.current = true }} >
                     <Feather name="search" size={25} color="black" />
@@ -54,28 +54,28 @@ export default ()=>{
             </View>
             <ScrollView style={styles.resultContainer} >
                 {
-                    isLoading?
-                        <ActivityIndicator size='large'/>
-                    :
+                    isLoading ?
+                        <ActivityIndicator size='large' />
+                        :
                         results.length > 0 ?
-                            results.map(({ houseName, houseNumber }:House)=>{
-                                return(
+                            results.map(({ houseName, houseNumber }: House) => {
+                                return (
                                     <TouchableOpacity
                                         style={styles.result}
                                         key={houseNumber}
-                                        onPress={()=>{
-                                            navigation.navigate('detail',{
+                                        onPress={() => {
+                                            navigation.navigate('detail', {
                                                 houseName: houseName,
                                                 houseNumber: houseNumber,
                                             })
                                         }}
                                     >
-                                        <Text>{ houseName }</Text>
-                                        <Text>{ houseNumber }</Text>
+                                        <Text>{houseName}</Text>
+                                        <Text>{houseNumber}</Text>
                                     </TouchableOpacity>
                                 )
                             })
-                        :
+                            :
                             searched.current ?
                                 <Text style={{ alignSelf: "center" }}>No Results Found</Text>
                                 : null
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderColor: "#dee8e8",
         borderWidth: 0,
-        borderBottomWidth: 2, 
+        borderBottomWidth: 2,
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 10,

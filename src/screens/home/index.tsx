@@ -7,13 +7,13 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity, RefreshControl, B
 import { Easing } from 'react-native-reanimated';
 import { timing } from "react-native-redash";
 import { housesLeftAPI, progressAPI } from '../../api/v1';
-import { StackParamList } from '../../App';
+import { StackParamList } from '../../../App';
 import ProgressArc from '../../components/animatedArcProgress';
-import { lwrap } from '../../model/language'
+import { localize } from '../../Design/language'
 
 type Props = StackScreenProps<StackParamList, 'tabs'>
 
-export default ({ navigation }:Props)=>{
+export default ({ navigation }: Props) => {
     //exit app on back
     useFocusEffect(
         React.useCallback(() => {
@@ -27,10 +27,10 @@ export default ({ navigation }:Props)=>{
         }, [])
     );
 
-    const [ progress, setProgress ] = useState(0)
-    const [ totalHouses, setTotal ] = useState(0)
-    const [ completed, setCompleted ] = useState(0)
-    const [ward, setWard] = useState<null|string>('')
+    const [progress, setProgress] = useState(0)
+    const [totalHouses, setTotal] = useState(0)
+    const [completed, setCompleted] = useState(0)
+    const [ward, setWard] = useState<null | string>('')
     const [houses, setHouses] = useState<{ houseName: string, houseNumber: string }[]>([])
     const [refreshing, setRefreshing] = React.useState(false);
 
@@ -65,6 +65,18 @@ export default ({ navigation }:Props)=>{
             .then((res) => setHouses(res.data || []))
     }, [])
 
+    useEffect(() => {
+        AsyncStorage.getItem('auth')
+            .then((res) => {
+                if (res === null) {
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'signIn' }]
+                    })
+                }
+            })
+    }, [])
+
     const config = {
         duration: 1000,
         from: 0,
@@ -72,11 +84,11 @@ export default ({ navigation }:Props)=>{
         easing: Easing.bezier(0.5, 1, 0.89, 1),
     }
 
-    return(
+    return (
         <View style={styles.container}>
             <View style={{ marginTop: 40, marginHorizontal: 30, flexDirection: 'row', justifyContent: "space-between" }}>
                 <View>
-                    <Text style={styles.header}>{lwrap('Progress')}</Text>
+                    <Text style={styles.header}>{localize('Progress')}</Text>
                     <Text style={styles.subHeader}>{ward}</Text>
                 </View>
                 <TouchableOpacity
@@ -97,10 +109,10 @@ export default ({ navigation }:Props)=>{
                         fontWeight: "bold",
                         fontSize: 40,
                     }}>{completed}</Text>
-                    <Text style={{fontSize: 20, marginTop: 10}}>{totalHouses}</Text>
-                    <Text style={{ color: '#888' }}>{lwrap('Houses')}</Text>
+                    <Text style={{ fontSize: 20, marginTop: 10 }}>{totalHouses}</Text>
+                    <Text style={{ color: '#888' }}>{localize('Houses')}</Text>
                 </View>
-                <Text style={{ fontSize: 20, fontWeight: "bold", alignSelf: 'flex-start', marginLeft: 40, marginBottom: 20 }} >{lwrap('Houses Left')}</Text>
+                <Text style={{ fontSize: 20, fontWeight: "bold", alignSelf: 'flex-start', marginLeft: 40, marginBottom: 20 }} >{localize('Houses Left')}</Text>
                 {
                     houses.map(({ houseName, houseNumber }) => {
                         return (
@@ -150,7 +162,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFF",
         borderRadius: 6,
     },
-    listHeader:{
+    listHeader: {
         marginBottom: 10,
         elevation: 0,
         backgroundColor: "#0000"
@@ -158,7 +170,7 @@ const styles = StyleSheet.create({
     listHeaderText: {
         fontWeight: "bold"
     },
-    listText:{
+    listText: {
         fontSize: 18,
     }
 })

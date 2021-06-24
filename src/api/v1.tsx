@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import Axios from 'axios'
-import { Voter } from '../model/voter'
+import { Voter } from '../Design/voter'
 
 export const server = 'http://18.224.184.235:8002'
 
@@ -42,9 +42,9 @@ export const verifyOtpAPI = async (phone: string, otp: string) => {
     })
 }
 
-export const progressAPI = async ()=>{
+export const progressAPI = async () => {
     return Axios.get(server + '/progress', {
-        params:{
+        params: {
             wardId: await AsyncStorage.getItem('wardId'),
             districtId: await AsyncStorage.getItem('districtId')
         },
@@ -56,13 +56,13 @@ export const progressAPI = async ()=>{
 
 export const searchAPI = async (query: string) => {
     return Axios.get(server + '/voters', {
-        params:{
+        params: {
             search: query
         },
         headers: {
             Authorization: await AsyncStorage.getItem('auth')
         }
-        
+
     })
 }
 
@@ -104,7 +104,7 @@ export const getWardsAPI = async (districtId: number, cityId: number): Promise<a
     })
 }
 
-export const familyDetailsAPI = async (houseNumber:number)=>{
+export const familyDetailsAPI = async (houseNumber: number) => {
     return Axios.get(server + '/familyDetails', {
         params: {
             wardId: await AsyncStorage.getItem('wardId'),

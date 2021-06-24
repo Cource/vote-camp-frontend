@@ -3,14 +3,14 @@ import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { familyDetailsAPI, increaseProgressAPI } from '../../api/v1';
-import { StackParamList } from "../../App";
-import { Voter } from "../../model/voter";
+import { StackParamList } from "../../../App";
+import { Voter } from "../../Design/voter";
 import Card from './card';
 import ConfirmBtn from '../../components/ConfirmBtn';
 
 type Props = StackScreenProps<StackParamList, 'detail'>
 
-export default ({ route, navigation }:Props)=>{
+export default ({ route, navigation }: Props) => {
     const { houseName } = route.params
     const { houseNumber } = route.params
 
@@ -36,43 +36,43 @@ export default ({ route, navigation }:Props)=>{
         return voterIds
     }
 
-    useEffect(()=>{
-        familyDetailsAPI(houseNumber).then((res)=>{
+    useEffect(() => {
+        familyDetailsAPI(houseNumber).then((res) => {
             setMembers(res.data || [])
-            }).finally(()=>{
-                setLoading(false)
-            })
+        }).finally(() => {
+            setLoading(false)
+        })
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         if (confirm) {
             increaseProgressAPI(getVoterIds())
         }
     }, [confirm])
 
-    return(
+    return (
         <View style={styles.screen}>
             <View>
                 <View style={styles.header}>
                     <TouchableOpacity
                         style={{ flexDirection: 'row', alignItems: "center", marginTop: 0, marginHorizontal: 0 }}
-                        onPress={()=>{navigation.goBack()}}
+                        onPress={() => { navigation.goBack() }}
                     >
                         <Feather name="chevron-left" size={30} color="#555" />
-                        <Text style={styles.name}>{ houseName }</Text>
-                        <Text style={[styles.name, {fontWeight: "500"}]} >{ houseNumber }</Text>
+                        <Text style={styles.name}>{houseName}</Text>
+                        <Text style={[styles.name, { fontWeight: "500" }]} >{houseNumber}</Text>
                     </TouchableOpacity>
                 </View>
                 <ScrollView style={styles.details} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} >
                     {
-                        isLoading?
-                        <ActivityIndicator size="large"/>
-                        :
+                        isLoading ?
+                            <ActivityIndicator size="large" />
+                            :
                             members.map((member: Voter) => {
                                 return (
                                     <Card {...member} key={member.voterId as string} />
                                 )
-                        })
+                            })
                     }
                     <View style={{ height: 160 }} />
                 </ScrollView>
@@ -111,7 +111,7 @@ export const styles = StyleSheet.create({
         fontWeight: "700",
         marginLeft: 10
     },
-    details:{
+    details: {
         paddingHorizontal: 30,
         marginTop: 30,
     },

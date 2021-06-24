@@ -124,6 +124,6 @@ const data: Data = {
     }
 }
 
-export function lwrap(textVar: string) {
+export function localize(textVar: string) {
     return data[currentLanguage][textVar] || data['en'][textVar]
 }

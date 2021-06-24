@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Voter } from "../../model/voter";
+import { Voter } from "../../Design/voter";
 import { useNavigation } from '@react-navigation/native';
-import { lwrap } from '../../model/language';
+import { localize } from '../../Design/language';
 import { Feather } from '@expo/vector-icons';
 
 export default (props: Voter) => {
     const navigation = useNavigation()
-    return(
+    return (
         <View style={{ marginBottom: 10 }}>
             <TouchableOpacity style={[styles.detailsItem, { backgroundColor: props.verified ? '#ddd' : '#fff' }]}
                 onPress={() => {
@@ -16,28 +16,28 @@ export default (props: Voter) => {
                         type: 'detail',
                         sex: props.gender.split(' / ')[0],
                         age: props.gender.split(' / ')[1],
-                })
-            }} >
+                    })
+                }} >
                 {props.verified && <Text style={styles.watermark}>Verified</Text>}
                 {props.visitCount ? props.visitCount >= 1 && <Text style={styles.visitCount}>{props.visitCount} visits</Text> : null}
                 {props.keyVoter && <Feather name="key" size={25} color="#333" style={styles.watermarkKey} />}
                 <View>
                     <View style={styles.section}>
-                        <Text style={styles.title} >{lwrap('Name')}</Text>
+                        <Text style={styles.title} >{localize('Name')}</Text>
                         <Text style={styles.text}>{props.name}</Text>
                     </View>
                     <View style={styles.section}>
-                        <Text style={styles.title} >{lwrap('Guardian')}</Text>
+                        <Text style={styles.title} >{localize('Guardian')}</Text>
                         <Text style={styles.text}>{props.guardian}</Text>
                     </View>
                 </View>
                 <View>
                     <View style={styles.section}>
-                        <Text style={styles.title} >{lwrap('Voter ID')}</Text>
+                        <Text style={styles.title} >{localize('Voter ID')}</Text>
                         <Text style={styles.text}>{props.voterId} </Text>
                     </View>
                     <View style={styles.section}>
-                        <Text style={styles.title} >{lwrap('Sex / Age')}</Text>
+                        <Text style={styles.title} >{localize('Sex / Age')}</Text>
                         <Text style={styles.text}>{props.gender}</Text>
                     </View>
                 </View>

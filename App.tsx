@@ -1,24 +1,24 @@
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-community/async-storage';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import addVoter from "./screens/addVoter";
-import Detail from "./screens/detail";
-import Home from './screens/home';
-import Scan from "./screens/scan";
-import Search from "./screens/search";
-import SignIn from "./screens/signIn";
-import Profile from "./screens/profile"
+import addVoter from "./src/screens/addVoter";
+import Detail from "./src/screens/detail";
+import Home from './src/screens/home';
+import Scan from "./src/screens/scan";
+import Search from "./src/screens/search";
+import SignIn from "./src/screens/signIn";
+import Profile from "./src/screens/profile"
 import * as Location from "expo-location";
 import * as IntentLauncher from 'expo-intent-launcher';
-import { setLocationAPI } from "./api/v1";
-import { Voter } from './model/voter'
+import { setLocationAPI } from "./src/api/v1";
+import { Voter } from './src/Design/voter'
 import { Alert, AppState, View, Text } from "react-native";
-import { lwrap } from "./model/language";
+import { localize } from "./src/Design/language";
 import Axios from "axios";
 import Constants from 'expo-constants'
 
@@ -62,7 +62,7 @@ export default function App() {
             }
             if (await AsyncStorage.getItem('auth') !== null && !AppState.currentState.match(/inactive|background/)) {
                 if (!(await Location.getProviderStatusAsync()).gpsAvailable) {
-                    Alert.alert('Location', lwrap('Enable GPS while using the app for live location services'),
+                    Alert.alert('Location', localize('Enable GPS while using the app for live location services'),
                         [{
                             text: 'Ok',
                             onPress: () => IntentLauncher.startActivityAsync(IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS)
@@ -80,9 +80,9 @@ export default function App() {
             <StatusBar style="auto" backgroundColor='#f0f0f0aa' hidden={Boolean(error)} />
             <Stack.Navigator initialRouteName='signIn' screenOptions={{ headerShown: false }} >
                 <Stack.Screen name="signIn" component={SignIn} />
-                <Stack.Screen name="tabs" component={Tabs}/>
-                <Stack.Screen name="detail" component={Detail}/>
-                <Stack.Screen name="voter" component={addVoter}/>
+                <Stack.Screen name="tabs" component={Tabs} />
+                <Stack.Screen name="detail" component={Detail} />
+                <Stack.Screen name="voter" component={addVoter} />
                 <Stack.Screen name="profile" component={Profile} />
             </Stack.Navigator>
             {
@@ -96,19 +96,19 @@ export default function App() {
     );
 }
 
-const Tabs = ()=>{
-    return(
+const Tabs = () => {
+    return (
         <Tab.Navigator
-            screenOptions={({ route })=>({
-                tabBarIcon: ({ color, size })=>{
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ color, size }) => {
                     let iconName = '';
-                    if (route.name==='home'){
+                    if (route.name === 'home') {
                         iconName = 'home'
                     }
-                    if (route.name==='search'){
+                    if (route.name === 'search') {
                         iconName = 'search'
                     }
-                    if (route.name==='scan'){
+                    if (route.name === 'scan') {
                         iconName = 'camera'
                     }
                     return <Feather name={iconName} size={size} color={color} />
@@ -122,18 +122,18 @@ const Tabs = ()=>{
             <Tab.Screen name="search" component={Search} />
             <Tab.Screen name="scan" component={Scan} />
             <Tab.Screen name="add" component={addVoter} options={{
-                tabBarIcon: ()=> {
-                    return(
+                tabBarIcon: () => {
+                    return (
                         <LinearGradient
                             colors={['#52dcff', '#5abdff']}
                             style={{ padding: 15, marginBottom: 15, alignSelf: "flex-end", borderTopLeftRadius: 20 }}
                         >
-                            <Feather name="plus" size={36} color="white"/>
+                            <Feather name="plus" size={36} color="white" />
                         </LinearGradient>
                     )
-                }}
+                }
+            }
             } />
         </Tab.Navigator>
     )
 }
-const nullPage = ()=> null

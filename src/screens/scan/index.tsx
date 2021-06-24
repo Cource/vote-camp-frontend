@@ -5,20 +5,20 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { searchAPI } from '../../api/v1';
 import Barcode from '../../components/barcode';
-import { lwrap } from '../../model/language';
+import { localize } from '../../Design/language';
 import { Feather } from '@expo/vector-icons';
 import Constants from 'expo-constants'
 
-export default ()=>{
+export default () => {
     const navigation = useNavigation()
 
-    const [ward, setWard] = useState<null|string>('')
+    const [ward, setWard] = useState<null | string>('')
     const [voterId, setVoterId] = useState('')
     const [error, setError] = useState(false)
 
-    useEffect(()=>{
-        voterId!==''?
-            searchAPI(voterId).then((res)=> {
+    useEffect(() => {
+        voterId !== '' ?
+            searchAPI(voterId).then((res) => {
                 navigation.navigate('detail', {
                     houseName: res.data[0].houseName,
                     houseNumber: res.data[0].houseNumber,
@@ -29,17 +29,17 @@ export default ()=>{
                     setError(false)
                 }, 3000)
             })
-            .finally(()=> setVoterId(''))
-        :null
+                .finally(() => setVoterId(''))
+            : null
     }, [voterId])
 
-    useEffect(()=>{
-        (async()=>{
+    useEffect(() => {
+        (async () => {
             setWard(await AsyncStorage.getItem('ward'))
         })()
     }, [])
 
-    return(
+    return (
         <View style={{ flex: 1, backgroundColor: 'black' }}>
             <Barcode valueSetter={setVoterId} />
             {
@@ -50,12 +50,13 @@ export default ()=>{
                     : null
             }
             <View style={styles.header}>
-                <Text style={styles.headerText} >{lwrap('Scan')}</Text>
+                <Text style={styles.headerText} >{localize('Scan')}</Text>
                 <Text style={{
-                    color: 'white', 
-                    textShadowColor:'#0003',
-                    textShadowOffset:{width: 2, height: 2},
-                    textShadowRadius: 3,}} >{ ward }</Text>
+                    color: 'white',
+                    textShadowColor: '#0003',
+                    textShadowOffset: { width: 2, height: 2 },
+                    textShadowRadius: 3,
+                }} >{ward}</Text>
             </View>
             <View style={styles.centerOverlay}>
                 <View style={styles.box} >
@@ -66,7 +67,7 @@ export default ()=>{
                     <Feather name="chevron-left" size={70} color="white" style={{ transform: [{ rotate: '135deg' }, { rotateY: '180deg' }] }} />
                     <Feather name="chevron-left" size={70} color="white" style={{ transform: [{ rotate: '45deg' }, { rotateY: '180deg' }] }} />
                 </View>
-                <Text style={{ color: 'white', width: 300 }} >{lwrap('Align the barcode of the votersID card within this box')}</Text>
+                <Text style={{ color: 'white', width: 300 }} >{localize('Align the barcode of the votersID card within this box')}</Text>
             </View>
         </View>
     )
@@ -82,8 +83,8 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         color: 'white',
-        textShadowColor:'#0003',
-        textShadowOffset:{width: 2, height: 2},
+        textShadowColor: '#0003',
+        textShadowOffset: { width: 2, height: 2 },
         textShadowRadius: 5,
     },
     box: {

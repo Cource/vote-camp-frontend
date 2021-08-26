@@ -12,7 +12,12 @@ import styled from 'styled-components'
 type props = StackScreenProps<StackParamList, 'signIn'>
 
 
-function verifyNumber(phone: string, setLoading: React.Dispatch<React.SetStateAction<boolean>>, setPage: React.Dispatch<React.SetStateAction<number>>, setBorder: React.Dispatch<React.SetStateAction<number>>) {
+function verifyNumber(
+    phone: string, 
+		setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+		setPage: React.Dispatch<React.SetStateAction<number>>,
+		setBorder: React.Dispatch<React.SetStateAction<number>>
+		) {
     if (/[0-9]{10}/.test(phone)) {
         setLoading(true);
         reqOtpAPI(phone)
@@ -29,9 +34,11 @@ function verifyNumber(phone: string, setLoading: React.Dispatch<React.SetStateAc
     }
 }
 
-function sendOtp(otp: string, phone: string,
+function sendOtp(otp: string,
+    phone: string,
     navigation: props["navigation"],
-    setBorder: React.Dispatch<React.SetStateAction<number>>) {
+    setBorder: React.Dispatch<React.SetStateAction<number>>
+		) {
     if (/[0-9]{6}/.test(otp)) {
         verifyOtpAPI(phone, otp)
             .then(async (res) => {

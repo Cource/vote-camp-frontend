@@ -3,7 +3,7 @@ export interface Voter {
     guardian?: string,
     age?: string,
     gender?: string
-    sex?: 'M'|'F'|'T',
+    sex?: 'M' | 'F' | 'T',
     houseName?: string,
     houseNumber?: string,
     voterId?: string,
@@ -16,7 +16,7 @@ export interface Voter {
     habits?: string,
     cash?: string,
     education?: string,
-    type?: 'add'|'detail',
+    type?: 'add' | 'detail',
     id?: number,
     verified?: Boolean,
     visitCount?: number,
@@ -28,4 +28,23 @@ export interface Voter {
 export interface House {
     houseName: string,
     houseNumber: number,
+}
+
+
+export interface voter {
+    id: Number,
+    name: String,
+    age: String,
+    gender: "Male" | "Female" | "Transgender",
+    houseName?: String,
+    voterId: String,
+    religion: "Buddhist" | "Hindu" | "Muslim" | "Christian" | "Atheist",
+    religiousness: Number,
+    cast: String,
+    partyAffinity: {
+        'LDF': Number,
+        'UDF': Number,
+        'BJP': Number
+    },
+    visitCount: Number,
 }
